@@ -33,10 +33,9 @@ struct VectorStorage<T, 2>
     };
 
     explicit FMATH_CONSTEXPR VectorStorage(const T &x = 0, const T &y = 0)
-    {
-        this->x = x;
-        this->y = y;
-    }
+        :   x(x),
+            y(y)
+    {}
 };
 
 template<typename T>
@@ -49,11 +48,10 @@ struct VectorStorage<T, 3>
     };
 
     explicit FMATH_CONSTEXPR VectorStorage(const T &x = 0, const T &y = 0, const T &z = 0)
-    {
-        this->x = x;
-        this->y = y;
-        this->z = z;
-    }
+        :   x(x),
+            y(y),
+            z(z)
+    {}
 };
 
 template<typename T>
@@ -66,12 +64,11 @@ struct VectorStorage<T, 4>
     };
 
     explicit FMATH_CONSTEXPR VectorStorage(const T &x = 0, const T &y = 0, const T &z = 0, const T &w = 0)
-    {
-        this->x = x;
-        this->y = y;
-        this->z = z;
-        this->w = w;
-    }
+        :   x(x),
+            y(y),
+            z(z),
+            w(w)
+    {}
 };
 
 }
