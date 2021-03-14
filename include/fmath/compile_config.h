@@ -39,7 +39,7 @@
 #   define FMATH_INLINE inline
 #endif
 
-#if defined(FMATH_CXX_14_OR_LATER)
+#if defined(FMATH_CXX14_OR_LATER)
 #   define FMATH_CONSTEXPR constexpr
 #else
 #   define FMATH_CONSTEXPR
