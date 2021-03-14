@@ -70,6 +70,9 @@ public:
     static Vector zero();
 };
 
+namespace internal
+{
+
 template<typename T, size_t N>
 struct VectorTraits
 {
@@ -509,88 +512,90 @@ FMATH_CONSTEXPR T VectorTraits<T, 4>::length2(const Vector<T, 4> &v)
     return v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w;
 }
 
+}
+
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR bool operator==(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
-    return VectorTraits<T, N>::equal(v1, v2);
+    return internal::VectorTraits<T, N>::equal(v1, v2);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR bool operator!=(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
-    return !VectorTraits<T, N>::equal(v1, v2);
+    return !internal::VectorTraits<T, N>::equal(v1, v2);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator+(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
-    return VectorTraits<T, N>::add(v1, v2);
+    return internal::VectorTraits<T, N>::add(v1, v2);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator+(const Vector<T, N> &vec, const T &value)
 {
-    return VectorTraits<T, N>::add(vec, value);
+    return internal::VectorTraits<T, N>::add(vec, value);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator-(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
-    return VectorTraits<T, N>::sub(v1, v2);
+    return internal::VectorTraits<T, N>::sub(v1, v2);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator-(const Vector<T, N> &vec, const T &value)
 {
-    return VectorTraits<T, N>::sub(vec, value);
+    return internal::VectorTraits<T, N>::sub(vec, value);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR T operator*(const Vector<T, N> &a, const Vector<T, N> &b)
 {
-    return VectorTraits<T, N>::dot(a, b);
+    return internal::VectorTraits<T, N>::dot(a, b);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator*(const Vector<T, N> &vec, const T &value)
 {
-    return VectorTraits<T, N>::mul(vec, value);
+    return internal::VectorTraits<T, N>::mul(vec, value);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator*(T value, const Vector<T, N> &vec)
 {
-    return VectorTraits<T, N>::mul(vec, value);
+    return internal::VectorTraits<T, N>::mul(vec, value);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator/(const Vector<T, N> &vec, const T &value)
 {
-    return VectorTraits<T, N>::div(vec, value);
+    return internal::VectorTraits<T, N>::div(vec, value);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR T dot(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
-    return VectorTraits<T, N>::dot(v1, v2);
+    return internal::VectorTraits<T, N>::dot(v1, v2);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> hadamardMul(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
-    return VectorTraits<T, N>::hadamardMul(v1, v2);
+    return internal::VectorTraits<T, N>::hadamardMul(v1, v2);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> hadamardDiv(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
-    return VectorTraits<T, N>::hadamardDiv(v1, v2);
+    return internal::VectorTraits<T, N>::hadamardDiv(v1, v2);
 }
 
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR T length2(const Vector<T, N> &vec)
 {
-    return VectorTraits<T, N>::length2(vec);
+    return internal::VectorTraits<T, N>::length2(vec);
 }
 
 template<typename T, size_t N>
@@ -604,19 +609,19 @@ template<typename T, size_t N>
 Vector<T, N> normalize(const Vector<T, N> &vec)
 {
     static_assert(std::is_floating_point_v<T>);
-    return VectorTraits<T, N>::div(vec, length(vec));
+    return internal::VectorTraits<T, N>::div(vec, length(vec));
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T cross(const Vector<T, 2> &v1, const Vector<T, 2> &v2)
 {
-    return VectorTraits<T, 2>::cross(v1, v2);
+    return internal::VectorTraits<T, 2>::cross(v1, v2);
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, 3> cross(const Vector<T, 3> &v1, const Vector<T, 3> &v2)
 {
-    return VectorTraits<T, 3>::cross(v1, v2);
+    return internal::VectorTraits<T, 3>::cross(v1, v2);
 }
 
 
@@ -723,28 +728,28 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> Vector<T, N>::operator-() const
 template<typename T, size_t N>
 Vector<T, N> &Vector<T, N>::operator+=(const Vector &other)
 {
-    *this = VectorTraits<T, N>::add(*this, other);
+    *this = internal::VectorTraits<T, N>::add(*this, other);
     return *this;
 }
 
 template<typename T, size_t N>
 Vector<T, N> &Vector<T, N>::operator-=(const Vector &other)
 {
-    *this = VectorTraits<T, N>::sub(*this, other);
+    *this = internal::VectorTraits<T, N>::sub(*this, other);
     return *this;
 }
 
 template<typename T, size_t N>
 Vector<T, N> &Vector<T, N>::operator*=(const ValueType &value)
 {
-    *this = VectorTraits<T, N>::mul(*this, value);
+    *this = internal::VectorTraits<T, N>::mul(*this, value);
     return *this;
 }
 
 template<typename T, size_t N>
 Vector<T, N> &Vector<T, N>::operator/=(const ValueType &value)
 {
-    *this = VectorTraits<T, N>::div(*this, value);
+    *this = internal::VectorTraits<T, N>::div(*this, value);
     return *this;
 }
 
