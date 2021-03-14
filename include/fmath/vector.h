@@ -4,7 +4,7 @@
 #include <ostream>
 #include <type_traits>
 
-#include "internal/vector_storage.h"
+#include "internal/vector_base.h"
 #include "common.h"
 #include "compile_config.h"
 #include "constants.h"
@@ -13,43 +13,20 @@ namespace fmath
 {
 
 template<typename T, size_t N>
-class Vector : public internal::VectorStorage<T, N>
+class Vector : public internal::VectorBase<T, N>
 {
 public:
     using ValueType = T;
     static constexpr size_t SIZE = N;
 
 public:
-    using internal::VectorStorage<T, N>::VectorStorage;
-
-    FMATH_CONSTEXPR Vector(const Vector &other);
-    explicit FMATH_CONSTEXPR Vector(const ValueType *data, size_t n);
+    using internal::VectorBase<T, N>::VectorBase;
 
     template<typename U, size_t M, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
     FMATH_CONSTEXPR Vector(const Vector<U, M> &other);
-    
-    FMATH_CONSTEXPR Vector &operator=(const Vector &other);
 
     template<typename U, size_t M, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
     FMATH_CONSTEXPR Vector &operator=(const Vector<U, M> &other);
-
-    FMATH_INLINE FMATH_CONSTEXPR bool equals(const Vector &other) const;
-
-    FMATH_INLINE FMATH_CONSTEXPR size_t size() const;
-
-    FMATH_INLINE FMATH_CONSTEXPR const ValueType *data() const;
-
-    FMATH_INLINE FMATH_CONSTEXPR ValueType *data();
-
-    FMATH_INLINE FMATH_CONSTEXPR const ValueType &get(index_t index) const;
-
-    FMATH_INLINE FMATH_CONSTEXPR ValueType &get(index_t index);
-
-    FMATH_INLINE void set(index_t index, const ValueType &value);
-
-    FMATH_INLINE FMATH_CONSTEXPR const ValueType &operator[](index_t index) const;
-
-    FMATH_INLINE FMATH_CONSTEXPR ValueType &operator[](index_t index);
 
     FMATH_INLINE FMATH_CONSTEXPR Vector operator+() const;
 
@@ -81,7 +58,7 @@ struct VectorTraits
     static constexpr size_t SIZE = N;
 
     static FMATH_CONSTEXPR bool equal(const Vector<T, N> &v1, const Vector<T, N> &v2);
-    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, N> &v1, const Vector<T, N> &v2, const T &epsilon = Epsilon<T>::value);
+    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, N> &v1, const Vector<T, N> &v2, const T &epsilon = number::Epsilon<T>::value);
 
     static FMATH_CONSTEXPR Vector<T, N> add(const Vector<T, N> &v1, const Vector<T, N> &v2);
     static FMATH_CONSTEXPR Vector<T, N> add(const Vector<T, N> &v, const T &value);
@@ -215,7 +192,7 @@ struct VectorTraits<T, 2>
     static constexpr size_t SIZE = 2;
 
     static FMATH_CONSTEXPR bool equal(const Vector<T, 2> &v1, const Vector<T, 2> &v2);
-    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, 2> &v1, const Vector<T, 2> &v2, const T &epsilon = Epsilon<T>::value);
+    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, 2> &v1, const Vector<T, 2> &v2, const T &epsilon = number::Epsilon<T>::value);
 
     static FMATH_CONSTEXPR Vector<T, 2> add(const Vector<T, 2> &v1, const Vector<T, 2> &v2);
     static FMATH_CONSTEXPR Vector<T, 2> add(const Vector<T, 2> &v, const T &value);
@@ -317,7 +294,7 @@ struct VectorTraits<T, 3>
     static constexpr size_t SIZE = 3;
 
     static FMATH_CONSTEXPR bool equal(const Vector<T, 3> &v1, const Vector<T, 3> &v2);
-    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, 3> &v1, const Vector<T, 3> &v2, const T &epsilon = Epsilon<T>::value);
+    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, 3> &v1, const Vector<T, 3> &v2, const T &epsilon = number::Epsilon<T>::value);
 
     static FMATH_CONSTEXPR Vector<T, 3> add(const Vector<T, 3> &v1, const Vector<T, 3> &v2);
     static FMATH_CONSTEXPR Vector<T, 3> add(const Vector<T, 3> &v, const T &value);
@@ -423,7 +400,7 @@ struct VectorTraits<T, 4>
     static constexpr size_t SIZE = 4;
 
     static FMATH_CONSTEXPR bool equal(const Vector<T, 4> &v1, const Vector<T, 4> &v2);
-    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, 4> &v1, const Vector<T, 4> &v2, const T &epsilon = Epsilon<T>::value);
+    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, 4> &v1, const Vector<T, 4> &v2, const T &epsilon = number::Epsilon<T>::value);
 
     static FMATH_CONSTEXPR Vector<T, 4> add(const Vector<T, 4> &v1, const Vector<T, 4> &v2);
     static FMATH_CONSTEXPR Vector<T, 4> add(const Vector<T, 4> &v, const T &value);
@@ -527,6 +504,18 @@ FMATH_INLINE FMATH_CONSTEXPR bool operator!=(const Vector<T, N> &v1, const Vecto
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool equal(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return internal::VectorTraits<T, N>::equal(v1, v2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, N> &v1, const Vector<T, N> &v2, const T epsilon = number::Epsilon<T>::value)
+{
+    return internal::VectorTraits<T, N>::equalEpsilon(v1, v2, epsilon);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator+(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
     return internal::VectorTraits<T, N>::add(v1, v2);
@@ -624,20 +613,6 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, 3> cross(const Vector<T, 3> &v1, const Ve
     return internal::VectorTraits<T, 3>::cross(v1, v2);
 }
 
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR Vector<T, N>::Vector(const Vector &other)
-{
-    memcpy(data(), other.data(), sizeof(ValueType) * SIZE);
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR Vector<T, N>::Vector(const ValueType *data, size_t n)
-    :   Vector()
-{
-    memcpy(data(), data, sizeof(ValueType) * min(SIZE, n));
-}
-
 template<typename T, size_t N>
     template<typename U, size_t M, typename>
 FMATH_CONSTEXPR Vector<T, N>::Vector(const Vector<U, M> &other)
@@ -649,13 +624,6 @@ FMATH_CONSTEXPR Vector<T, N>::Vector(const Vector<U, M> &other)
 }
 
 template<typename T, size_t N>
-FMATH_CONSTEXPR Vector<T, N> &Vector<T, N>::operator=(const Vector &other)
-{
-    memcpy(data(), other.data(), sizeof(ValueType) * SIZE);
-    return *this;
-}
-
-template<typename T, size_t N>
     template<typename U, size_t M, typename>
 FMATH_CONSTEXPR Vector<T, N> &Vector<T, N>::operator=(const Vector<U, M> &other)
 {
@@ -663,54 +631,6 @@ FMATH_CONSTEXPR Vector<T, N> &Vector<T, N>::operator=(const Vector<U, M> &other)
     for (index_t i = 0; i < REAL; ++i)
         this->values[i] = static_cast<ValueType>(other[i]);
     return *this;
-}
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR size_t Vector<T, N>::size() const
-{
-    return SIZE;
-}
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR const typename Vector<T, N>::ValueType *Vector<T, N>::data() const
-{
-    return this->values.data();
-}
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR typename Vector<T, N>::ValueType *Vector<T, N>::data()
-{
-    return this->values.data();
-}
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR const typename Vector<T, N>::ValueType &Vector<T, N>::get(index_t index) const
-{
-    return this->values[index];
-}
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR typename Vector<T, N>::ValueType &Vector<T, N>::get(index_t index)
-{
-    return this->values[index];
-}
-
-template<typename T, size_t N>
-FMATH_INLINE void Vector<T, N>::set(index_t index, const ValueType &value)
-{
-    this->values[index] = value;
-}
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR const typename Vector<T, N>::ValueType &Vector<T, N>::operator[](index_t index) const
-{
-    return this->values[index];
-}
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR typename Vector<T, N>::ValueType &Vector<T, N>::operator[](index_t index)
-{
-    return this->values[index];
 }
 
 template<typename T, size_t N>
