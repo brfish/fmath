@@ -8,6 +8,7 @@
 #include "common.h"
 #include "compile_config.h"
 #include "constants.h"
+#include "scalar.h"
 
 namespace fmath
 {
@@ -32,462 +33,35 @@ public:
 
     FMATH_INLINE FMATH_CONSTEXPR Vector operator-() const;
 
-    Vector &operator+=(const Vector &other);
+    FMATH_INLINE Vector &operator+=(const Vector &other);
 
-    Vector &operator+=(const ValueType &value);
+    FMATH_INLINE Vector &operator+=(const ValueType &value);
 
-    Vector &operator-=(const Vector &other);
+    FMATH_INLINE Vector &operator-=(const Vector &other);
 
-    Vector &operator-=(const ValueType &value);
+    FMATH_INLINE Vector &operator-=(const ValueType &value);
 
-    Vector &operator*=(const ValueType &value);
+    FMATH_INLINE Vector &operator*=(const ValueType &value);
 
-    Vector &operator/=(const ValueType &value);
+    FMATH_INLINE Vector &operator*=(const Scalar<T, N> &scalar);
 
-    static Vector zero();
+    FMATH_INLINE Vector &operator/=(const ValueType &value);
+
+    static FMATH_CONSTEXPR Vector zero();
 };
 
 namespace internal
 {
 
 template<typename T, size_t N>
-struct VectorTraits
-{
-    using ValueType = T;
-    using VectorType = Vector<T, N>;
-    static constexpr size_t SIZE = N;
-
-    static FMATH_CONSTEXPR bool equal(const Vector<T, N> &v1, const Vector<T, N> &v2);
-    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, N> &v1, const Vector<T, N> &v2, const T &epsilon = number::Epsilon<T>::value);
-
-    static FMATH_CONSTEXPR Vector<T, N> add(const Vector<T, N> &v1, const Vector<T, N> &v2);
-    static FMATH_CONSTEXPR Vector<T, N> add(const Vector<T, N> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, N> sub(const Vector<T, N> &v1, const Vector<T, N> &v2);
-    static FMATH_CONSTEXPR Vector<T, N> sub(const Vector<T, N> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, N> mul(const Vector<T, N> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, N> div(const Vector<T, N> &v, const T &value);
-    static FMATH_CONSTEXPR T dot(const Vector<T, N> &v1, const Vector<T, N> &v2);
-    static FMATH_CONSTEXPR Vector<T, N> hadamardMul(const Vector<T, N> &v1, const Vector<T, N> &v2);
-    static FMATH_CONSTEXPR Vector<T, N> hadamardDiv(const Vector<T, N> &v1, const Vector<T, N> &v2);
-    static FMATH_CONSTEXPR T length2(const Vector<T, N> &v);
-};
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR bool VectorTraits<T, N>::equal(const Vector<T, N> &v1, const Vector<T, N> &v2)
-{
-    for (index_t i = 0; i < N; ++i)
-    {
-        if (v1[i] != v2[i])
-            return false;
-    }
-    return true;
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR bool VectorTraits<T, N>::equalEpsilon(const Vector<T, N> &v1, const Vector<T, N> &v2, const T &epsilon)
-{
-    for (index_t i = 0; i < N; ++i)
-    {
-        if (abs(v1[i] - v2[i]) >= epsilon)
-            return false;
-    }
-    return true;
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR Vector<T, N> VectorTraits<T, N>::add(const Vector<T, N> &v1, const Vector<T, N> &v2)
-{
-    Vector<T, N> result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v1[i] + v2[i];
-    return result;
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR Vector<T, N> VectorTraits<T, N>::add(const Vector<T, N> &v, const T &value)
-{
-    Vector<T, N> result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v[i] + value;
-    return result;
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR Vector<T, N> VectorTraits<T, N>::sub(const Vector<T, N> &v1, const Vector<T, N> &v2)
-{
-    Vector<T, N> result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v1[i] - v2[i];
-    return result;
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR Vector<T, N> VectorTraits<T, N>::sub(const Vector<T, N> &v, const T &value)
-{
-    Vector<T, N> result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v[i] - value;
-    return result;
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR Vector<T, N> VectorTraits<T, N>::mul(const Vector<T, N> &v, const T &value)
-{
-    Vector<T, N> result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v[i] * value;
-    return result;
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR Vector<T, N> VectorTraits<T, N>::div(const Vector<T, N> &v, const T &value)
-{
-    Vector<T, N> result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v[i] / value;
-    return result;
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR T VectorTraits<T, N>::dot(const Vector<T, N> &v1, const Vector<T, N> &v2)
-{
-    T result = 0;
-    for (index_t i = 0; i < N; ++i)
-        result += v1[i] * v2[i];
-    return result;
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR Vector<T, N> VectorTraits<T, N>::hadamardMul(const Vector<T, N> &v1, const Vector<T, N> &v2)
-{
-    Vector<T, N> result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v1[i] * v2[i];
-    return result;
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR Vector<T, N> VectorTraits<T, N>::hadamardDiv(const Vector<T, N> &v1, const Vector<T, N> &v2)
-{
-    Vector<T, N> result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v1[i] / v2[i];
-    return result;
-}
-
-template<typename T, size_t N>
-FMATH_CONSTEXPR T VectorTraits<T, N>::length2(const Vector<T, N> &v)
-{
-    T result = 0;
-    for (index_t i = 0; i < N; ++i)
-        result += v[i] * v[i];
-    return result;
-}
-
-template<typename T>
-struct VectorTraits<T, 2>
-{
-    using ValueType = T;
-    using VectorType = Vector<T, 2>;
-    static constexpr size_t SIZE = 2;
-
-    static FMATH_CONSTEXPR bool equal(const Vector<T, 2> &v1, const Vector<T, 2> &v2);
-    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, 2> &v1, const Vector<T, 2> &v2, const T &epsilon = number::Epsilon<T>::value);
-
-    static FMATH_CONSTEXPR Vector<T, 2> add(const Vector<T, 2> &v1, const Vector<T, 2> &v2);
-    static FMATH_CONSTEXPR Vector<T, 2> add(const Vector<T, 2> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, 2> sub(const Vector<T, 2> &v1, const Vector<T, 2> &v2);
-    static FMATH_CONSTEXPR Vector<T, 2> sub(const Vector<T, 2> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, 2> mul(const Vector<T, 2> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, 2> div(const Vector<T, 2> &v, const T &value);
-    static FMATH_CONSTEXPR T dot(const Vector<T, 2> &v1, const Vector<T, 2> &v2);
-    static FMATH_CONSTEXPR Vector<T, 2> hadamardMul(const Vector<T, 2> &v1, const Vector<T, 2> &v2);
-    static FMATH_CONSTEXPR Vector<T, 2> hadamardDiv(const Vector<T, 2> &v1, const Vector<T, 2> &v2);
-    static FMATH_CONSTEXPR T length2(const Vector<T, 2> &v);
-    
-    static FMATH_CONSTEXPR T cross(const Vector<T, 2> &v1, const Vector<T, 2> &v2);
-};
-
-template<typename T>
-FMATH_CONSTEXPR bool VectorTraits<T, 2>::equal(const Vector<T, 2> &v1, const Vector<T, 2> &v2)
-{
-    return v1.x == v2.x && v1.y == v2.y;
-}
-
-template<typename T>
-FMATH_CONSTEXPR bool VectorTraits<T, 2>::equalEpsilon(const Vector<T, 2> &v1, const Vector<T, 2> &v2, const T &epsilon)
-{
-    return equalEpsilon(v1.x, v2.x, epsilon) && equalEpsilon(v1.y, v2.y, epsilon);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 2> VectorTraits<T, 2>::add(const Vector<T, 2> &v1, const Vector<T, 2> &v2)
-{
-    return Vector<T, 2>(v1.x + v2.x, v1. y + v2.y);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 2> VectorTraits<T, 2>::add(const Vector<T, 2> &v, const T &value)
-{
-    return Vector<T, 2>(v.x + value, v.y + value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 2> VectorTraits<T, 2>::sub(const Vector<T, 2> &v1, const Vector<T, 2> &v2)
-{
-    return Vector<T, 2>(v1.x - v2.x, v1.y - v2.y);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 2> VectorTraits<T, 2>::sub(const Vector<T, 2> &v, const T &value)
-{
-    return Vector<T, 2>(v.x - value, v.y - value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 2> VectorTraits<T, 2>::mul(const Vector<T, 2> &v, const T &value)
-{
-    return Vector<T, 2>(v.x * value, v.y * value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 2> VectorTraits<T, 2>::div(const Vector<T, 2> &v, const T &value)
-{
-    return Vector<T, 2>(v.x / value, v.y / value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR T VectorTraits<T, 2>::dot(const Vector<T, 2> &v1, const Vector<T, 2> &v2)
-{
-    return v1.x * v2.x + v1.y * v2.y;
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 2> VectorTraits<T, 2>::hadamardMul(const Vector<T, 2> &v1, const Vector<T, 2> &v2)
-{
-    return Vector<T, 2>(v1.x * v2.x, v1.y * v2.y);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 2> VectorTraits<T, 2>::hadamardDiv(const Vector<T, 2> &v1, const Vector<T, 2> &v2)
-{
-    return Vector<T, 2>(v1.x / v2.x, v1.y / v2.y);
-}
-
-template<typename T>
-FMATH_CONSTEXPR T VectorTraits<T, 2>::length2(const Vector<T, 2> &v)
-{
-    return v.x * v.x + v.y * v.y;
-}
-
-template<typename T>
-FMATH_CONSTEXPR T VectorTraits<T, 2>::cross(const Vector<T, 2> &v1, const Vector<T, 2> &v2)
-{
-    return v1.x * v2.y - v1.y * v2.x;
-}
-
-template<typename T>
-struct VectorTraits<T, 3>
-{
-    using ValueType = T;
-    using VectorType = Vector<T, 3>;
-    static constexpr size_t SIZE = 3;
-
-    static FMATH_CONSTEXPR bool equal(const Vector<T, 3> &v1, const Vector<T, 3> &v2);
-    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, 3> &v1, const Vector<T, 3> &v2, const T &epsilon = number::Epsilon<T>::value);
-
-    static FMATH_CONSTEXPR Vector<T, 3> add(const Vector<T, 3> &v1, const Vector<T, 3> &v2);
-    static FMATH_CONSTEXPR Vector<T, 3> add(const Vector<T, 3> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, 3> sub(const Vector<T, 3> &v1, const Vector<T, 3> &v2);
-    static FMATH_CONSTEXPR Vector<T, 3> sub(const Vector<T, 3> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, 3> mul(const Vector<T, 3> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, 3> div(const Vector<T, 3> &v, const T &value);
-    static FMATH_CONSTEXPR T dot(const Vector<T, 3> &v1, const Vector<T, 3> &v2);
-    static FMATH_CONSTEXPR Vector<T, 3> hadamardMul(const Vector<T, 3> &v1, const Vector<T, 3> &v2);
-    static FMATH_CONSTEXPR Vector<T, 3> hadamardDiv(const Vector<T, 3> &v1, const Vector<T, 3> &v2);
-    static FMATH_CONSTEXPR T length2(const Vector<T, 3> &v);
-
-    static FMATH_CONSTEXPR Vector<T, 3> cross(const Vector<T, 3> &v1, const Vector<T, 3> &v2);
-};
-
-template<typename T>
-FMATH_CONSTEXPR bool VectorTraits<T, 3>::equal(const Vector<T, 3> &v1, const Vector<T, 3> &v2)
-{
-    return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
-}
-
-template<typename T>
-FMATH_CONSTEXPR bool VectorTraits<T, 3>::equalEpsilon(const Vector<T, 3> &v1, const Vector<T, 3> &v2, const T &epsilon)
-{
-    return equalEpsilon(v1.x, v2.x, epsilon) && 
-        equalEpsilon(v1.y, v2.y, epsilon) &&
-        equalEpsilon(v1.z, v2.z, epsilon);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 3> VectorTraits<T, 3>::add(const Vector<T, 3> &v1, const Vector<T, 3> &v2)
-{
-    return Vector<T, 3>(v1.x + v2.x, v1. y + v2.y, v1.z + v2.z);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 3> VectorTraits<T, 3>::add(const Vector<T, 3> &v, const T &value)
-{
-    return Vector<T, 3>(v.x + value, v.y + value, v.z + value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 3> VectorTraits<T, 3>::sub(const Vector<T, 3> &v1, const Vector<T, 3> &v2)
-{
-    return Vector<T, 3>(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 3> VectorTraits<T, 3>::sub(const Vector<T, 3> &v, const T &value)
-{
-    return Vector<T, 3>(v.x - value, v.y - value, v.z - value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 3> VectorTraits<T, 3>::mul(const Vector<T, 3> &v, const T &value)
-{
-    return Vector<T, 3>(v.x * value, v.y * value, v.z * value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 3> VectorTraits<T, 3>::div(const Vector<T, 3> &v, const T &value)
-{
-    return Vector<T, 3>(v.x / value, v.y / value, v.z / value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR T VectorTraits<T, 3>::dot(const Vector<T, 3> &v1, const Vector<T, 3> &v2)
-{
-    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 3> VectorTraits<T, 3>::hadamardMul(const Vector<T, 3> &v1, const Vector<T, 3> &v2)
-{
-    return Vector<T, 3>(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 3> VectorTraits<T, 3>::hadamardDiv(const Vector<T, 3> &v1, const Vector<T, 3> &v2)
-{
-    return Vector<T, 3>(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
-}
-
-template<typename T>
-FMATH_CONSTEXPR T VectorTraits<T, 3>::length2(const Vector<T, 3> &v)
-{
-    return v.x * v.x + v.y * v.y + v.z * v.z;
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 3> VectorTraits<T, 3>::cross(const Vector<T, 3> &v1, const Vector<T, 3> &v2)
-{
-    return Vector<T, 3>(v1[1] * v2[2] - v1[2] * v2[1],
-        v1[2] * v2[0] - v1[0] * v2[2],
-        v1[0] * v2[1] - v1[1] * v2[0]);
-}
-
-template<typename T>
-struct VectorTraits<T, 4>
-{
-    using ValueType = T;
-    using VectorType = Vector<T, 4>;
-    static constexpr size_t SIZE = 4;
-
-    static FMATH_CONSTEXPR bool equal(const Vector<T, 4> &v1, const Vector<T, 4> &v2);
-    static FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, 4> &v1, const Vector<T, 4> &v2, const T &epsilon = number::Epsilon<T>::value);
-
-    static FMATH_CONSTEXPR Vector<T, 4> add(const Vector<T, 4> &v1, const Vector<T, 4> &v2);
-    static FMATH_CONSTEXPR Vector<T, 4> add(const Vector<T, 4> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, 4> sub(const Vector<T, 4> &v1, const Vector<T, 4> &v2);
-    static FMATH_CONSTEXPR Vector<T, 4> sub(const Vector<T, 4> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, 4> mul(const Vector<T, 4> &v, const T &value);
-    static FMATH_CONSTEXPR Vector<T, 4> div(const Vector<T, 4> &v, const T &value);
-    static FMATH_CONSTEXPR T dot(const Vector<T, 4> &v1, const Vector<T, 4> &v2);
-    static FMATH_CONSTEXPR Vector<T, 4> hadamardMul(const Vector<T, 4> &v1, const Vector<T, 4> &v2);
-    static FMATH_CONSTEXPR Vector<T, 4> hadamardDiv(const Vector<T, 4> &v1, const Vector<T, 4> &v2);
-    static FMATH_CONSTEXPR T length2(const Vector<T, 4> &v);
-};
-
-template<typename T>
-FMATH_CONSTEXPR bool VectorTraits<T, 4>::equal(const Vector<T, 4> &v1, const Vector<T, 4> &v2)
-{
-    return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z && v1.w == v2.w;
-}
-
-template<typename T>
-FMATH_CONSTEXPR bool VectorTraits<T, 4>::equalEpsilon(const Vector<T, 4> &v1, const Vector<T, 4> &v2, const T &epsilon)
-{
-    return equalEpsilon(v1.x, v2.x, epsilon) && 
-        equalEpsilon(v1.y, v2.y, epsilon) &&
-        equalEpsilon(v1.z, v2.z, epsilon) &&
-        equalEpsilon(v1.w, v2.w, epsilon);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 4> VectorTraits<T, 4>::add(const Vector<T, 4> &v1, const Vector<T, 4> &v2)
-{
-    return Vector<T, 4>(v1.x + v2.x, v1. y + v2.y, v1.z + v2.z, v1.w + v2.w);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 4> VectorTraits<T, 4>::add(const Vector<T, 4> &v, const T &value)
-{
-    return Vector<T, 4>(v.x + value, v.y + value, v.z + value, v.w + value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 4> VectorTraits<T, 4>::sub(const Vector<T, 4> &v1, const Vector<T, 4> &v2)
-{
-    return Vector<T, 4>(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 4> VectorTraits<T, 4>::sub(const Vector<T, 4> &v, const T &value)
-{
-    return Vector<T, 4>(v.x - value, v.y - value, v.z - value, v.w - value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 4> VectorTraits<T, 4>::mul(const Vector<T, 4> &v, const T &value)
-{
-    return Vector<T, 4>(v.x * value, v.y * value, v.z * value, v.w * value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 4> VectorTraits<T, 4>::div(const Vector<T, 4> &v, const T &value)
-{
-    return Vector<T, 4>(v.x / value, v.y / value, v.z / value, v.w / value);
-}
-
-template<typename T>
-FMATH_CONSTEXPR T VectorTraits<T, 4>::dot(const Vector<T, 4> &v1, const Vector<T, 4> &v2)
-{
-    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 4> VectorTraits<T, 4>::hadamardMul(const Vector<T, 4> &v1, const Vector<T, 4> &v2)
-{
-    return Vector<T, 4>(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z, v1.w * v2.w);
-}
-
-template<typename T>
-FMATH_CONSTEXPR Vector<T, 4> VectorTraits<T, 4>::hadamardDiv(const Vector<T, 4> &v1, const Vector<T, 4> &v2)
-{
-    return Vector<T, 4>(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z, v1.w / v2.w);
-}
-
-template<typename T>
-FMATH_CONSTEXPR T VectorTraits<T, 4>::length2(const Vector<T, 4> &v)
-{
-    return v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w;
-}
+struct VectorTraits : 
+    VectorTraits_Add<T, N, Vector<T, N>>,
+    VectorTraits_Compare<T, N>,
+    VectorTraits_Dot<T, N>,
+    VectorTraits_Hadamard<T, N, Vector<T, N>>,
+    VectorTraits_Norm<T, N>,
+    VectorTraits_Scale<T, N, Vector<T, N>>
+{};
 
 }
 
@@ -564,6 +138,30 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator/(const Vector<T, N> &vec, con
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> add(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return v1 + v2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> sub(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return v1 - v2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> mul(const Vector<T, N> &v, const T &value)
+{
+    return v * value;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> div(const Vector<T, N> &v, const T &value)
+{
+    return v / value;
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR T dot(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
     return internal::VectorTraits<T, N>::dot(v1, v2);
@@ -604,13 +202,16 @@ Vector<T, N> normalize(const Vector<T, N> &vec)
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T cross(const Vector<T, 2> &v1, const Vector<T, 2> &v2)
 {
-    return internal::VectorTraits<T, 2>::cross(v1, v2);
+    return v1.x * v2.y - v1.y * v2.x;
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, 3> cross(const Vector<T, 3> &v1, const Vector<T, 3> &v2)
 {
-    return internal::VectorTraits<T, 3>::cross(v1, v2);
+    return Vector<T, 3>(v1[1] * v2[2] - v1[2] * v2[1],
+        v1[2] * v2[0] - v1[0] * v2[2],
+        v1[0] * v2[1] - v1[1] * v2[0]
+    );
 }
 
 template<typename T, size_t N>
@@ -646,9 +247,16 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> Vector<T, N>::operator-() const
 }
 
 template<typename T, size_t N>
-Vector<T, N> &Vector<T, N>::operator+=(const Vector &other)
+FMATH_INLINE Vector<T, N> &Vector<T, N>::operator+=(const Vector &other)
 {
     *this = internal::VectorTraits<T, N>::add(*this, other);
+    return *this;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE Vector<T, N> &Vector<T, N>::operator+=(const ValueType &value)
+{
+    *this = internal::VectorTraits<T, N>::add(*this, value);
     return *this;
 }
 
@@ -674,7 +282,7 @@ Vector<T, N> &Vector<T, N>::operator/=(const ValueType &value)
 }
 
 template<typename T, size_t N>
-Vector<T, N> Vector<T, N>::zero()
+FMATH_CONSTEXPR Vector<T, N> Vector<T, N>::zero()
 {
     return Vector();
 }
