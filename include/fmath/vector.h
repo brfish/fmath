@@ -43,8 +43,6 @@ public:
 
     FMATH_INLINE Vector &operator*=(const ValueType &value);
 
-    FMATH_INLINE Vector &operator*=(const Scalar<T, N> &scalar);
-
     FMATH_INLINE Vector &operator/=(const ValueType &value);
 
     static FMATH_CONSTEXPR Vector zero();
@@ -60,6 +58,7 @@ struct VectorTraits :
     VectorTraits_Dot<T, N>,
     VectorTraits_Hadamard<T, N, Vector<T, N>>,
     VectorTraits_Norm<T, N>,
+    VectorTraits_Print<T, N>,
     VectorTraits_Scale<T, N, Vector<T, N>>
 {};
 
@@ -144,9 +143,21 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> add(const Vector<T, N> &v1, const Vect
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> add(const Vector<T, N> &v, const T &value)
+{
+    return v + value;
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> sub(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
     return v1 - v2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> sub(const Vector<T, N> &v, const T &value)
+{
+    return v - value;
 }
 
 template<typename T, size_t N>
@@ -212,6 +223,13 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, 3> cross(const Vector<T, 3> &v1, const Ve
         v1[2] * v2[0] - v1[0] * v2[2],
         v1[0] * v2[1] - v1[1] * v2[0]
     );
+}
+
+template<typename T, size_t N>
+std::ostream &operator<<(std::ostream &output, const Vector<T, N> &vec)
+{
+    internal::VectorTraits<T, N>::print(output, vec);
+    return output;
 }
 
 template<typename T, size_t N>
@@ -285,16 +303,6 @@ template<typename T, size_t N>
 FMATH_CONSTEXPR Vector<T, N> Vector<T, N>::zero()
 {
     return Vector();
-}
-
-template<typename T, size_t N>
-std::ostream &operator<<(std::ostream &output, const Vector<T, N> &vec)
-{
-    output << '[';
-    for (index_t i = 0; i < N; ++i)
-        output << vec[i] << ("," + (i == N - 1));
-    output << ']';
-    return output;
 }
 
 template<typename T>

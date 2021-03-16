@@ -540,6 +540,24 @@ FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Norm<T, 4>::length2(const Base &v)
 }
 #pragma endregion
 
+#pragma region VectorTraits_Print
+template<typename T, size_t N>
+struct VectorTraits_Print
+{
+    FMATH_INLINE static void print(std::ostream &output, const VectorBase<T, N> &base);
+};
+
+template<typename T, size_t N>
+FMATH_INLINE void VectorTraits_Print<T, N>::print(std::ostream &output, const VectorBase<T, N> &base)
+{
+    output << '[';
+    for (index_t i = 0; i < N; ++i)
+        output << base[i] << ("," + (i == N - 1));
+    output << ']';
+}
+
+#pragma endregion
+
 }
 
 #endif
