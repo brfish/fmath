@@ -26,7 +26,7 @@ struct VectorBase : public VectorStorage<T, N>
 
     FMATH_CONSTEXPR FMATH_INLINE const ValueType &get(index_t index) const;
 
-    FMATH_CONSTEXPR FMATH_INLINE ValueType &get(index_t index);
+    FMATH_INLINE ValueType &get(index_t index);
     
     FMATH_INLINE void set(index_t index, const ValueType &value);
 
@@ -66,7 +66,7 @@ FMATH_CONSTEXPR FMATH_INLINE const typename VectorBase<T, N>::ValueType &VectorB
 }
 
 template<typename T, size_t N>
-FMATH_CONSTEXPR FMATH_INLINE typename VectorBase<T, N>::ValueType &VectorBase<T, N>::get(index_t index)
+FMATH_INLINE typename VectorBase<T, N>::ValueType &VectorBase<T, N>::get(index_t index)
 {
     return this->values[index];
 }
