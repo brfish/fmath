@@ -24,10 +24,10 @@ public:
     using internal::VectorBase<T, N>::VectorBase;
 
     template<typename U, size_t M, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
-    FMATH_CONSTEXPR Vector(const Vector<U, M> &other);
+    Vector(const Vector<U, M> &other);
 
     template<typename U, size_t M, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
-    FMATH_CONSTEXPR Vector &operator=(const Vector<U, M> &other);
+    Vector &operator=(const Vector<U, M> &other);
 
     FMATH_INLINE FMATH_CONSTEXPR Vector operator+() const;
 
@@ -234,19 +234,19 @@ std::ostream &operator<<(std::ostream &output, const Vector<T, N> &vec)
 
 template<typename T, size_t N>
     template<typename U, size_t M, typename>
-FMATH_CONSTEXPR Vector<T, N>::Vector(const Vector<U, M> &other)
+Vector<T, N>::Vector(const Vector<U, M> &other)
     :   Vector()
 {
-    FMATH_CONSTEXPR size_t REAL = min(SIZE, M);
+    constexpr size_t REAL = min(SIZE, M);
     for (index_t i = 0; i < REAL; ++i)
         this->values[i] = static_cast<ValueType>(other[i]);
 }
 
 template<typename T, size_t N>
     template<typename U, size_t M, typename>
-FMATH_CONSTEXPR Vector<T, N> &Vector<T, N>::operator=(const Vector<U, M> &other)
+Vector<T, N> &Vector<T, N>::operator=(const Vector<U, M> &other)
 {
-    FMATH_CONSTEXPR size_t REAL = min(SIZE, M);
+    constexpr size_t REAL = min(SIZE, M);
     for (index_t i = 0; i < REAL; ++i)
         this->values[i] = static_cast<ValueType>(other[i]);
     return *this;
