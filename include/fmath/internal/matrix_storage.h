@@ -34,7 +34,7 @@ struct MatrixStorage<T, 2>
 
     explicit FMATH_CONSTEXPR MatrixStorage(const T &x0 = 0, const T &y0 = 0, const T &x1 = 0, const T &y1 = 0)
         :   v0(x0, y0),
-            v1(x1, y1);
+            v1(x1, y1)
     {}
 
     explicit FMATH_CONSTEXPR MatrixStorage(const Vector<T, 2> &v0, const Vector<T, 2> &v1)
