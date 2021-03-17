@@ -113,9 +113,9 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator-(const Vector<T, N> &vec, con
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR T operator*(const Vector<T, N> &a, const Vector<T, N> &b)
+FMATH_INLINE FMATH_CONSTEXPR T operator*(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
-    return internal::VectorTraits<T, N>::dot(a, b);
+    return internal::VectorTraits<T, N>::dot(v1, v2);
 }
 
 template<typename T, size_t N>
@@ -143,9 +143,9 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> add(const Vector<T, N> &v1, const Vect
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> add(const Vector<T, N> &v, const T &value)
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> add(const Vector<T, N> &vec, const T &value)
 {
-    return v + value;
+    return vec + value;
 }
 
 template<typename T, size_t N>
@@ -155,21 +155,21 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> sub(const Vector<T, N> &v1, const Vect
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> sub(const Vector<T, N> &v, const T &value)
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> sub(const Vector<T, N> &vec, const T &value)
 {
-    return v - value;
+    return vec - value;
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> mul(const Vector<T, N> &v, const T &value)
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> mul(const Vector<T, N> &vec, const T &value)
 {
-    return v * value;
+    return vec * value;
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> div(const Vector<T, N> &v, const T &value)
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> div(const Vector<T, N> &vec, const T &value)
 {
-    return v / value;
+    return vec / value;
 }
 
 template<typename T, size_t N>

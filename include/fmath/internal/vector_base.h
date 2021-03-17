@@ -9,28 +9,28 @@ namespace internal
 {
 
 template<typename T, size_t N>
-struct VectorBase : public VectorStorage<T, N>
+struct VectorBase : VectorStorage<T, N>
 {
     using ValueType = T;
     static constexpr size_t SIZE = N;
 
     using VectorStorage<T, N>::VectorStorage;
 
-    VectorBase(const ValueType *data, size_t count);
+    explicit VectorBase(const ValueType *data, size_t count);
 
-    FMATH_CONSTEXPR FMATH_INLINE size_t size() const;
+    FMATH_INLINE FMATH_CONSTEXPR size_t size() const;
 
-    FMATH_CONSTEXPR FMATH_INLINE const ValueType *data() const;
+    FMATH_INLINE FMATH_CONSTEXPR const ValueType *data() const;
 
-    FMATH_CONSTEXPR FMATH_INLINE ValueType *data();
+    FMATH_INLINE FMATH_CONSTEXPR ValueType *data();
 
-    FMATH_CONSTEXPR FMATH_INLINE const ValueType &get(index_t index) const;
+    FMATH_INLINE FMATH_CONSTEXPR const ValueType &get(index_t index) const;
 
     FMATH_INLINE ValueType &get(index_t index);
-    
+
     FMATH_INLINE void set(index_t index, const ValueType &value);
 
-    FMATH_CONSTEXPR FMATH_INLINE const ValueType &operator[](index_t index) const;
+    FMATH_INLINE FMATH_CONSTEXPR const ValueType &operator[](index_t index) const;
 
     FMATH_INLINE ValueType &operator[](index_t index);
 };
@@ -42,25 +42,25 @@ VectorBase<T, N>::VectorBase(const ValueType *data, size_t count)
 }
 
 template<typename T, size_t N>
-FMATH_CONSTEXPR FMATH_INLINE size_t VectorBase<T, N>::size() const
+FMATH_INLINE FMATH_CONSTEXPR size_t VectorBase<T, N>::size() const
 {
     return SIZE;
 }
 
 template<typename T, size_t N>
-FMATH_CONSTEXPR FMATH_INLINE const typename VectorBase<T, N>::ValueType *VectorBase<T, N>::data() const
+FMATH_INLINE FMATH_CONSTEXPR const typename VectorBase<T, N>::ValueType *VectorBase<T, N>::data() const
 {
     return this->values.data();
 }
 
 template<typename T, size_t N>
-FMATH_CONSTEXPR FMATH_INLINE typename VectorBase<T, N>::ValueType *VectorBase<T, N>::data()
+FMATH_INLINE FMATH_CONSTEXPR typename VectorBase<T, N>::ValueType *VectorBase<T, N>::data()
 {
     return this->values.data();
 }
 
 template<typename T, size_t N>
-FMATH_CONSTEXPR FMATH_INLINE const typename VectorBase<T, N>::ValueType &VectorBase<T, N>::get(index_t index) const
+FMATH_INLINE FMATH_CONSTEXPR const typename VectorBase<T, N>::ValueType &VectorBase<T, N>::get(index_t index) const
 {
     return this->values[index];
 }
@@ -78,7 +78,7 @@ FMATH_INLINE void VectorBase<T, N>::set(index_t index, const ValueType &value)
 }
 
 template<typename T, size_t N>
-FMATH_CONSTEXPR FMATH_INLINE const typename VectorBase<T, N>::ValueType &VectorBase<T, N>::operator[](index_t index) const
+FMATH_INLINE FMATH_CONSTEXPR const typename VectorBase<T, N>::ValueType &VectorBase<T, N>::operator[](index_t index) const
 {
     return this->values[index];
 }
