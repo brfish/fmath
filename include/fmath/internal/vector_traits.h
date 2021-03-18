@@ -55,7 +55,7 @@ struct VectorTraits_Compare<T, 2>
 template<typename T>
 bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 2>::equal(const Base &v1, const Base &v2)
 {
-    return v1.x == v2.x && v1.y == v2.y;
+    return v1[0] == v2[0] && v1[1] == v2[1];
 }
 
 template<typename T>
@@ -64,8 +64,8 @@ bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 2>::equalEpsilon(const
     if (&v1 == &v2)
         return true;
 
-    return fmath::equalEpsilon(v1.x, v2.x, epsilon) && 
-        fmath::equalEpsilon(v1.y, v2.y, epsilon);
+    return fmath::equalEpsilon(v1[0], v2[0], epsilon) && 
+        fmath::equalEpsilon(v1[1], v2[1], epsilon);
 }
 
 template<typename T>
@@ -79,7 +79,7 @@ struct VectorTraits_Compare<T, 3>
 template<typename T>
 bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 3>::equal(const Base &v1, const Base &v2)
 {
-    return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z;
+    return v1[0] == v2[0] && v1[1] == v2[1] && v1[2] == v2[2];
 }
 
 template<typename T>
@@ -88,9 +88,9 @@ bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 3>::equalEpsilon(const
     if (&v1 == &v2)
         return true;
 
-    return fmath::equalEpsilon(v1.x, v2.x, epsilon) && 
-        fmath::equalEpsilon(v1.y, v2.y, epsilon) && 
-        fmath::equalEpsilon(v1.z, v2.z, epsilon);
+    return fmath::equalEpsilon(v1[0], v2[0], epsilon) && 
+        fmath::equalEpsilon(v1[1], v2[1], epsilon) && 
+        fmath::equalEpsilon(v1[2], v2[2], epsilon);
 }
 
 template<typename T>
@@ -104,7 +104,7 @@ struct VectorTraits_Compare<T, 4>
 template<typename T>
 bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 4>::equal(const Base &v1, const Base &v2)
 {
-    return v1.x == v2.x && v1.y == v2.y && v1.z == v2.z && v1.w == v2.w;
+    return v1[0] == v2[0] && v1[1] == v2[1] && v1[2] == v2[2] && v1[3] == v2[3];
 }
 
 template<typename T>
@@ -113,10 +113,10 @@ bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 4>::equalEpsilon(const
     if (&v1 == &v2)
         return true;
 
-    return fmath::equalEpsilon(v1.x, v2.x, epsilon) && 
-        fmath::equalEpsilon(v1.y, v2.y, epsilon) && 
-        fmath::equalEpsilon(v1.z, v2.z, epsilon) && 
-        fmath::equalEpsilon(v1.w, v2.w, epsilon);
+    return fmath::equalEpsilon(v1[0], v2[0], epsilon) && 
+        fmath::equalEpsilon(v1[1], v2[1], epsilon) && 
+        fmath::equalEpsilon(v1[2], v2[2], epsilon) && 
+        fmath::equalEpsilon(v1[3], v2[3], epsilon);
 }
 #pragma endregion
 
@@ -180,25 +180,25 @@ struct VectorTraits_Add<T, 2, VectorT>
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 2, VectorT>::add(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x + v2.x, v1. y + v2.y);
+    return VectorT(v1[0] + v2[0], v1. y + v2[1]);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 2, VectorT>::add(const Base &v, const T &value)
 {
-    return VectorT(v.x + value, v.y + value);
+    return VectorT(v[0] + value, v[1] + value);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 2, VectorT>::sub(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x - v2.x, v1.y - v2.y);
+    return VectorT(v1[0] - v2[0], v1[1] - v2[1]);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 2, VectorT>::sub(const Base &v, const T &value)
 {
-    return VectorT(v.x - value, v.y - value);
+    return VectorT(v[0] - value, v[1] - value);
 }
 
 template<typename T, typename VectorT>
@@ -214,25 +214,25 @@ struct VectorTraits_Add<T, 3, VectorT>
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 3, VectorT>::add(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x + v2.x, v1. y + v2.y, v1.z + v2.z);
+    return VectorT(v1[0] + v2[0], v1. y + v2[1], v1[2] + v2[2]);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 3, VectorT>::add(const Base &v, const T &value)
 {
-    return VectorT(v.x + value, v.y + value, v.z + value);
+    return VectorT(v[0] + value, v[1] + value, v[2] + value);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 3, VectorT>::sub(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z);
+    return VectorT(v1[0] - v2[0], v1[1] - v2[1], v1[2] - v2[2]);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 3, VectorT>::sub(const Base &v, const T &value)
 {
-    return VectorT(v.x - value, v.y - value, v.z - value);
+    return VectorT(v[0] - value, v[1] - value, v[2] - value);
 }
 
 template<typename T, typename VectorT>
@@ -248,25 +248,25 @@ struct VectorTraits_Add<T, 4, VectorT>
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 4, VectorT>::add(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x + v2.x, v1. y + v2.y, v1.z + v2.z, v1.w + v2.w);
+    return VectorT(v1[0] + v2[0], v1[1] + v2[1], v1[2] + v2[2], v1[3] + v2[3]);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 4, VectorT>::add(const Base &v, const T &value)
 {
-    return VectorT(v.x + value, v.y + value, v.z + value, v.w + value);
+    return VectorT(v[0] + value, v[1] + value, v[2] + value, v[3] + value);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 4, VectorT>::sub(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w);
+    return VectorT(v1[0] - v2[0], v1[1] - v2[1], v1[2] - v2[2], v1[3] - v2[3]);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 4, VectorT>::sub(const Base &v, const T &value)
 {
-    return VectorT(v.x - value, v.y - value, v.z - value, v.w - value);
+    return VectorT(v[0] - value, v[1] - value, v[2] - value, v[3] - value);
 }
 #pragma endregion
 
@@ -297,7 +297,7 @@ struct VectorTraits_Dot<T, 2>
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Dot<T, 2>::dot(const Base &v1, const Base &v2)
 {
-    return v1.x * v2.x + v1.y * v2.y;
+    return v1[0] * v2[0] + v1[1] * v2[1];
 }
 
 template<typename T>
@@ -310,7 +310,7 @@ struct VectorTraits_Dot<T, 3>
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Dot<T, 3>::dot(const Base &v1, const Base &v2)
 {
-    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+    return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 
 template<typename T>
@@ -323,7 +323,7 @@ struct VectorTraits_Dot<T, 4>
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Dot<T, 4>::dot(const Base &v1, const Base &v2)
 {
-    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w;
+    return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2] + v1[3] * v2[3];
 }
 #pragma endregion
 
@@ -365,13 +365,13 @@ struct VectorTraits_Scale<T, 2, VectorT>
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 2, VectorT>::mul(const Base &v, const T &value)
 {
-    return VectorT(v.x * value, v.y * value);
+    return VectorT(v[0] * value, v[1] * value);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 2, VectorT>::div(const Base &v, const T &value)
 {
-    return VectorT(v.x / value, v.y / value);
+    return VectorT(v[0] / value, v[1] / value);
 }
 
 template<typename T, typename VectorT>
@@ -385,13 +385,13 @@ struct VectorTraits_Scale<T, 3, VectorT>
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 3, VectorT>::mul(const Base &v, const T &value)
 {
-    return VectorT(v.x * value, v.y * value, v.z * value);
+    return VectorT(v[0] * value, v[1] * value, v[2] * value);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 3, VectorT>::div(const Base &v, const T &value)
 {
-    return VectorT(v.x / value, v.y / value, v.z / value);
+    return VectorT(v[0] / value, v[1] / value, v[2] / value);
 }
 
 template<typename T, typename VectorT>
@@ -405,13 +405,13 @@ struct VectorTraits_Scale<T, 4, VectorT>
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 4, VectorT>::mul(const Base &v, const T &value)
 {
-    return VectorT(v.x * value, v.y * value, v.z * value, v.w * value);
+    return VectorT(v[0] * value, v[1] * value, v[2] * value, v[3] * value);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 4, VectorT>::div(const Base &v, const T &value)
 {
-    return VectorT(v.x / value, v.y / value, v.z / value, v.w / value);
+    return VectorT(v[0] / value, v[1] / value, v[2] / value, v[3] / value);
 }
 #pragma endregion
 
@@ -453,13 +453,13 @@ struct VectorTraits_Hadamard<T, 2, VectorT>
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 2, VectorT>::hadamardMul(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x * v2.x, v1.y * v2.y);
+    return VectorT(v1[0] * v2[0], v1[1] * v2[1]);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 2, VectorT>::hadamardDiv(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x / v2.x, v1.y / v2.y);
+    return VectorT(v1[0] / v2[0], v1[1] / v2[1]);
 }
 
 template<typename T, typename VectorT>
@@ -473,13 +473,13 @@ struct VectorTraits_Hadamard<T, 3, VectorT>
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 3, VectorT>::hadamardMul(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
+    return VectorT(v1[0] * v2[0], v1[1] * v2[1], v1[2] * v2[2]);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 3, VectorT>::hadamardDiv(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x / v2.x, v1.y / v2.y, v1.z / v2.z);
+    return VectorT(v1[0] / v2[0], v1[1] / v2[1], v1[2] / v2[2]);
 }
 
 template<typename T, typename VectorT>
@@ -493,13 +493,13 @@ struct VectorTraits_Hadamard<T, 4, VectorT>
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 4, VectorT>::hadamardMul(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z, v1.w * v2.w);
+    return VectorT(v1[0] * v2[0], v1[1] * v2[1], v1[2] * v2[2], v1[3] * v2[3]);
 }
 
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 4, VectorT>::hadamardDiv(const Base &v1, const Base &v2)
 {
-    return VectorT(v1.x / v2.x, v1.y / v2.y, v1.z * v2.z, v1.w * v2.w);
+    return VectorT(v1[0] / v2[0], v1[1] / v2[1], v1[2] * v2[2], v1[3] * v2[3]);
 }
 #pragma endregion
 
@@ -530,7 +530,7 @@ struct VectorTraits_Norm<T, 2>
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Norm<T, 2>::length2(const Base &v)
 {
-    return v.x * v.x + v.y * v.y;
+    return v[0] * v[0] + v[1] * v[1];
 }
 
 template<typename T>
@@ -543,7 +543,7 @@ struct VectorTraits_Norm<T, 3>
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Norm<T, 3>::length2(const Base &v)
 {
-    return v.x * v.x + v.y * v.y + v.z * v.z;
+    return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 }
 
 template<typename T>
@@ -556,7 +556,7 @@ struct VectorTraits_Norm<T, 4>
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Norm<T, 4>::length2(const Base &v)
 {
-    return v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w;
+    return v[0] * v[0] + v[1] * v[1] + v[2] * v[2] + v[3] * v[3];
 }
 #pragma endregion
 

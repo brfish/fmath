@@ -33,8 +33,7 @@ struct VectorStorage<T, 2>
     };
 
     explicit FMATH_CONSTEXPR VectorStorage(const T &x = 0, const T &y = 0)
-        :   x(x),
-            y(y)
+        :   values { x, y }
     {}
 };
 
@@ -48,9 +47,7 @@ struct VectorStorage<T, 3>
     };
 
     explicit FMATH_CONSTEXPR VectorStorage(const T &x = 0, const T &y = 0, const T &z = 0)
-        :   x(x),
-            y(y),
-            z(z)
+        :   values { x, y, z }
     {}
 };
 
@@ -64,10 +61,7 @@ struct VectorStorage<T, 4>
     };
 
     explicit FMATH_CONSTEXPR VectorStorage(const T &x = 0, const T &y = 0, const T &z = 0, const T &w = 0)
-        :   x(x),
-            y(y),
-            z(z),
-            w(w)
+        :   values { x, y, z, w }
     {}
 };
 

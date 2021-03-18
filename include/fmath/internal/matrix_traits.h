@@ -35,12 +35,12 @@ template<typename T, size_t N>
 struct MatrixTraits_Compare
 {
     using Base = MatrixBase<T, N>;
-    static FMATH_INLINE FMATH_CONSTEXPR bool equal(const Base &m1, const Base &m2);
-    static FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Base &m1, const Base &m2, const T &epsilon);
+    static FMATH_INLINE bool equal(const Base &m1, const Base &m2);
+    static FMATH_INLINE bool equalEpsilon(const Base &m1, const Base &m2, const T &epsilon);
 };
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR bool MatrixTraits_Compare<T, N>::equal(const Base &m1, const Base &m2)
+FMATH_INLINE bool MatrixTraits_Compare<T, N>::equal(const Base &m1, const Base &m2)
 {
     if (&m1 == &m2)
         return true;
@@ -48,7 +48,7 @@ FMATH_INLINE FMATH_CONSTEXPR bool MatrixTraits_Compare<T, N>::equal(const Base &
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR bool MatrixTraits_Compare<T, N>::equalEpsilon(const Base &m1, const Base &m2, const T &epsilon)
+FMATH_INLINE bool MatrixTraits_Compare<T, N>::equalEpsilon(const Base &m1, const Base &m2, const T &epsilon)
 {
     if (&m1 == &m2)
         return true;
@@ -68,18 +68,15 @@ FMATH_INLINE FMATH_CONSTEXPR bool MatrixTraits_Compare<T, N>::equalEpsilon(const
 template<typename T, size_t N, typename MatrixT>
 struct MatrixTraits_Add
 {
-private:
     using Base = MatrixBase<T, N>;
-
-public:
-    static FMATH_INLINE FMATH_CONSTEXPR MatrixT add(const Base &m1, const Base &m2);
-    static FMATH_INLINE FMATH_CONSTEXPR MatrixT add(const Base &m, const T &value);
-    static FMATH_INLINE FMATH_CONSTEXPR MatrixT sub(const Base &m1, const Base &m2);
-    static FMATH_INLINE FMATH_CONSTEXPR MatrixT sub(const Base &m, const T &value);
+    static FMATH_INLINE MatrixT add(const Base &m1, const Base &m2);
+    static FMATH_INLINE MatrixT add(const Base &m, const T &value);
+    static FMATH_INLINE MatrixT sub(const Base &m1, const Base &m2);
+    static FMATH_INLINE MatrixT sub(const Base &m, const T &value);
 };
 
 template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Add<T, N, MatrixT>::add(const Base &m1, const Base &m2)
+FMATH_INLINE MatrixT MatrixTraits_Add<T, N, MatrixT>::add(const Base &m1, const Base &m2)
 {
     MatrixT result;
     for (index_t i = 0; i < N; ++i)
@@ -88,7 +85,7 @@ FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Add<T, N, MatrixT>::add(const 
 }
 
 template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Add<T, N, MatrixT>::add(const Base &m, const T &value)
+FMATH_INLINE MatrixT MatrixTraits_Add<T, N, MatrixT>::add(const Base &m, const T &value)
 {
     MatrixT result;
     for (index_t i = 0; i < N; ++i)
@@ -97,7 +94,7 @@ FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Add<T, N, MatrixT>::add(const 
 }
 
 template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Add<T, N, MatrixT>::sub(const Base &m1, const Base &m2)
+FMATH_INLINE MatrixT MatrixTraits_Add<T, N, MatrixT>::sub(const Base &m1, const Base &m2)
 {
     MatrixT result;
     for (index_t i = 0; i < N; ++i)
@@ -106,7 +103,7 @@ FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Add<T, N, MatrixT>::sub(const 
 }
 
 template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Add<T, N, MatrixT>::sub(const Base &m, const T &value)
+FMATH_INLINE MatrixT MatrixTraits_Add<T, N, MatrixT>::sub(const Base &m, const T &value)
 {
     MatrixT result;
     for (index_t i = 0; i < N; ++i)
@@ -556,8 +553,11 @@ struct MatrixTraits_Square<T, 2, MatrixT>
 template<typename T, typename MatrixT>
 FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Square<T, 2, MatrixT>::inverse(const Base &m)
 {
-    T factor = static_cast<T>(1) / determinant(m);
-    return MatrixT(m[1][1], -m[0][1], -m[1][0], m[0][0]) * factor;
+    T det = determinant(m);
+    FMATH_ASSERT(det != 0);
+
+    det = static_cast<T>(1) / det;
+    return MatrixT(m[1][1], -m[0][1], -m[1][0], m[0][0]) * det;
 }
 
 template<typename T, typename MatrixT>
@@ -590,6 +590,8 @@ FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Square<T, 3, MatrixT>::inverse
     result[2][2] = m[0][0] * m[1][1] - m[0][1] * m[1][0];
 
     T det = determinant(m);
+    FMATH_ASSERT(det != 0);
+
     det = static_cast<T>(1) / det;
 
     result *= det;
@@ -731,6 +733,8 @@ FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Square<T, 4, MatrixT>::inverse
         m[2][0] * m[0][2] * m[1][1];
 
     T det = m[0][0] * result[0][0] + m[0][1] * result[1][0] + m[0][2] * result[2][0] + m[0][3] * result[3][0];
+    FMATH_ASSERT(det != 0);
+
     det = 1.0 / det;
     result *= det;
     return result;

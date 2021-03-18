@@ -26,7 +26,7 @@ struct MatrixBase : internal::MatrixStorage<T, N>
 
     FMATH_INLINE FMATH_CONSTEXPR const T &get(index_t i, index_t j) const;
 
-    FMATH_INLINE T &get(index_t i, index_t j);
+    FMATH_INLINE FMATH_CONSTEXPR T &get(index_t i, index_t j);
 
     FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> col(index_t index) const;
 
@@ -40,7 +40,7 @@ struct MatrixBase : internal::MatrixStorage<T, N>
 
     FMATH_INLINE FMATH_CONSTEXPR const Vector<T, N> &operator[](index_t index) const;
 
-    FMATH_INLINE Vector<T, N> &operator[](index_t index);
+    FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> &operator[](index_t index);
 
     FMATH_INLINE void fill(const T &value);
 };
@@ -76,7 +76,7 @@ FMATH_INLINE FMATH_CONSTEXPR const T &MatrixBase<T, N>::get(index_t i, index_t j
 }
 
 template<typename T, size_t N>
-FMATH_INLINE T &MatrixBase<T, N>::get(index_t i, index_t j)
+FMATH_INLINE FMATH_CONSTEXPR T &MatrixBase<T, N>::get(index_t i, index_t j)
 {
     return this->values[i][j];
 }
@@ -122,11 +122,10 @@ FMATH_INLINE FMATH_CONSTEXPR const Vector<T, N> &MatrixBase<T, N>::operator[](in
 }
 
 template<typename T, size_t N>
-FMATH_INLINE Vector<T, N> &MatrixBase<T, N>::operator[](index_t index)
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> &MatrixBase<T, N>::operator[](index_t index)
 {
     return this->values[index];
 }
-
 
 template<typename T, size_t N>
 FMATH_INLINE void MatrixBase<T, N>::fill(const T &value)
