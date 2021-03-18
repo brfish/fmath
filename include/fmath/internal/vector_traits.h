@@ -19,6 +19,9 @@ struct VectorTraits_Compare
 template<typename T, size_t N>
 bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, N>::equal(const Base &v1, const Base &v2)
 {
+    if (&v1 == &v2)
+        return true;
+    
     for (index_t i = 0; i < N; ++i)
     {
         if (v1[i] != v2[i])
@@ -30,9 +33,12 @@ bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, N>::equal(const Base &
 template<typename T, size_t N>
 bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, N>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
 {
+    if (&v1 == &v2)
+        return true;
+
     for (index_t i = 0; i < N; ++i)
     {
-        if (!equalEpsilon(v1[i], v2[i], epsilon))
+        if (!fmath::equalEpsilon(v1[i], v2[i], epsilon))
             return false;
     }
     return true;
@@ -55,7 +61,11 @@ bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 2>::equal(const Base &
 template<typename T>
 bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 2>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
 {
-    return equalEpsilon(v1.x, v2.x) && equalEpsilon(v1.y, v2.y);
+    if (&v1 == &v2)
+        return true;
+
+    return fmath::equalEpsilon(v1.x, v2.x, epsilon) && 
+        fmath::equalEpsilon(v1.y, v2.y, epsilon);
 }
 
 template<typename T>
@@ -75,7 +85,12 @@ bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 3>::equal(const Base &
 template<typename T>
 bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 3>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
 {
-    return equalEpsilon(v1.x, v2.x) && equalEpsilon(v1.y, v2.y) && equalEpsilon(v1.z, v2.z);
+    if (&v1 == &v2)
+        return true;
+
+    return fmath::equalEpsilon(v1.x, v2.x, epsilon) && 
+        fmath::equalEpsilon(v1.y, v2.y, epsilon) && 
+        fmath::equalEpsilon(v1.z, v2.z, epsilon);
 }
 
 template<typename T>
@@ -95,8 +110,13 @@ bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 4>::equal(const Base &
 template<typename T>
 bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 4>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
 {
-    return equalEpsilon(v1.x, v2.x) && equalEpsilon(v1.y, v2.y) && 
-        equalEpsilon(v1.z, v2.z) && equalEpsilon(v1.w, v2.w);
+    if (&v1 == &v2)
+        return true;
+
+    return fmath::equalEpsilon(v1.x, v2.x, epsilon) && 
+        fmath::equalEpsilon(v1.y, v2.y, epsilon) && 
+        fmath::equalEpsilon(v1.z, v2.z, epsilon) && 
+        fmath::equalEpsilon(v1.w, v2.w, epsilon);
 }
 #pragma endregion
 
