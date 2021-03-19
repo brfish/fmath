@@ -643,6 +643,97 @@ FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Mul<T, 4, MatrixT>::mul(const 
 }
 #pragma endregion
 
+#pragma region MatrixTraits_VectorMul
+template<typename T, size_t N, typename VectorT>
+struct MatrixTraits_VectorMul
+{
+    using VecBase = VectorBase<T, N>;
+    using MatBase = MatrixBase<T, N>;
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT vectorMul(const VecBase &v, const MatBase &m);
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT vectorMul(const MatBase &m, const VecBase &v);
+};
+
+template<typename T, typename VectorT>
+struct MatrixTraits_VectorMul<T, 2, VectorT>
+{
+    using VecBase = VectorBase<T, 2>;
+    using MatBase = MatrixBase<T, 2>;
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT vectorMul(const VecBase &v, const MatBase &m);
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT vectorMul(const MatBase &m, const VecBase &v);
+};
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT MatrixTraits_VectorMul<T, 2, VectorT>::vectorMul(const VecBase &v, const MatBase &m)
+{
+    return VectorT(v[0] * m[0][0] + v[1] * m[0][1],
+        v[0] * m[1][0] + v[1] * m[1][1]);
+}
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT MatrixTraits_VectorMul<T, 2, VectorT>::vectorMul(const MatBase &m, const VecBase &v)
+{
+    return VectorT(m[0][0] * v[0] + m[1][0] * v[1],
+        m[0][1] * v[0] + m[1][1] * v[1]
+    );
+}
+
+template<typename T, typename VectorT>
+struct MatrixTraits_VectorMul<T, 3, VectorT>
+{
+    using VecBase = VectorBase<T, 3>;
+    using MatBase = MatrixBase<T, 3>;
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT vectorMul(const VecBase &v, const MatBase &m);
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT vectorMul(const MatBase &m, const VecBase &v);
+};
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT MatrixTraits_VectorMul<T, 3, VectorT>::vectorMul(const VecBase &v, const MatBase &m)
+{
+    return VectorT(v[0] * m[0][0] + v[1] * m[0][1] + v[2] * m[0][2],
+        v[0] * m[1][0] + v[1] * m[1][1] + v[2] * m[1][2],
+        v[0] * m[2][0] + v[1] * m[2][1] + v[2] * m[2][2]
+    );
+}
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT MatrixTraits_VectorMul<T, 3, VectorT>::vectorMul(const MatBase &m, const VecBase &v)
+{
+    return VectorT(m[0][0] * v[0] + m[1][0] * v[1] + m[2][0] * v[2],
+        m[0][1] * v[0] + m[1][1] * v[1] + m[2][1] * v[2],
+        m[0][2] * v[0] + m[1][2] * v[1] + m[2][2] * v[2]
+    );
+}
+
+template<typename T, typename VectorT>
+struct MatrixTraits_VectorMul<T, 4, VectorT>
+{
+    using VecBase = VectorBase<T, 4>;
+    using MatBase = MatrixBase<T, 4>;
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT vectorMul(const VecBase &v, const MatBase &m);
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT vectorMul(const MatBase &m, const VecBase &v);
+};
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT MatrixTraits_VectorMul<T, 4, VectorT>::vectorMul(const VecBase &v, const MatBase &m)
+{
+    return VectorT(v[0] * m[0][0] + v[1] * m[0][1] + v[2] * m[0][2] + v[3] * m[0][3],
+        v[0] * m[1][0] + v[1] * m[1][1] + v[2] * m[1][2] + v[3] * m[1][3],
+        v[0] * m[2][0] + v[1] * m[2][1] + v[2] * m[2][2] + v[3] * m[2][3],
+        v[0] * m[3][0] + v[1] * m[3][1] + v[2] * m[3][2] + v[3] * m[3][3]
+    );
+}
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT MatrixTraits_VectorMul<T, 4, VectorT>::vectorMul(const MatBase &m, const VecBase &v)
+{
+    return VectorT(m[0][0] * v[0] + m[1][0] * v[1] + m[2][0] * v[2] + m[3][0] * v[3],
+        m[0][1] * v[0] + m[1][1] * v[1] + m[2][1] * v[2] + m[3][1] * v[3],
+        m[0][2] * v[0] + m[1][2] * v[1] + m[2][2] * v[2] + m[3][2] * v[3],
+        m[0][3] * v[0] + m[1][3] * v[1] + m[2][3] * v[2] + m[3][3] * v[3]
+    );
+}
+#pragma endregion
+
 #pragma region MatrixTraits_Hadamard
 template<typename T, size_t N, typename MatrixT>
 struct MatrixTraits_Hadamard

@@ -61,7 +61,8 @@ struct MatrixTraits :
     MatrixTraits_Hadamard<T, N, Matrix<T, N>>,
     MatrixTraits_Mul<T, N, Matrix<T, N>>,
     MatrixTraits_Print<T, N>,
-    MatrixTraits_Square<T, N, Matrix<T, N>>
+    MatrixTraits_Square<T, N, Matrix<T, N>>,
+    MatrixTraits_VectorMul<T, N, Vector<T, N>>
 {};
 
 }
@@ -133,9 +134,15 @@ FMATH_INLINE FMATH_CONSTEXPR Matrix<T, N> operator*(const T &value, const Matrix
 }
 
 template<typename T, size_t N>
-typename Matrix<T, N>::VectorType operator*(const Matrix<T, N> &mat, const Vector<T, N> &v)
+typename Matrix<T, N>::VectorType operator*(const Matrix<T, N> &mat, const Vector<T, N> &vec)
 {
-    return internal::MatrixTraits<T, N>::mul(mat, v);
+    return internal::MatrixTraits<T, N>::vectorMul(mat, vec);
+}
+
+template<typename T, size_t N>
+typename Matrix<T, N>::VectorType operator*(const Vector<T, N> &vec, const Matrix<T, N> &mat)
+{
+    return internal::MatrixTraits<T, N>::vectorMul(vec, mat);
 }
 
 template<typename T, size_t N>
