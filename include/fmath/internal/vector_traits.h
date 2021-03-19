@@ -332,12 +332,12 @@ template<typename T, size_t N, typename VectorT>
 struct VectorTraits_Scale
 {
     using Base = VectorBase<T, N>;
-    FMATH_INLINE FMATH_CONSTEXPR static VectorT mul(const Base &v, const T &value);
-    FMATH_INLINE FMATH_CONSTEXPR static VectorT div(const Base &v, const T &value);
+    FMATH_INLINE static VectorT mul(const Base &v, const T &value);
+    FMATH_INLINE static VectorT div(const Base &v, const T &value);
 };
 
 template<typename T, size_t N, typename VectorT>
-FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, N, VectorT>::mul(const Base &v, const T &value)
+FMATH_INLINE VectorT VectorTraits_Scale<T, N, VectorT>::mul(const Base &v, const T &value)
 {
     VectorT result;
     for (index_t i = 0; i < N; ++i)
@@ -346,8 +346,9 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, N, VectorT>::mul(cons
 }
 
 template<typename T, size_t N, typename VectorT>
-FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, N, VectorT>::div(const Base &v, const T &value)
+FMATH_INLINE VectorT VectorTraits_Scale<T, N, VectorT>::div(const Base &v, const T &value)
 {
+    FMATH_ASSERT(value != 0);
     VectorT result;
     for (index_t i = 0; i < N; ++i)
         result[i] = v[i] / value;
@@ -371,6 +372,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 2, VectorT>::mul(cons
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 2, VectorT>::div(const Base &v, const T &value)
 {
+    FMATH_ASSERT(value != 0);
     return VectorT(v[0] / value, v[1] / value);
 }
 
@@ -391,6 +393,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 3, VectorT>::mul(cons
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 3, VectorT>::div(const Base &v, const T &value)
 {
+    FMATH_ASSERT(value != 0);
     return VectorT(v[0] / value, v[1] / value, v[2] / value);
 }
 
@@ -411,6 +414,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 4, VectorT>::mul(cons
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 4, VectorT>::div(const Base &v, const T &value)
 {
+    FMATH_ASSERT(value != 0);
     return VectorT(v[0] / value, v[1] / value, v[2] / value, v[3] / value);
 }
 #pragma endregion
@@ -438,7 +442,10 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, N, VectorT>::hadam
 {
     VectorT result;
     for (index_t i = 0; i < N; ++i)
+    {
+        FMATH_ASSERT(v2[i] != 0);
         result[i] = v1[i] / v2[i];
+    }   
     return result;
 }
 
@@ -459,6 +466,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 2, VectorT>::hadam
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 2, VectorT>::hadamardDiv(const Base &v1, const Base &v2)
 {
+    FMATH_ASSERT(v2[0] !=0 && v2[1] != 0);
     return VectorT(v1[0] / v2[0], v1[1] / v2[1]);
 }
 
@@ -479,6 +487,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 3, VectorT>::hadam
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 3, VectorT>::hadamardDiv(const Base &v1, const Base &v2)
 {
+    FMATH_ASSERT(v2[0] !=0 && v2[1] != 0 && v2[2] != 0);
     return VectorT(v1[0] / v2[0], v1[1] / v2[1], v1[2] / v2[2]);
 }
 
@@ -499,6 +508,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 4, VectorT>::hadam
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 4, VectorT>::hadamardDiv(const Base &v1, const Base &v2)
 {
+    FMATH_ASSERT(v2[0] != 0 && v2[1] != 0 && v2[2] !=0 && v2[3] != 0);
     return VectorT(v1[0] / v2[0], v1[1] / v2[1], v1[2] * v2[2], v1[3] * v2[3]);
 }
 #pragma endregion
