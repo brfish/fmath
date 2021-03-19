@@ -259,51 +259,49 @@ FMATH_INLINE FMATH_CONSTEXPR Matrix<T, N> Matrix<T, N>::operator-() const
 template<typename T, size_t N>
 FMATH_INLINE Matrix<T, N> &Matrix<T, N>::operator+=(const Matrix<T, N> &mat)
 {
-    for (index_t i = 0; i < DIMENSION; ++i)
-        (*this)[i] += mat[i];
+    internal::MatrixTraits<T, N>::addBy(*this, mat);
+    return *this;
 }
 
 template<typename T, size_t N>
 FMATH_INLINE Matrix<T, N> &Matrix<T, N>::operator+=(const ValueType &value)
 {
-    for (index_t i = 0; i < DIMENSION; ++i)
-        (*this)[i] += value;
+    internal::MatrixTraits<T, N>::addBy(*this, value);
+    return *this;
 }
 
 template<typename T, size_t N>
 FMATH_INLINE Matrix<T, N> &Matrix<T, N>::operator-=(const Matrix<T, N> &mat)
 {
-    for (index_t i = 0; i < DIMENSION; ++i)
-        (*this)[i] -= mat[i];
+    internal::MatrixTraits<T, N>::subBy(*this, mat);
+    return *this;
 }
 
 template<typename T, size_t N>
 FMATH_INLINE Matrix<T, N> &Matrix<T, N>::operator-=(const ValueType &value)
 {
-    for (index_t i = 0; i < DIMENSION; ++i)
-        (*this)[i] -= value;
+    internal::MatrixTraits<T, N>::subBy(*this, value);
+    return *this;
 }
 
 template<typename T, size_t N>
 FMATH_INLINE Matrix<T, N> &Matrix<T, N>::operator*=(const Matrix<T, N> &mat)
 {
-    for (index_t i = 0; i < DIMENSION; ++i)
-        (*this)[i] -= mat[i];
+    *this = (*this) * mat;
+    return *this;
 }
 
 template<typename T, size_t N>
 FMATH_INLINE Matrix<T, N> &Matrix<T, N>::operator*=(const ValueType &value)
 {
-    for (index_t i = 0; i < DIMENSION; ++i)
-        (*this)[i] *= value;
+    internal::MatrixTraits<T, N>::scalarMulBy(*this, value);
     return *this;
 }
 
 template<typename T, size_t N>
 FMATH_INLINE Matrix<T, N> &Matrix<T, N>::operator/=(const ValueType &value)
 {
-    for (index_t i = 0; i < DIMENSION; ++i)
-        (*this)[i] /= value;
+    internal::MatrixTraits<T, N>::scalarDivBy(*this, value);
     return *this;
 }
 
