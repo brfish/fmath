@@ -1,8 +1,11 @@
 #ifndef _FMATH_COMMON_H_
 #define _FMATH_COMMON_H_
 
+#include <cassert>
 #include <cstdint>
 #include <cstdlib>
+
+#include "compile_config.h"
 
 namespace fmath
 {
@@ -24,6 +27,8 @@ using ssize_t   =   ::ssize_t;
 using index_t   =   size_t;
 using offset_t  =   ptrdiff_t;
 using diff_t    =   ptrdiff_t;
+
+#define FMATH_ASSERT(Expr) assert(Expr)
 
 }
 
