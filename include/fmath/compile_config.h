@@ -33,7 +33,7 @@
 #   define FMATH_ALWAYS_INLINE inline
 #endif
 
-#if defined(FMATH_OPTION_FORCEINLINE)
+#if defined(FMATH_USE_FORCEINLINE)
 #   define FMATH_INLINE FMATH_ALWAYS_INLINE
 #else
 #   define FMATH_INLINE inline
@@ -44,8 +44,6 @@
 #else
 #   define FMATH_CONSTEXPR
 #endif
-
-
 
 #if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(__WINDOWS__)
 #   define FMATH_PLATFORM_WIN32
@@ -60,39 +58,5 @@
 #elif INTPTR_MAX == INT32_MAX
 #   define FMATH_ARCHITECTURE_X86
 #endif
-
-#if defined(FMATH_COMPILER_GCC) || defined(FMATH_COMPILER_CLANG)
-#   if defined(FMATH_PLATFORM_WIN32)
-#       define FMATH_IMPORT __declspec(dllimport)
-#       define FMATH_EXPORT __declspec(dllexport)
-#       define FMATH_HIDDEN static
-#   elif defined(FMATH_PLATFORM_LINUX)
-#       define FMATH_IMPORT __attribute__((visibility("default")))
-#       define FMATH_EXPORT __attribute__((visibility("default")))
-#       define FMATH_HIDDEN __attribute__((visibility("hidden")))
-#   endif
-#elif defined(FMATH_COMPILER_MSVC)
-#   define FMATH_IMPORT __declspec(dllimport)
-#   define FMATH_EXPORT __declspec(dllexport)
-#   define FMATH_HIDDEN static
-#else
-#   define FMATH_IMPORT
-#   define FMATH_EXPORT
-#   define FMATH_HIDDEN static
-#endif
-
-#if defined(FMATH_LIB_EXPORT)
-#   define FMATH_API FMATH_EXPORT
-#   define FMATH_INTERNAL FMATH_HIDDEN
-#else
-#   define FMATH_API
-#   define FMATH_INTERNAL static
-#endif
-
-namespace fmath
-{
-
-
-}
 
 #endif
