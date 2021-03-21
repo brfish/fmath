@@ -45,9 +45,11 @@ public:
 
     FMATH_INLINE Quat &operator-=(const Quat &other);
 
-    FMATH_INLINE Quat &operator*=(ValueType value);
+    FMATH_INLINE Quat &operator*=(const ValueType &value);
 
-    FMATH_INLINE Quat &operator/=(ValueType value);
+    FMATH_INLINE Quat &operator/=(const ValueType &value);
+
+    static FMATH_CONSTEXPR Quat identity();
 
 public:
     union
@@ -59,24 +61,24 @@ public:
 };
 
 template<typename T>
-FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator+(const Quat<T> &p, const Quat<T> &q)
+FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator+(const Quat<T> &q1, const Quat<T> &q2)
 {
-    return Quat<T>(p[0] + q[0], p[1] + q[1], p[2] + q[2], p[3] + q[3]);
+    return Quat<T>(q1[0] + q2[0], q1[1] + q2[1], q1[2] + q2[2], q1[3] + q2[3]);
 }
 
 template<typename T>
-FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator-(const Quat<T> &p, const Quat<T> &q)
+FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator-(const Quat<T> &q1, const Quat<T> &q2)
 {
-    return Quat<T>(p[0] - q[0], p[1] - q[1], p[2] - q[2], p[3] - q[3]);
+    return Quat<T>(q1[0] - q2[0], q1[1] - q2[1], q1[2] - q2[2], q1[3] - q2[3]);
 }
 
 template<typename T>
-FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator*(const Quat<T> &q, const Quat<T> &p)
+FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator*(const Quat<T> &q1, const Quat<T> &q2)
 {
-    return Quat<T>(q[0] * p[0] - q[1] * p[1] - q[2] * p[2] - q[3] * p[3],
-        q[1] * p[0] + q[0] * p[1] + q[3] * p[2] - q[2] * p[3],
-        q[2] * p[0] + q[0] * p[2] + q[1] * p[3] - q[3] * p[1],
-        q[3] * p[0] + p[3] * q[0] + q[2] * p[1] - q[1] * p[2]
+    return Quat<T>(q1[0] * q2[0] - q1[1] * q2[1] - q1[2] * q2[2] - q1[3] * q2[3],
+        q1[1] * q2[0] + q1[0] * q2[1] + q1[3] * q2[2] - q1[2] * q2[3],
+        q1[2] * q2[0] + q1[0] * q2[2] + q1[1] * q2[3] - q1[3] * q2[1],
+        q1[3] * q2[0] + q2[3] * q1[0] + q1[2] * q2[1] - q1[1] * q2[2]
     );
 }
 
@@ -94,17 +96,17 @@ FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator/(const Quat<T> &q, const T &value)
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR T dot(const Quat<T> &p, const Quat<T> &q)
+FMATH_INLINE FMATH_CONSTEXPR T dot(const Quat<T> &q1, const Quat<T> &q2)
 {
-    return p[0] * q[0] + p[1] * q[1] + p[2] * q[2] + p[3] * q[3];
+    return q1[0] * q2[0] + q1[1] * q2[1] + q1[2] * q2[2] + q1[3] * q2[3];
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR Vector3<T> cross(const Quat<T> &p, const Quat<T> &q)
+FMATH_INLINE FMATH_CONSTEXPR Vector3<T> cross(const Quat<T> &q1, const Quat<T> &q2)
 {
-    return Vector3<T>(p[1] * q[2] - p[2] * q[1],
-        p[2] * q[0] - p[0] * q[2],
-        p[0] * q[1] - p[1] * q[0]
+    return Vector3<T>(q1[1] * q2[2] - q1[2] * q2[1],
+        q1[2] * q2[0] - q1[0] * q2[2],
+        q1[0] * q2[1] - q1[1] * q2[0]
     );
 }
 
@@ -231,17 +233,23 @@ FMATH_INLINE Quat<T> &Quat<T>::operator-=(const Quat &other)
 }
 
 template<typename T>
-FMATH_INLINE Quat<T> &Quat<T>::operator*=(ValueType value)
+FMATH_INLINE Quat<T> &Quat<T>::operator*=(const ValueType &value)
 {
     *this = (*this) * value;
     return this;
 }
 
 template<typename T>
-FMATH_INLINE Quat<T> &Quat<T>::operator/=(ValueType value)
+FMATH_INLINE Quat<T> &Quat<T>::operator/=(const ValueType &value)
 {
     *this = (*this) / value;
     return this;
+}
+
+template<typename T>
+FMATH_CONSTEXPR Quat<T> Quat<T>::identity()
+{
+    return Quat<T>(1, 0, 0, 0);
 }
 
 using Quatf = Quat<float>;
