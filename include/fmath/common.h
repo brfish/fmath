@@ -30,6 +30,13 @@ using diff_t    =   ptrdiff_t;
 
 #define FMATH_ASSERT(Expr) assert(Expr)
 
+enum class Axis
+{
+    X,
+    Y,
+    Z
+};
+
 }
 
 #endif
