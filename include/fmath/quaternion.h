@@ -3,7 +3,8 @@
 
 #include <array>
 
-#include "compile_config.h"
+#include "common.h"
+#include "matrix.h"
 #include "vector.h"
 
 namespace fmath
@@ -48,6 +49,8 @@ public:
     FMATH_INLINE Quat &operator*=(const ValueType &value);
 
     FMATH_INLINE Quat &operator/=(const ValueType &value);
+
+    FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> toMatrix() const;
 
     static FMATH_CONSTEXPR Quat identity();
 
@@ -244,6 +247,16 @@ FMATH_INLINE Quat<T> &Quat<T>::operator/=(const ValueType &value)
 {
     *this = (*this) / value;
     return this;
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> Quat<T>::toMatrix() const
+{
+    return Matrix4<T>(values[0], values[3], -values[2], -values[1],
+        -values[3], values[0], values[1], -values[2],
+        values[2], -values[1], values[0], -values[3],
+        values[1], values[2], values[3], values[0]
+    );
 }
 
 template<typename T>
