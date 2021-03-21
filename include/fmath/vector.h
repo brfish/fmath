@@ -8,7 +8,6 @@
 #include "common.h"
 #include "compile_config.h"
 #include "constants.h"
-#include "scalar.h"
 
 namespace fmath
 {
@@ -223,6 +222,30 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, 3> cross(const Vector<T, 3> &v1, const Ve
         v1[2] * v2[0] - v1[0] * v2[2],
         v1[0] * v2[1] - v1[1] * v2[0]
     );
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR float angle(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return acos(dot(normalize(v1), normalize(v2)));
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> reflect(const Vector<T, N> &v, const Vector<T, N> &n)
+{
+    return 2 * (n * v) * n - v;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> halfway(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return normalize(v1 + v2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> opposite(const Vector<T, N> &v)
+{
+    return -v;
 }
 
 template<typename T, size_t N>
