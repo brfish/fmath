@@ -84,9 +84,21 @@ FMATH_INLINE FMATH_CONSTEXPR bool equal(const Vector<T, N> &v1, const Vector<T, 
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool notEqual(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return !equal(v1, v2);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Vector<T, N> &v1, const Vector<T, N> &v2, const T epsilon = number::Epsilon<T>::value)
 {
     return internal::VectorTraits<T, N>::equalEpsilon(v1, v2, epsilon);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Vector<T, N> &v1, const Vector<T, N> &v2, const T &epsilon = number::Epsilon<T>::value)
+{
+    return !equalEpsilon(v1, v2, epsilon);
 }
 
 template<typename T, size_t N>

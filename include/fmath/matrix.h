@@ -87,9 +87,21 @@ FMATH_INLINE FMATH_CONSTEXPR bool equal(const Matrix<T, N> &m1, const Matrix<T, 
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool notEqual(const Matrix<T, N> &m1, const Matrix<T, N> &m2)
+{
+    return !equal(m1, m2);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Matrix<T, N> &m1, const Matrix<T, N> &m2, const T &epsilon = number::Epsilon<T>::value)
 {
     return internal::MatrixTraits<T, N>::equalEpsilon(m1, m2, epsilon);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Matrix<T, N> &m1, const Matrix<T, N> &m2, const T &epsilon = number::Epsilon<T>::value)
+{
+    return !equalEpsilon(m1, m2, epsilon);
 }
 
 template<typename T, size_t N>
