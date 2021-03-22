@@ -361,6 +361,22 @@ using Vector4i  = Vector4<int32>;
 using Vector4f  = Vector4<float>;
 using Vector4lf = Vector4<double>;
 
+template<typename T>
+inline constexpr Vector2<T> AXIS2D_X = Vector2<T>(static_cast<T>(1), static_cast<T>(0));
+
+template<typename T>
+inline constexpr Vector2<T> AXIS2D_Y = Vector2<T>(static_cast<T>(0), static_cast<T>(1));
+
+template<typename T>
+inline constexpr Vector3<T> AXIS3D_X = Vector3<T>(static_cast<T>(1), static_cast<T>(0), static_cast<T>(0));
+
+template<typename T>
+inline constexpr Vector3<T> AXIS3D_Y = Vector3<T>(static_cast<T>(0), static_cast<T>(1), static_cast<T>(0));
+
+template<typename T>
+inline constexpr Vector3<T> AXIS3D_Z = Vector3<T>(static_cast<T>(0), static_cast<T>(0), static_cast<T>(1));
+
+
 }
 
 #endif
