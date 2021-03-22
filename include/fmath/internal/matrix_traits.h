@@ -2,6 +2,7 @@
 #define _FMATH_INTERNAL_MATRIX_TRAITS_H_
 
 #include <cstring>
+#include <istream>
 #include <ostream>
 
 #include "internal/matrix_base.h"
@@ -12,21 +13,38 @@ namespace fmath
 {
 namespace internal
 {
-#pragma region MatrixTraits_Print
+#pragma region MatrixTraits_Output
 template<typename T, size_t N>
-struct MatrixTraits_Print
+struct MatrixTraits_Output
 {
     using Base = MatrixBase<T, N>;
-    static FMATH_INLINE void print(std::ostream &output, const Base &mat);
+    static FMATH_INLINE void write(std::ostream &output, const Base &mat);
 };
 
 template<typename T, size_t N>
-FMATH_INLINE void MatrixTraits_Print<T, N>::print(std::ostream &output, const Base &mat)
+FMATH_INLINE void MatrixTraits_Output<T, N>::write(std::ostream &output, const Base &mat)
 {
     output << '[';
     for (index_t i = 0; i < N; ++i)
         output << mat[i] << (" " + (i == N - 1));
     output << ']';
+}
+#pragma endregion
+
+#pragma region MatrixTraits_Input
+template<typename T, size_t N>
+struct MatrixTraits_Input
+{
+    using Base = MatrixBase<T, N>;
+    static FMATH_INLINE void read(std::ostream &input, Base &mat);
+};
+
+template<typename T, size_t N>
+FMATH_INLINE void MatrixTraits_Input<T, N>::read(std::ostream &input, Base &mat)
+{
+    for (index_t i = 0; i < N; ++i)
+        for (index_t j = 0; j < N; ++j)
+            input >> mat[i][j];
 }
 #pragma endregion
 

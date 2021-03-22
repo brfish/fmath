@@ -53,8 +53,9 @@ template<typename T, size_t N>
 struct PointTraits :
     VectorTraits_Add<T, N, Point<T, N>>,
     VectorTraits_Compare<T, N>,
+    VectorTraits_Input<T, N>,
     VectorTraits_Norm<T, N>,
-    VectorTraits_Print<T, N>,
+    VectorTraits_Output<T, N>,
     VectorTraits_Scale<T, N, Point<T, N>>
 {};
 
@@ -169,16 +170,35 @@ FMATH_INLINE FMATH_CONSTEXPR Point<T, N> div(const Point<T, N> &p, const T &valu
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T distance2(const Point<T, N> &p1, const Point<T, N> &p2)
+{
+    return internal::PointTraits<T, N>::length2(p1 - p2);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR T distance(const Point<T, N> &p1, const Point<T, N> &p2)
 {
-    return sqrt(internal::PointTraits<T, N>::length2(p1 - p2));
+    return sqrt(distance2(p1, p2));
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> opposite(const Point<T, N> &p)
+{
+    return -p;
 }
 
 template<typename T, size_t N>
 std::ostream &operator<<(std::ostream &output, const Point<T, N> &p)
 {
-    internal::PointTraits<T, N>::print(output, p);
+    internal::PointTraits<T, N>::write(output, p);
     return output;
+}
+
+template<typename T, size_t N>
+std::istream &operator>>(std::istream &input, Point<T, N> &p)
+{
+    internal::PointTraits<T, N>::read(input, p);
+    return input;
 }
 
 template<typename T, size_t N>

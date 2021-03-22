@@ -1,6 +1,9 @@
 #ifndef _FMATH_INTERNAL_VECTOR_TRAITS_H_
 #define _FMATH_INTERNAL_VECTOR_TRAITS_H_
 
+#include <istream>
+#include <ostream>
+
 #include "internal/vector_base.h"
 #include "functions.h"
 
@@ -570,22 +573,36 @@ FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Norm<T, 4>::length2(const Base &v)
 }
 #pragma endregion
 
-#pragma region VectorTraits_Print
+#pragma region VectorTraits_Output
 template<typename T, size_t N>
-struct VectorTraits_Print
+struct VectorTraits_Output
 {
-    FMATH_INLINE static void print(std::ostream &output, const VectorBase<T, N> &base);
+    static FMATH_INLINE void write(std::ostream &output, const VectorBase<T, N> &base);
 };
 
 template<typename T, size_t N>
-FMATH_INLINE void VectorTraits_Print<T, N>::print(std::ostream &output, const VectorBase<T, N> &base)
+FMATH_INLINE void VectorTraits_Output<T, N>::write(std::ostream &output, const VectorBase<T, N> &base)
 {
     output << '[';
     for (index_t i = 0; i < N; ++i)
         output << base[i] << ("," + (i == N - 1));
     output << ']';
 }
+#pragma endregion
 
+#pragma region VectorTraits_Input
+template<typename T, size_t N>
+struct VectorTraits_Input
+{
+    static FMATH_INLINE void read(std::istream &input, VectorBase<T, N> &base);
+};
+
+template<typename T, size_t N>
+FMATH_INLINE void VectorTraits_Input<T, N>::read(std::istream &input, VectorBase<T, N> &base)
+{
+    for (index_t i = 0; i < N; ++i)
+        input >> base[i];
+}
 #pragma endregion
 
 }

@@ -37,8 +37,9 @@ namespace internal
 template<typename T, size_t N>
 struct NormalTraits :
     VectorTraits_Compare<T, N>,
+    VectorTraits_Input<T, N>,
     VectorTraits_Norm<T, N>,
-    VectorTraits_Print<T, N>,
+    VectorTraits_Output<T, N>,
     VectorTraits_Scale<T, N, Normal<T, N>>
 {};
 
@@ -128,6 +129,20 @@ FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> normalize(const Normal<T, N> &n)
 {
     static_assert(std::is_floating_point_v<T>);
     return internal::NormalTraits<T, N>::div(n, length(n));
+}
+
+template<typename T, size_t N>
+FMATH_INLINE std::ostream &operator<<(std::ostream &output, const Normal<T, N> &n)
+{
+    internal::NormalTraits<T, N>::write(output, n);
+    return output;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE std::istream &operator>>(std::istream &input, Normal<T, N> &n)
+{
+    internal::NormalTraits<T, N>::read(input, n);
+    return input;
 }
 
 template<typename T, size_t N>

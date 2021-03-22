@@ -5,6 +5,7 @@
 #include <type_traits>
 
 #include "internal/vector_base.h"
+#include "internal/vector_traits.h"
 #include "common.h"
 #include "compile_config.h"
 #include "constants.h"
@@ -56,8 +57,9 @@ struct VectorTraits :
     VectorTraits_Compare<T, N>,
     VectorTraits_Dot<T, N>,
     VectorTraits_Hadamard<T, N, Vector<T, N>>,
+    VectorTraits_Input<T, N>,
     VectorTraits_Norm<T, N>,
-    VectorTraits_Print<T, N>,
+    VectorTraits_Output<T, N>,
     VectorTraits_Scale<T, N, Vector<T, N>>
 {};
 
@@ -251,8 +253,15 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> opposite(const Vector<T, N> &v)
 template<typename T, size_t N>
 std::ostream &operator<<(std::ostream &output, const Vector<T, N> &vec)
 {
-    internal::VectorTraits<T, N>::print(output, vec);
+    internal::VectorTraits<T, N>::write(output, vec);
     return output;
+}
+
+template<typename T, size_t N>
+std::istream &operator>>(std::istream &input, Vector<T, N> &vec)
+{
+    internal::VectorTraits<T, N>::read(input, vec);
+    return input;
 }
 
 template<typename T, size_t N>

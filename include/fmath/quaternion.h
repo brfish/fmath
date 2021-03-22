@@ -2,6 +2,8 @@
 #define _FMATH_QUATERNION_H_
 
 #include <array>
+#include <istream>
+#include <ostream>
 
 #include "common.h"
 #include "matrix.h"
@@ -148,6 +150,13 @@ FMATH_INLINE std::ostream &operator<<(std::ostream &output, const Quat<T> &q)
 {
     output << '[' << q[0] << ',' << q[1] << ',' << q[2] << ',' << q[3] << ']';
     return output;
+}
+
+template<typename T>
+FMATH_INLINE std::istream &operator>>(std::istream &input, Quat<T> &q)
+{
+    input >> q[0] >> q[1] >> q[2] >> q[3];
+    return input;
 }
 
 template<typename T>

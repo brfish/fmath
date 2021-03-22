@@ -59,8 +59,9 @@ struct MatrixTraits :
     MatrixTraits_Basic<T, N, Matrix<T, N>>,
     MatrixTraits_Compare<T, N>,
     MatrixTraits_Hadamard<T, N, Matrix<T, N>>,
+    MatrixTraits_Input<T, N>,
     MatrixTraits_Mul<T, N, Matrix<T, N>>,
-    MatrixTraits_Print<T, N>,
+    MatrixTraits_Output<T, N>,
     MatrixTraits_Square<T, N, Matrix<T, N>>,
     MatrixTraits_VectorMul<T, N, Vector<T, N>>
 {};
@@ -226,8 +227,15 @@ FMATH_INLINE FMATH_CONSTEXPR Matrix<T, N> transpose(const Matrix<T, N> &mat)
 template<typename T, size_t N>
 FMATH_INLINE std::ostream &operator<<(std::ostream &output, const Matrix<T, N> &mat)
 {
-    internal::MatrixTraits<T, N>::print(output, mat);
+    internal::MatrixTraits<T, N>::write(output, mat);
     return output;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE std::istream &operator>>(std::istream &input, Matrix<T, N> &mat)
+{
+    internal::MatrixTraits<T, N>::read(input, mat);
+    return input;
 }
 
 template<typename T, size_t N>
