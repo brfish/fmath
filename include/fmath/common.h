@@ -28,6 +28,8 @@ using index_t   =   size_t;
 using offset_t  =   ptrdiff_t;
 using diff_t    =   ptrdiff_t;
 
+using angle_t   =   double;
+
 #define FMATH_ASSERT(Expr) assert(Expr)
 
 enum class Axis
