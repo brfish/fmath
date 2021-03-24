@@ -102,6 +102,18 @@ FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Vector<T, N> &v1, const 
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T minComponent(const Vector<T, N> &v)
+{
+    return internal::VectorTraits<T, N>::minComponent(v);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T maxComponent(const Vector<T, N> &v)
+{
+    return internal::VectorTraits<T, N>::maxComponent(v);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator+(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
     return internal::VectorTraits<T, N>::add(v1, v2);
@@ -210,14 +222,14 @@ FMATH_INLINE FMATH_CONSTEXPR T length2(const Vector<T, N> &vec)
 }
 
 template<typename T, size_t N>
-FMATH_CONSTEXPR T length(const Vector<T, N> &vec)
+FMATH_INLINE FMATH_CONSTEXPR T length(const Vector<T, N> &vec)
 {
     static_assert(std::is_floating_point_v<T>);
     return sqrt(length2(vec));
 }
 
 template<typename T, size_t N>
-Vector<T, N> normalize(const Vector<T, N> &vec)
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> normalize(const Vector<T, N> &vec)
 {
     static_assert(std::is_floating_point_v<T>);
     return internal::VectorTraits<T, N>::div(vec, length(vec));
@@ -263,14 +275,14 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> opposite(const Vector<T, N> &v)
 }
 
 template<typename T, size_t N>
-std::ostream &operator<<(std::ostream &output, const Vector<T, N> &vec)
+FMATH_INLINE std::ostream &operator<<(std::ostream &output, const Vector<T, N> &vec)
 {
     internal::VectorTraits<T, N>::write(output, vec);
     return output;
 }
 
 template<typename T, size_t N>
-std::istream &operator>>(std::istream &input, Vector<T, N> &vec)
+FMATH_INLINE std::istream &operator>>(std::istream &input, Vector<T, N> &vec)
 {
     internal::VectorTraits<T, N>::read(input, vec);
     return input;
@@ -323,21 +335,21 @@ FMATH_INLINE Vector<T, N> &Vector<T, N>::operator+=(const ValueType &value)
 }
 
 template<typename T, size_t N>
-Vector<T, N> &Vector<T, N>::operator-=(const Vector &other)
+FMATH_INLINE Vector<T, N> &Vector<T, N>::operator-=(const Vector &other)
 {
     *this = internal::VectorTraits<T, N>::sub(*this, other);
     return *this;
 }
 
 template<typename T, size_t N>
-Vector<T, N> &Vector<T, N>::operator*=(const ValueType &value)
+FMATH_INLINE Vector<T, N> &Vector<T, N>::operator*=(const ValueType &value)
 {
     *this = internal::VectorTraits<T, N>::mul(*this, value);
     return *this;
 }
 
 template<typename T, size_t N>
-Vector<T, N> &Vector<T, N>::operator/=(const ValueType &value)
+FMATH_INLINE Vector<T, N> &Vector<T, N>::operator/=(const ValueType &value)
 {
     *this = internal::VectorTraits<T, N>::div(*this, value);
     return *this;

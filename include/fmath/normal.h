@@ -82,6 +82,18 @@ FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Normal<T, N> &n1, const 
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T minComponent(const Normal<T, N> &n)
+{
+    return internal::NormalTraits<T, N>::minComponent(n);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T maxComponent(const Normal<T, N> &n)
+{
+    return internal::NormalTraits<T, N>::maxComponent(n);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator+(const Normal<T, N> &n1, const Normal<T, N> &n2)
 {
     return internal::NormalTraits<T, N>::add(n1, n2);

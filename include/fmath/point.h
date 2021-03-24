@@ -98,6 +98,18 @@ FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Point<T, N> &p1, const P
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T minComponent(const Point<T, N> &p)
+{
+    return internal::PointTraits<T, N>::minComponent(p);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T maxComponent(const Point<T, N> &p)
+{
+    return internal::PointTraits<T, N>::maxComponent(p);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Point<T, N> operator+(const Point<T, N> &p, const Vector<T, N> &v)
 {
     return internal::PointTraits<T, N>::add(p, v);
