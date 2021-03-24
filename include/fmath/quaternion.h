@@ -26,13 +26,17 @@ public:
 
     explicit FMATH_CONSTEXPR Quat(const ValueType &s, const Vector3<ValueType> &v);
 
+    explicit FMATH_CONSTEXPR Quat(Axis axis, ValueType theta);
+
+    explicit FMATH_CONSTEXPR Quat(const Vector3<ValueType> &axis, angle_t theta);
+
     FMATH_CONSTEXPR Quat &operator=(const Quat &other);
     
     FMATH_INLINE FMATH_CONSTEXPR size_t size() const;
 
-    FMATH_CONSTEXPR FMATH_INLINE const ValueType *data() const;
+    FMATH_INLINE FMATH_CONSTEXPR const ValueType *data() const;
 
-    FMATH_INLINE ValueType *data();
+    FMATH_INLINE FMATH_CONSTEXPR ValueType *data();
 
     FMATH_INLINE FMATH_CONSTEXPR const ValueType &get(index_t index) const;
 
@@ -43,6 +47,10 @@ public:
     FMATH_INLINE FMATH_CONSTEXPR const ValueType &operator[](index_t index) const;
 
     FMATH_INLINE FMATH_CONSTEXPR ValueType &operator[](index_t index);
+
+    FMATH_INLINE FMATH_CONSTEXPR ValueType angle() const;
+    
+    FMATH_INLINE FMATH_CONSTEXPR Vector3<T> axis() const;
 
     FMATH_INLINE Quat &operator+=(const Quat &other);
 
@@ -66,19 +74,59 @@ public:
 };
 
 template<typename T>
-FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator+(const Quat<T> &q1, const Quat<T> &q2)
+FMATH_INLINE FMATH_CONSTEXPR bool operator==(const Quat<T> &q1, const Quat<T> &q2)
+{
+    return q1[0] == q2[0] && q1[1] == q2[1] &&
+        q1[2] == q2[2] && q1[3] == q2[3]; 
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool operator!=(const Quat<T> &q1, const Quat<T> &q2)
+{
+    return !(q1 == q2);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool equal(const Quat<T> &q1, const Quat<T> &q2)
+{
+    return q1 == q2;
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool notEqual(const Quat<T> &q1, const Quat<T> &q2)
+{
+    return q1 != q2;
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Quat<T> &q1, const Quat<T> &q2, const T &epsilon = number::Epsilon<T>::value)
+{
+    return fmath::equalEpsilon(q1[0], q2[0]) &&
+        fmath::equalEpsilon(q1[1], q2[1]) &&
+        fmath::equalEpsilon(q1[2], q2[2]) &&
+        fmath::equalEpsilon(q1[3], q2[3]);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Quat<T> &q1, const Quat<T> &q2, const T &epsilon = number::Epsilon<T>::value)
+{
+    return !equalEpsilon(q1, q2, epsilon);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Quat<T> operator+(const Quat<T> &q1, const Quat<T> &q2)
 {
     return Quat<T>(q1[0] + q2[0], q1[1] + q2[1], q1[2] + q2[2], q1[3] + q2[3]);
 }
 
 template<typename T>
-FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator-(const Quat<T> &q1, const Quat<T> &q2)
+FMATH_INLINE FMATH_CONSTEXPR Quat<T> operator-(const Quat<T> &q1, const Quat<T> &q2)
 {
     return Quat<T>(q1[0] - q2[0], q1[1] - q2[1], q1[2] - q2[2], q1[3] - q2[3]);
 }
 
 template<typename T>
-FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator*(const Quat<T> &q1, const Quat<T> &q2)
+FMATH_INLINE FMATH_CONSTEXPR Quat<T> operator*(const Quat<T> &q1, const Quat<T> &q2)
 {
     return Quat<T>(q1[0] * q2[0] - q1[1] * q2[1] - q1[2] * q2[2] - q1[3] * q2[3],
         q1[1] * q2[0] + q1[0] * q2[1] + q1[3] * q2[2] - q1[2] * q2[3],
@@ -88,13 +136,13 @@ FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator*(const Quat<T> &q1, const Quat<T> 
 }
 
 template<typename T>
-FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator*(const Quat<T> &q, const T &value)
+FMATH_INLINE FMATH_CONSTEXPR Quat<T> operator*(const Quat<T> &q, const T &value)
 {
     return Quat<T>(q[0] * value, q[1] * value, q[2] * value, q[3] * value);
 }
 
 template<typename T>
-FMATH_CONSTEXPR FMATH_INLINE Quat<T> operator/(const Quat<T> &q, const T &value)
+FMATH_INLINE FMATH_CONSTEXPR Quat<T> operator/(const Quat<T> &q, const T &value)
 {
     FMATH_ASSERT(value != 0);
     return Quat<T>(q[0] / value, q[1] / value, q[2] / value, q[3] / value);
@@ -146,6 +194,9 @@ FMATH_INLINE FMATH_CONSTEXPR Quat<T> inverse(const Quat<T> &q)
 }
 
 template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Quat<T> slerp(const Quat<T> &q1, const Quat<T> &q2);
+
+template<typename T>
 FMATH_INLINE std::ostream &operator<<(std::ostream &output, const Quat<T> &q)
 {
     output << '[' << q[0] << ',' << q[1] << ',' << q[2] << ',' << q[3] << ']';
@@ -172,7 +223,7 @@ FMATH_CONSTEXPR Quat<T>::Quat(const ValueType &w, const ValueType &x,
 
 template<typename T>
 FMATH_CONSTEXPR Quat<T>::Quat(const ValueType &s, const Vector3<ValueType> &v)
-    :   values { s, v.x, v.y, v.z }
+    :   values { s, v[0], v[1], v[2] }
 {}
 
 template<typename T>
@@ -189,13 +240,13 @@ FMATH_INLINE FMATH_CONSTEXPR size_t Quat<T>::size() const
 }
 
 template<typename T>
-FMATH_CONSTEXPR FMATH_INLINE const typename Quat<T>::ValueType *Quat<T>::data() const
+FMATH_INLINE FMATH_CONSTEXPR const typename Quat<T>::ValueType *Quat<T>::data() const
 {
     return values.data();
 }
 
 template<typename T>
-FMATH_INLINE typename Quat<T>::ValueType *Quat<T>::data()
+FMATH_INLINE FMATH_CONSTEXPR typename Quat<T>::ValueType *Quat<T>::data()
 {
     return values.data();
 }
