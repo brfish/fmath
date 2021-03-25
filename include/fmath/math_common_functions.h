@@ -3,10 +3,11 @@
 
 #include <cmath>
 #include <limits>
+#include <type_traits>
 
 #include "internal/math_common_functions_impl.h"
 #include "common.h"
-#include "vector.h"
+#include "constants.h"
 
 namespace fmath
 {
@@ -35,40 +36,50 @@ FMATH_INLINE FMATH_CONSTEXPR bool isFinite(const T &value)
     return std::isfinite(value);
 }
 
-template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR T sin(const T &radian)
+FMATH_INLINE FMATH_CONSTEXPR angle_t toDegree(angle_t radian)
 {
-    return std::sin(radian);
+    return radian / number::Pi<angle_t>::value * static_cast<angle_t>(180);
+}
+
+FMATH_INLINE FMATH_CONSTEXPR angle_t toRadian(angle_t degree)
+{
+    return degree / static_cast<angle_t>(180) * number::Pi<angle_t>::value;
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR T cos(const T &radian)
+FMATH_INLINE FMATH_CONSTEXPR T sin(const T &angle)
 {
-    return std::cos(radian);
+    return std::sin(angle);
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR T tan(const T &radian)
+FMATH_INLINE FMATH_CONSTEXPR T cos(const T &angle)
 {
-    return std::tan(radian);
+    return std::cos(angle);
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR T asin(const T &radian)
+FMATH_INLINE FMATH_CONSTEXPR T tan(const T &angle)
 {
-    return std::asin(radian);
+    return std::tan(angle);
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR T acos(const T &radian)
+FMATH_INLINE FMATH_CONSTEXPR T asin(const T &angle)
 {
-    return std::acos(radian);
+    return std::asin(angle);
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR T atan(const T &radian)
+FMATH_INLINE FMATH_CONSTEXPR T acos(const T &angle)
 {
-    return std::atan(radian);
+    return std::acos(angle);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR T atan(const T &angle)
+{
+    return std::atan(angle);
 }
 
 template<typename T>
@@ -209,16 +220,6 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const T &a, const T &b, const T &epsilon = number::Epsilon<T>::value)
 {
     return !equalEpsilon(a, b, epsilon);
-}
-
-FMATH_INLINE FMATH_CONSTEXPR angle_t toDegree(angle_t radian)
-{
-    return radian / number::Pi<angle_t>::value * static_cast<angle_t>(180);
-}
-
-FMATH_INLINE FMATH_CONSTEXPR angle_t toRadian(angle_t degree)
-{
-    return degree / static_cast<angle_t>(180) * number::Pi<angle_t>::value;
 }
 
 }
