@@ -6,7 +6,9 @@
 #include "internal/matrix_base.h"
 #include "internal/matrix_traits.h"
 #include "common.h"
-#include "compile_config.h"
+#include "constants.h"
+#include "normal.h"
+#include "point.h"
 #include "vector.h"
 
 namespace fmath
@@ -157,6 +159,25 @@ template<typename T, size_t N>
 typename Matrix<T, N>::VectorType operator*(const Vector<T, N> &vec, const Matrix<T, N> &mat)
 {
     return internal::MatrixTraits<T, N>::vectorMul(vec, mat);
+}
+
+template<typename T, size_t N>
+Normal<T, N> operator*(const Normal<T, N> &normal, const Matrix<T, N> &mat)
+{
+    Matrix<T, N> inv = internal::MatrixTraits<T, N>::inverse(mat);
+    return normal * inv;
+}
+
+template<typename T, size_t N>
+Point<T, N> operator*(const Matrix<T, N> &mat, const Point<T, N> &point)
+{
+    return internal::MatrixTraits<T, N>::vectorMul(mat, point);
+}
+
+template<typename T, size_t N>
+Point<T, N> operator*(const Point<T, N> &point, const Matrix<T, N> &mat)
+{
+    return internal::MatrixTraits<T, N>::vectorMul(point, mat);
 }
 
 template<typename T, size_t N>
