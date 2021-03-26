@@ -50,6 +50,16 @@ namespace internal
 {
 
 template<typename T, size_t N>
+struct VectorTraits_TypeInfo<Point<T, N>>
+{
+    template<typename U, size_t M>
+    using VectorType = Point<U, M>;
+
+    using ValueType = T;
+    static constexpr size_t SIZE = N;
+};
+
+template<typename T, size_t N>
 struct PointTraits :
     VectorTraits_Add<T, N, Point<T, N>>,
     VectorTraits_Compare<T, N>,

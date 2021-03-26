@@ -10,6 +10,10 @@
 namespace fmath::internal
 {
 
+template<typename VectorT>
+struct VectorTraits_TypeInfo
+{};
+
 #pragma region VectorTraits_Compare
 template<typename T, size_t N>
 struct VectorTraits_Compare

@@ -35,6 +35,16 @@ namespace internal
 {
 
 template<typename T, size_t N>
+struct VectorTraits_TypeInfo<Normal<T, N>>
+{
+    template<typename U, size_t M>
+    using VectorType = Normal<U, M>;
+
+    using ValueType = T;
+    static constexpr size_t SIZE = N;
+};
+
+template<typename T, size_t N>
 struct NormalTraits :
     VectorTraits_Compare<T, N>,
     VectorTraits_Input<T, N>,
