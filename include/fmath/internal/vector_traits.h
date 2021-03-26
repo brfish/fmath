@@ -8,6 +8,7 @@
 #include <string>
 
 #include "internal/vector_base.h"
+#include "constants.h"
 #include "functions.h"
 
 namespace fmath::internal
@@ -689,6 +690,53 @@ FMATH_INLINE void VectorTraits_Input<T, N>::read(std::istream &input, VectorBase
     for (index_t i = 0; i < N; ++i)
         input >> base[i];
 }
+#pragma endregion
+
+#pragma region VectorTraits_Constants
+template<typename T, size_t N, typename VectorT>
+struct VectorTraits_Constants
+{};
+
+template<typename T, typename VectorT>
+struct VectorTraits_Constants<T, 2, VectorT>
+{
+    static constexpr VectorT MIN_VALUE = VectorT(constants::MIN_VALUE<T>, constants::MIN_VALUE<T>);
+    static constexpr VectorT MAX_VALUE = VectorT(constants::MAX_VALUE<T>, constants::MAX_VALUE<T>);
+
+    static constexpr VectorT UNIT_X = VectorT(static_cast<T>(1), static_cast<T>(0));
+    static constexpr VectorT UNIT_Y = VectorT(static_cast<T>(0), static_cast<T>(1));
+};
+
+template<typename T, typename VectorT>
+struct VectorTraits_Constants<T, 3, VectorT>
+{
+    static constexpr VectorT MIN_VALUE = VectorT(constants::MIN_VALUE<T>, constants::MIN_VALUE<T>, 
+        constants::MIN_VALUE<T>);
+    static constexpr VectorT MAX_VALUE = VectorT(constants::MAX_VALUE<T>, constants::MAX_VALUE<T>,
+        constants::MAX_VALUE<T>);
+
+    static constexpr VectorT UNIT_X = VectorT(static_cast<T>(1), static_cast<T>(0), static_cast<T>(0));
+    static constexpr VectorT UNIT_Y = VectorT(static_cast<T>(0), static_cast<T>(1), static_cast<T>(0));
+    static constexpr VectorT UNIT_Z = VectorT(static_cast<T>(0), static_cast<T>(0), static_cast<T>(1));
+};
+
+template<typename T, typename VectorT>
+struct VectorTraits_Constants<T, 4, VectorT>
+{
+    static constexpr VectorT MIN_VALUE = VectorT(constants::MIN_VALUE<T>, constants::MIN_VALUE<T>,
+        constants::MIN_VALUE<T>, constants::MIN_VALUE<T>);
+    static constexpr VectorT MAX_VALUE = VectorT(constants::MAX_VALUE<T>, constants::MAX_VALUE<T>,
+        constants::MAX_VALUE<T>, constants::MAX_VALUE<T>);
+
+    static constexpr VectorT UNIT_X = VectorT(static_cast<T>(1), static_cast<T>(0),
+        static_cast<T>(0), static_cast<T>(0));
+    static constexpr VectorT UNIT_Y = VectorT(static_cast<T>(0), static_cast<T>(1),
+        static_cast<T>(0), static_cast<T>(0));
+    static constexpr VectorT UNIT_Z = VectorT(static_cast<T>(0), static_cast<T>(0),
+        static_cast<T>(1), static_cast<T>(0));
+    static constexpr VectorT UNIT_W = VectorT(static_cast<T>(0), static_cast<T>(0),
+        static_cast<T>(0), static_cast<T>(1));
+};
 #pragma endregion
 
 }

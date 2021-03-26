@@ -64,6 +64,7 @@ template<typename T, size_t N>
 struct PointTraits :
     VectorTraits_Add<T, N, Point<T, N>>,
     VectorTraits_Compare<T, N>,
+    VectorTraits_Constants<T, N, Point<T, N>>,
     VectorTraits_Input<T, N>,
     VectorTraits_Norm<T, N>,
     VectorTraits_Output<T, N>,
@@ -319,6 +320,23 @@ template<typename T, size_t N>
 FMATH_CONSTEXPR Point<T, N> Point<T, N>::zero()
 {
     return Point();
+}
+
+namespace constants
+{
+
+template<typename T, size_t N>
+struct MinValue<Point<T, N>>
+{
+    static constexpr Point<T, N> value = internal::PointTraits<T, N>::MIN_VALUE;
+};
+
+template<typename T, size_t N>
+struct MaxValue<Point<T, N>>
+{
+    static constexpr Point<T, N> value = internal::PointTraits<T, N>::MAX_VALUE;
+};
+
 }
 
 template<typename T>

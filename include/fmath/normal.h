@@ -47,6 +47,7 @@ struct VectorTraits_TypeInfo<Normal<T, N>>
 template<typename T, size_t N>
 struct NormalTraits :
     VectorTraits_Compare<T, N>,
+    VectorTraits_Constants<T, N, Normal<T, N>>,
     VectorTraits_Input<T, N>,
     VectorTraits_Norm<T, N>,
     VectorTraits_Output<T, N>,
@@ -244,6 +245,23 @@ template<typename T, size_t N>
 FMATH_CONSTEXPR Normal<T, N> Normal<T, N>::zero()
 {
     return Normal();
+}
+
+namespace constants
+{
+
+template<typename T, size_t N>
+struct MinValue<Normal<T, N>>
+{
+    static constexpr Normal<T, N> value = internal::NormalTraits<T, N>::MIN_VALUE;
+};
+
+template<typename T, size_t N>
+struct MaxValue<Normal<T, N>>
+{
+    static constexpr Normal<T, N> value = internal::NormalTraits<T, N>::MAX_VALUE;
+};
+
 }
 
 template<typename T>

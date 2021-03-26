@@ -66,6 +66,7 @@ template<typename T, size_t N>
 struct VectorTraits : 
     VectorTraits_Add<T, N, Vector<T, N>>,
     VectorTraits_Compare<T, N>,
+    VectorTraits_Constants<T, N, Vector<T, N>>,
     VectorTraits_Dot<T, N>,
     VectorTraits_Hadamard<T, N, Vector<T, N>>,
     VectorTraits_Input<T, N>,
@@ -379,6 +380,23 @@ FMATH_CONSTEXPR Vector<T, N> Vector<T, N>::zero()
     return Vector();
 }
 
+namespace constants
+{
+
+template<typename T, size_t N>
+struct MinValue<Vector<T, N>>
+{
+    static constexpr Vector<T, N> value = internal::VectorTraits<T, N>::MIN_VALUE;
+};
+
+template<typename T, size_t N>
+struct MaxValue<Vector<T, N>>
+{
+    static constexpr Vector<T, N> value = internal::VectorTraits<T, N>::MAX_VALUE;
+};
+
+}
+
 template<typename T>
 using Vector2 = Vector<T, 2>;
 
@@ -404,19 +422,19 @@ using Vector4f  = Vector4<float>;
 using Vector4lf = Vector4<double>;
 
 template<typename T>
-inline constexpr Vector2<T> AXIS2D_X = Vector2<T>(static_cast<T>(1), static_cast<T>(0));
+inline constexpr Vector2<T> AXIS2D_X = internal::VectorTraits<T, 2>::UNIT_X;
 
 template<typename T>
-inline constexpr Vector2<T> AXIS2D_Y = Vector2<T>(static_cast<T>(0), static_cast<T>(1));
+inline constexpr Vector2<T> AXIS2D_Y = internal::VectorTraits<T, 2>::UNIT_Y;
 
 template<typename T>
-inline constexpr Vector3<T> AXIS3D_X = Vector3<T>(static_cast<T>(1), static_cast<T>(0), static_cast<T>(0));
+inline constexpr Vector3<T> AXIS3D_X = internal::VectorTraits<T, 3>::UNIT_X;
 
 template<typename T>
-inline constexpr Vector3<T> AXIS3D_Y = Vector3<T>(static_cast<T>(0), static_cast<T>(1), static_cast<T>(0));
+inline constexpr Vector3<T> AXIS3D_Y = internal::VectorTraits<T, 3>::UNIT_Y;
 
 template<typename T>
-inline constexpr Vector3<T> AXIS3D_Z = Vector3<T>(static_cast<T>(0), static_cast<T>(0), static_cast<T>(1));
+inline constexpr Vector3<T> AXIS3D_Z = internal::VectorTraits<T, 3>::UNIT_Z;
 
 
 }
