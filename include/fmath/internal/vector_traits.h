@@ -81,24 +81,52 @@ struct VectorTraits_Compare<T, 2>
     using Base = VectorBase<T, 2>;
     static FMATH_INLINE FMATH_CONSTEXPR bool equal(const Base &v1, const Base &v2);
     static FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Base &v1, const Base &v2, const T &epsilon);
+    static FMATH_INLINE FMATH_CONSTEXPR bool less(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool greater(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool lessOrEqual(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool greaterOrEqual(const Base &v1, const Base &v2);
     static FMATH_INLINE FMATH_CONSTEXPR T minComponent(const Base &v);
     static FMATH_INLINE FMATH_CONSTEXPR T maxComponent(const Base &v);
 };
 
 template<typename T>
-bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 2>::equal(const Base &v1, const Base &v2)
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 2>::equal(const Base &v1, const Base &v2)
 {
     return v1[0] == v2[0] && v1[1] == v2[1];
 }
 
 template<typename T>
-bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 2>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 2>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
 {
     if (&v1 == &v2)
         return true;
 
     return fmath::equalEpsilon(v1[0], v2[0], epsilon) && 
         fmath::equalEpsilon(v1[1], v2[1], epsilon);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 2>::less(const Base &v1, const Base &v2)
+{
+    return v1[0] < v2[0] && v1[1] < v2[1];
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 2>::greater(const Base &v1, const Base &v2)
+{
+    return v1[0] > v2[0] && v1[1] > v2[1];
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 2>::lessOrEqual(const Base &v1, const Base &v2)
+{
+    return v1[0] <= v2[0] && v1[1] <= v2[1];
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 2>::greaterOrEqual(const Base &v1, const Base &v2)
+{
+    return v1[0] >= v2[0] && v1[1] >= v2[1];
 }
 
 template<typename T>
@@ -119,18 +147,22 @@ struct VectorTraits_Compare<T, 3>
     using Base = VectorBase<T, 3>;
     static FMATH_INLINE FMATH_CONSTEXPR bool equal(const Base &v1, const Base &v2);
     static FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Base &v1, const Base &v2, const T &epsilon);
+    static FMATH_INLINE FMATH_CONSTEXPR bool less(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool greater(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool lessOrEqual(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool greaterOrEqual(const Base &v1, const Base &v2);
     static FMATH_INLINE FMATH_CONSTEXPR T minComponent(const Base &v);
     static FMATH_INLINE FMATH_CONSTEXPR T maxComponent(const Base &v);
 };
 
 template<typename T>
-bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 3>::equal(const Base &v1, const Base &v2)
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 3>::equal(const Base &v1, const Base &v2)
 {
     return v1[0] == v2[0] && v1[1] == v2[1] && v1[2] == v2[2];
 }
 
 template<typename T>
-bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 3>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 3>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
 {
     if (&v1 == &v2)
         return true;
@@ -138,6 +170,30 @@ bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 3>::equalEpsilon(const
     return fmath::equalEpsilon(v1[0], v2[0], epsilon) && 
         fmath::equalEpsilon(v1[1], v2[1], epsilon) && 
         fmath::equalEpsilon(v1[2], v2[2], epsilon);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 3>::less(const Base &v1, const Base &v2)
+{
+    return v1[0] < v2[0] && v1[1] < v2[1] && v1[2] < v2[2];
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 3>::greater(const Base &v1, const Base &v2)
+{
+    return v1[0] > v2[0] && v1[1] > v2[1] && v1[2] > v2[2];
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 3>::lessOrEqual(const Base &v1, const Base &v2)
+{
+    return v1[0] <= v2[0] && v1[1] <= v2[1] && v1[2] <= v2[2];
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 3>::greaterOrEqual(const Base &v1, const Base &v2)
+{
+    return v1[0] >= v2[0] && v1[1] >= v2[1] && v1[2] >= v2[2];
 }
 
 template<typename T>
@@ -158,18 +214,22 @@ struct VectorTraits_Compare<T, 4>
     using Base = VectorBase<T, 4>;
     static FMATH_INLINE FMATH_CONSTEXPR bool equal(const Base &v1, const Base &v2);
     static FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Base &v1, const Base &v2, const T &epsilon);
+    static FMATH_INLINE FMATH_CONSTEXPR bool less(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool greater(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool lessOrEqual(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool greaterOrEqual(const Base &v1, const Base &v2);
     static FMATH_INLINE FMATH_CONSTEXPR T minComponent(const Base &v);
     static FMATH_INLINE FMATH_CONSTEXPR T maxComponent(const Base &v);
 };
 
 template<typename T>
-bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 4>::equal(const Base &v1, const Base &v2)
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 4>::equal(const Base &v1, const Base &v2)
 {
     return v1[0] == v2[0] && v1[1] == v2[1] && v1[2] == v2[2] && v1[3] == v2[3];
 }
 
 template<typename T>
-bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 4>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 4>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
 {
     if (&v1 == &v2)
         return true;
@@ -178,6 +238,30 @@ bool FMATH_INLINE FMATH_CONSTEXPR VectorTraits_Compare<T, 4>::equalEpsilon(const
         fmath::equalEpsilon(v1[1], v2[1], epsilon) && 
         fmath::equalEpsilon(v1[2], v2[2], epsilon) && 
         fmath::equalEpsilon(v1[3], v2[3], epsilon);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 4>::less(const Base &v1, const Base &v2)
+{
+    return v1[0] < v2[0] && v1[1] < v2[1] && v1[2] < v2[2] && v1[3] < v2[3];
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 4>::greater(const Base &v1, const Base &v2)
+{
+    return v1[0] > v2[0] && v1[1] > v2[1] && v1[2] > v2[2] && v1[3] > v2[3];
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 4>::lessOrEqual(const Base &v1, const Base &v2)
+{
+    return v1[0] <= v2[0] && v1[1] <= v2[1] && v1[2] <= v2[2] && v1[3] <= v2[3];
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 4>::greaterOrEqual(const Base &v1, const Base &v2)
+{
+    return v1[0] >= v2[0] && v1[1] >= v2[1] && v1[2] <= v2[2] && v1[3] <= v2[3];
 }
 
 template<typename T>

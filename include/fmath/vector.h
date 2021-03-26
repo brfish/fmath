@@ -91,6 +91,30 @@ FMATH_INLINE FMATH_CONSTEXPR bool operator!=(const Vector<T, N> &v1, const Vecto
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator<(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return internal::VectorTraits<T, N>::less(v1, v2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator>(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return internal::VectorTraits<T, N>::greater(v1, v2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator<=(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return internal::VectorTraits<T, N>::lessOrEqual(v1, v2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator>=(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return internal::VectorTraits<T, N>::greaterOrEqual(v1, v2);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR bool equal(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
     return internal::VectorTraits<T, N>::equal(v1, v2);
@@ -112,6 +136,30 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Vector<T, N> &v1, const Vector<T, N> &v2, const T &epsilon = constants::Epsilon<T>::value)
 {
     return !equalEpsilon(v1, v2, epsilon);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool less(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return v1 < v2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool greater(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return v1 > v2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool lessOrEqual(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return v1 <= v2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool greaterOrEqual(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return v1 >= v2;
 }
 
 template<typename T, size_t N>

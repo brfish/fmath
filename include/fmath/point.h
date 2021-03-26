@@ -87,6 +87,30 @@ FMATH_INLINE FMATH_CONSTEXPR bool operator!=(const Point<T, N> &p1, const Point<
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator<(const Point<T, N> &p1, const Point<T, N> &p2)
+{
+    return internal::PointTraits<T, N>::less(p1, p2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator>(const Point<T, N> &p1, const Point<T, N> &p2)
+{
+    return internal::PointTraits<T, N>::greater(p1, p2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator<=(const Point<T, N> &p1, const Point<T, N> &p2)
+{
+    return internal::PointTraits<T, N>::lessOrEqual(p1, p2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator>=(const Point<T, N> &p1, const Point<T, N> &p2)
+{
+    return internal::PointTraits<T, N>::greaterOrEqual(p1, p2);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR bool equal(const Point<T, N> &p1, const Point<T, N> &p2)
 {
     return internal::PointTraits<T, N>::equal(p1, p2);
@@ -108,6 +132,30 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Point<T, N> &p1, const Point<T, N> &p2, const T epsilon = constants::Epsilon<T>::value)
 {
     return !equalEpsilon(p1, p2, epsilon);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool less(const Point<T, N> &p1, const Point<T, N> &p2)
+{
+    return p1 < p2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool greater(const Point<T, N> &p1, const Point<T, N> &p2)
+{
+    return p1 > p2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool lessOrEqual(const Point<T, N> &p1, const Point<T, N> &p2)
+{
+    return p1 <= p2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool greaterOrEqual(const Point<T, N> &p1, const Point<T, N> &p2)
+{
+    return p1 >= p2;
 }
 
 template<typename T, size_t N>

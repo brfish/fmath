@@ -70,6 +70,30 @@ FMATH_INLINE FMATH_CONSTEXPR bool operator!=(const Normal<T, N> &n1, const Norma
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator<(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return internal::NormalTraits<T, N>::less(n1, n2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator>(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return internal::NormalTraits<T, N>::greater(n1, n2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator<=(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return internal::NormalTraits<T, N>::lessOrEqual(n1, n2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator>=(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return internal::NormalTraits<T, N>::greaterOrEqual(n1, n2);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR bool equal(const Normal<T, N> &n1, const Normal<T, N> &n2)
 {
     return internal::NormalTraits<T, N>::equal(n1, n2);
@@ -91,6 +115,30 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Normal<T, N> &n1, const Normal<T, N> &n2, const T &epsilon = constants::Epsilon<T>::value)
 {
     return !equalEpsilon(n1, n2, epsilon);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool less(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return n1 < n2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool greater(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return n1 > n2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool lessOrEqual(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return n1 <= n2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool greaterOrEqual(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return n1 >= n2;
 }
 
 template<typename T, size_t N>
