@@ -5,7 +5,7 @@
 
 namespace fmath
 {
-namespace number
+namespace constants
 {
 
 template<typename T>

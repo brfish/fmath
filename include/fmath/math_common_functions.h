@@ -38,12 +38,12 @@ FMATH_INLINE FMATH_CONSTEXPR bool isFinite(const T &value)
 
 FMATH_INLINE FMATH_CONSTEXPR angle_t toDegree(angle_t radian)
 {
-    return radian / number::Pi<angle_t>::value * static_cast<angle_t>(180);
+    return radian / constants::Pi<angle_t>::value * static_cast<angle_t>(180);
 }
 
 FMATH_INLINE FMATH_CONSTEXPR angle_t toRadian(angle_t degree)
 {
-    return degree / static_cast<angle_t>(180) * number::Pi<angle_t>::value;
+    return degree / static_cast<angle_t>(180) * constants::Pi<angle_t>::value;
 }
 
 template<typename T>
@@ -211,13 +211,13 @@ FMATH_INLINE FMATH_CONSTEXPR bool notEqual(const T &a, const T &b)
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const T &a, const T &b, const T &epsilon = number::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const T &a, const T &b, const T &epsilon = constants::Epsilon<T>::value)
 {
     return abs(a - b) <= epsilon;
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const T &a, const T &b, const T &epsilon = number::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const T &a, const T &b, const T &epsilon = constants::Epsilon<T>::value)
 {
     return !equalEpsilon(a, b, epsilon);
 }

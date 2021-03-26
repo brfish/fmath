@@ -6,6 +6,7 @@
 #include "internal/vector_base.h"
 #include "internal/vector_traits.h"
 #include "common.h"
+#include "constants.h"
 #include "vector.h"
 
 namespace fmath
@@ -97,13 +98,13 @@ FMATH_INLINE FMATH_CONSTEXPR bool notEqual(const Point<T, N> &p1, const Point<T,
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Point<T, N> &p1, const Point<T, N> &p2, const T epsilon = number::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Point<T, N> &p1, const Point<T, N> &p2, const T epsilon = constants::Epsilon<T>::value)
 {
     return internal::PointTraits<T, N>::equalEpsilon(p1, p2, epsilon);
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Point<T, N> &p1, const Point<T, N> &p2, const T epsilon = number::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Point<T, N> &p1, const Point<T, N> &p2, const T epsilon = constants::Epsilon<T>::value)
 {
     return !equalEpsilon(p1, p2, epsilon);
 }

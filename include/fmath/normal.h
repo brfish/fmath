@@ -81,13 +81,13 @@ FMATH_INLINE FMATH_CONSTEXPR bool notEqual(const Normal<T, N> &n1, const Normal<
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Normal<T, N> &n1, const Normal<T, N> &n2, const T &epsilon = number::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Normal<T, N> &n1, const Normal<T, N> &n2, const T &epsilon = constants::Epsilon<T>::value)
 {
     return internal::NormalTraits<T, N>::equalEpsilon(n1, n2, epsilon);
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Normal<T, N> &n1, const Normal<T, N> &n2, const T &epsilon = number::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Normal<T, N> &n1, const Normal<T, N> &n2, const T &epsilon = constants::Epsilon<T>::value)
 {
     return !equalEpsilon(n1, n2, epsilon);
 }

@@ -99,7 +99,7 @@ FMATH_INLINE FMATH_CONSTEXPR bool notEqual(const Quat<T> &q1, const Quat<T> &q2)
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Quat<T> &q1, const Quat<T> &q2, const T &epsilon = number::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Quat<T> &q1, const Quat<T> &q2, const T &epsilon = constants::Epsilon<T>::value)
 {
     return fmath::equalEpsilon(q1[0], q2[0]) &&
         fmath::equalEpsilon(q1[1], q2[1]) &&
@@ -108,7 +108,7 @@ FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Quat<T> &q1, const Quat<T> 
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Quat<T> &q1, const Quat<T> &q2, const T &epsilon = number::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Quat<T> &q1, const Quat<T> &q2, const T &epsilon = constants::Epsilon<T>::value)
 {
     return !equalEpsilon(q1, q2, epsilon);
 }
