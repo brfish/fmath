@@ -63,6 +63,7 @@ struct MatrixTraits :
     MatrixTraits_Mul<T, N, Matrix<T, N>>,
     MatrixTraits_Output<T, N>,
     MatrixTraits_Square<T, N, Matrix<T, N>>,
+    MatrixTraits_Stringify<T, N>,
     MatrixTraits_VectorMul<T, N, Vector<T, N>>
 {};
 
@@ -234,6 +235,12 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Matrix<T, N> transpose(const Matrix<T, N> &mat)
 {
     return internal::MatrixTraits<T, N>::transpose(mat);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR std::string toString(const Matrix<T, N> &mat, uint32 precision = 6)
+{
+    return internal::MatrixTraits<T, N>::toString(mat, precision);
 }
 
 template<typename T, size_t N>

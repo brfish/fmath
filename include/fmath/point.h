@@ -66,7 +66,8 @@ struct PointTraits :
     VectorTraits_Input<T, N>,
     VectorTraits_Norm<T, N>,
     VectorTraits_Output<T, N>,
-    VectorTraits_Scale<T, N, Point<T, N>>
+    VectorTraits_Scale<T, N, Point<T, N>>,
+    VectorTraits_Stringify<T, N>
 {};
 
 };
@@ -219,6 +220,12 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Point<T, N> opposite(const Point<T, N> &p)
 {
     return -p;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR std::string toString(const Point<T, N> &vec, uint32 precision = 6)
+{
+    return internal::PointTraits<T, N>::toString(vec, precision);
 }
 
 template<typename T, size_t N>

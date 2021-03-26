@@ -71,7 +71,8 @@ struct VectorTraits :
     VectorTraits_Input<T, N>,
     VectorTraits_Norm<T, N>,
     VectorTraits_Output<T, N>,
-    VectorTraits_Scale<T, N, Vector<T, N>>
+    VectorTraits_Scale<T, N, Vector<T, N>>,
+    VectorTraits_Stringify<T, N>
 {};
 
 }
@@ -283,6 +284,12 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> opposite(const Vector<T, N> &v)
 {
     return -v;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR std::string toString(const Vector<T, N> &vec, uint32 precision = 6)
+{
+    return internal::VectorTraits<T, N>::toString(vec, precision);
 }
 
 template<typename T, size_t N>

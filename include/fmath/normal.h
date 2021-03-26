@@ -50,7 +50,8 @@ struct NormalTraits :
     VectorTraits_Input<T, N>,
     VectorTraits_Norm<T, N>,
     VectorTraits_Output<T, N>,
-    VectorTraits_Scale<T, N, Normal<T, N>>
+    VectorTraits_Scale<T, N, Normal<T, N>>,
+    VectorTraits_Stringify<T, N>
 {};
 
 }
@@ -163,6 +164,12 @@ FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> normalize(const Normal<T, N> &n)
 {
     static_assert(std::is_floating_point_v<T>);
     return internal::NormalTraits<T, N>::div(n, length(n));
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR std::string toString(const Normal<T, N> &vec, uint32 precision = 6)
+{
+    return internal::NormalTraits<T, N>::toString(vec, precision);
 }
 
 template<typename T, size_t N>

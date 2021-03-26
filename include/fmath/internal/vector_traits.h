@@ -1,8 +1,11 @@
 #ifndef _FMATH_INTERNAL_VECTOR_TRAITS_H_
 #define _FMATH_INTERNAL_VECTOR_TRAITS_H_
 
+#include <iomanip>
 #include <istream>
 #include <ostream>
+#include <sstream>
+#include <string>
 
 #include "internal/vector_base.h"
 #include "functions.h"
@@ -639,6 +642,26 @@ FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Norm<T, 4>::length2(const Base &v)
 }
 #pragma endregion
 
+#pragma region VectorTraits_Stringify
+template<typename T, size_t N>
+struct VectorTraits_Stringify
+{
+    static FMATH_INLINE FMATH_CONSTEXPR std::string toString(const VectorBase<T, N> &base, uint32 precision = 6);
+};
+
+template<typename T, size_t  N>
+FMATH_INLINE FMATH_CONSTEXPR std::string VectorTraits_Stringify<T, N>::toString(const VectorBase<T, N> &base, uint32 precision)
+{
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(precision);
+    ss << '[';
+    for (index_t i = 0; i < N; ++i)
+        ss << base[i] << ("," + (i == N - 1));
+    ss << ']';
+    return ss.str();
+}
+#pragma endregion
+
 #pragma region VectorTraits_Output
 template<typename T, size_t N>
 struct VectorTraits_Output
@@ -649,10 +672,7 @@ struct VectorTraits_Output
 template<typename T, size_t N>
 FMATH_INLINE void VectorTraits_Output<T, N>::write(std::ostream &output, const VectorBase<T, N> &base)
 {
-    output << '[';
-    for (index_t i = 0; i < N; ++i)
-        output << base[i] << ("," + (i == N - 1));
-    output << ']';
+    output << VectorTraits_Stringify<T, N>::toString(base);
 }
 #pragma endregion
 

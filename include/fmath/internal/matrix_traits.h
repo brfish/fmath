@@ -4,6 +4,8 @@
 #include <cstring>
 #include <istream>
 #include <ostream>
+#include <sstream>
+#include <string>
 
 #include "internal/matrix_base.h"
 #include "common.h"
@@ -13,40 +15,6 @@ namespace fmath
 {
 namespace internal
 {
-#pragma region MatrixTraits_Output
-template<typename T, size_t N>
-struct MatrixTraits_Output
-{
-    using Base = MatrixBase<T, N>;
-    static FMATH_INLINE void write(std::ostream &output, const Base &mat);
-};
-
-template<typename T, size_t N>
-FMATH_INLINE void MatrixTraits_Output<T, N>::write(std::ostream &output, const Base &mat)
-{
-    output << '[';
-    for (index_t i = 0; i < N; ++i)
-        output << mat[i] << (" " + (i == N - 1));
-    output << ']';
-}
-#pragma endregion
-
-#pragma region MatrixTraits_Input
-template<typename T, size_t N>
-struct MatrixTraits_Input
-{
-    using Base = MatrixBase<T, N>;
-    static FMATH_INLINE void read(std::ostream &input, Base &mat);
-};
-
-template<typename T, size_t N>
-FMATH_INLINE void MatrixTraits_Input<T, N>::read(std::ostream &input, Base &mat)
-{
-    for (index_t i = 0; i < N; ++i)
-        for (index_t j = 0; j < N; ++j)
-            input >> mat[i][j];
-}
-#pragma endregion
 
 #pragma region MatrixTraits_Compare
 template<typename T, size_t N>
@@ -1097,6 +1065,61 @@ FMATH_INLINE FMATH_CONSTEXPR T MatrixTraits_Square<T, 4, MatrixT>::determinant(c
     return f0 * m[0][0] + f1 * m[0][1] + f2 * m[0][2] + f3 * m[0][3];
 }
 
+#pragma endregion
+
+#pragma region MatrixTraits_Stringify
+template<typename T, size_t N>
+struct MatrixTraits_Stringify
+{
+    using Base = MatrixBase<T, N>;
+    static FMATH_INLINE FMATH_CONSTEXPR std::string toString(const Base &mat, uint32 precision = 6);
+};
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR std::string MatrixTraits_Stringify<T, N>::toString(const Base &mat, uint32 precision)
+{
+    std::stringstream ss;
+    ss << '[';
+    for (index_t i = 0; i < N; ++i)
+        ss << fmath::toString(mat[i], precision);
+    ss << ']';
+    return ss.str();
+}
+#pragma endregion
+
+#pragma region MatrixTraits_Output
+template<typename T, size_t N>
+struct MatrixTraits_Output
+{
+    using Base = MatrixBase<T, N>;
+    static FMATH_INLINE void write(std::ostream &output, const Base &mat);
+};
+
+template<typename T, size_t N>
+FMATH_INLINE void MatrixTraits_Output<T, N>::write(std::ostream &output, const Base &mat)
+{
+    output << '[';
+    for (index_t i = 0; i < N; ++i)
+        output << mat[i] << (" " + (i == N - 1));
+    output << ']';
+}
+#pragma endregion
+
+#pragma region MatrixTraits_Input
+template<typename T, size_t N>
+struct MatrixTraits_Input
+{
+    using Base = MatrixBase<T, N>;
+    static FMATH_INLINE void read(std::ostream &input, Base &mat);
+};
+
+template<typename T, size_t N>
+FMATH_INLINE void MatrixTraits_Input<T, N>::read(std::ostream &input, Base &mat)
+{
+    for (index_t i = 0; i < N; ++i)
+        for (index_t j = 0; j < N; ++j)
+            input >> mat[i][j];
+}
 #pragma endregion
 
 }
