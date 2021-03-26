@@ -1,12 +1,33 @@
 #ifndef _FMATH_CONSTANTS_H_
 #define _FMATH_CONSTANTS_H_
 
+#include <limits>
+
 #include "common.h"
 
 namespace fmath
 {
 namespace constants
 {
+
+template<typename T>
+struct Inf
+{
+    static_assert(std::is_floating_point_v<T>);
+    static constexpr T value = std::numeric_limits<T>::infinity();
+};
+
+template<typename T>
+struct MinValue
+{
+    static constexpr T value = std::numeric_limits<T>::min();
+};
+
+template<typename T>
+struct MaxValue
+{
+    static constexpr T value = std::numeric_limits<T>::max();
+};
 
 template<typename T>
 struct Pi
@@ -153,6 +174,15 @@ struct Epsilon<float>
 {
     static constexpr float value = 1.19209289550781250000000000000000000e-7F;
 };
+
+template<typename T>
+inline constexpr T INF = Inf<T>::value;
+
+template<typename T>
+inline constexpr T MIN_VALUE = MinValue<T>::value;
+
+template<typename T>
+inline constexpr T MAX_VALUE = MaxValue<T>::value;
 
 inline constexpr double PI = Pi<double>::value;
 
