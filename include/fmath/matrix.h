@@ -50,7 +50,7 @@ public:
     FMATH_INLINE Matrix &operator/=(const ValueType &value);
 
     static FMATH_CONSTEXPR Matrix zero();
-    static Matrix identity();
+    static FMATH_CONSTEXPR Matrix identity();
 };
 
 namespace internal
@@ -367,7 +367,7 @@ FMATH_CONSTEXPR Matrix<T, N> Matrix<T, N>::zero()
 }
 
 template<typename T, size_t N>
-Matrix<T, N> Matrix<T, N>::identity()
+FMATH_CONSTEXPR Matrix<T, N> Matrix<T, N>::identity()
 {
     Matrix result;
     for (index_t i = 0; i < DIMENSION; ++i)
