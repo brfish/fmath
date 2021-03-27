@@ -160,19 +160,7 @@ struct Sqrt3<float>
 template<typename T>
 struct Epsilon
 {
-    static constexpr T value = 0;
-};
-
-template<>
-struct Epsilon<double>
-{
-    static constexpr double value = static_cast<double>(2.22044604925031308084726333618164062e-16L);
-};
-
-template<>
-struct Epsilon<float>
-{
-    static constexpr float value = 1.19209289550781250000000000000000000e-7F;
+    static constexpr T value = std::numeric_limits<T>::epsilon();
 };
 
 template<typename T>
