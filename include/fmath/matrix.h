@@ -171,13 +171,13 @@ Normal<T, N> operator*(const Normal<T, N> &normal, const Matrix<T, N> &mat)
 template<typename T, size_t N>
 Point<T, N> operator*(const Matrix<T, N> &mat, const Point<T, N> &point)
 {
-    return internal::MatrixTraits<T, N>::vectorMul(mat, point);
+    return internal::MatrixTraits_VectorMul<T, N, Point<T, N>>::vectorMul(mat, point);
 }
 
 template<typename T, size_t N>
 Point<T, N> operator*(const Point<T, N> &point, const Matrix<T, N> &mat)
 {
-    return internal::MatrixTraits<T, N>::vectorMul(point, mat);
+    return internal::MatrixTraits_VectorMul<T, N, Point<T, N>>::vectorMul(point, mat);
 }
 
 template<typename T, size_t N>
@@ -398,6 +398,209 @@ using Matrix4u = Matrix4<uint32>;
 using Matrix4i = Matrix4<int32>;
 using Matrix4f = Matrix4<float>;
 using Matrix4lf = Matrix4<double>;
+
+template<Axis A, typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> rotate(const T &angle)
+{
+    const T cost = cos(static_cast<angle_t>(angle)); 
+    const T sint = sin(static_cast<angle_t>(angle));
+    const T one = static_cast<T>(1);
+    const T zero = static_cast<T>(0);
+
+    if constexpr (A == Axis::X)
+    {
+        return Matrix4<T>(
+            one, zero, zero, zero,
+            zero, cost, -sint, zero,
+            zero, sint, cost, zero,
+            zero, zero, zero, one
+        );
+    }
+    else if constexpr (A == Axis::Y)
+    {
+        return Matrix4<T>(
+            cost, zero, sint, zero,
+            zero, one, zero, zero,
+            -sint, zero, cost, zero,
+            zero, zero, zero, one
+        );
+    }
+    else
+    {
+        return Matrix4<T>(
+            cost, -sint, zero, zero,
+            sint, cost, zero, zero,
+            zero, zero, one, zero,
+            zero, zero, zero, one
+        );
+    }
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> rotate(const Vector3<T> &axis, const T &angle)
+{
+    Vector3<T> n = normalize(axis);
+    const T cost = cos(static_cast<angle_t>(angle));
+    const T sint = sin(static_cast<angle_t>(angle));
+    const T minus_cost = static_cast<T>(1) - cost;
+    const T factor_x = n[0] * minus_cost;
+    const T factor_y = n[1] * minus_cost;
+    const T factor_z = n[2] * minus_cost;
+
+    Matrix4<T> r;
+
+    r[0][0] = factor_x * n[0] + cost;
+    r[0][1] = factor_y * n[0] - sint * n[2];
+    r[0][2] = factor_z * n[0] + sint * n[1];
+
+    r[1][0] = factor_x * n[1] + sint * n[2];
+    r[1][1] = factor_y * n[1] + cost;
+    r[1][2] = factor_z * n[1] - sint * n[0];
+
+    r[2][0] = factor_x * n[2] - sint * n[1];
+    r[2][1] = factor_y * n[2] + sint * n[0];
+    r[2][2] = factor_z * n[2] + cost;
+
+    r[3][3] = static_cast<T>(1);
+
+    return r;
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> scale(const Vector3<T> &factors)
+{
+    T one = static_cast<T>(1);
+    T zero = static_cast<T>(0);
+
+    return Matrix4<T>(
+        factors[0], zero, zero, zero,
+        zero, factors[1], zero, zero,
+        zero, zero, factors[2], zero,
+        zero, zero, zero, one
+    );
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> scale(const T &x, const T &y, const T &z)
+{
+    return scale(Vector3f(x, y, z));
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> scale(const T &uniform_factor)
+{
+    return scale(Vector3f(uniform_factor, uniform_factor, uniform_factor));
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> scale(const Vector3<T> &axis, const T &factor)
+{
+    Vector3<T> n = normalize(axis);
+    const T factor_x = n[0] * (factor - 1);
+    const T factor_y = n[1] * (factor - 1);
+    const T factor_z = n[2] * (factor - 1);
+
+    Matrix4<T> result;
+
+    result[0][0] = factor_x * n[0] + 1;
+    result[0][1] = factor_y * n[0];
+    result[0][2] = factor_z * n[0];
+
+    result[1][0] = factor_x * n[1];
+    result[1][1] = factor_y * n[1] + 1;
+    result[1][2] = factor_z * n[1];
+
+    result[2][0] = factor_x * n[2];
+    result[2][1] = factor_z * n[2];
+    result[2][2] = factor_z * n[2] + 1;
+
+    result[3][3] = static_cast<T>(1);
+
+    return result;
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> translate(const Vector3<T> &translation)
+{
+    const T one = static_cast<T>(1);
+    const T zero = static_cast<T>(0);
+
+    return Matrix4<T>(
+        one, zero, zero, zero,
+        zero, one, zero, zero,
+        zero, zero, one, zero,
+        translation[0], translation[1], translation[2], one
+    );
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> translate(const T &x, const T &y, const T &z)
+{
+    return translate(Vector3<T>(x, y, z));
+}
+
+template<Axis A, typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> shear(const T &factor_s, const T &factor_t)
+{
+    const T one = static_cast<T>(1);
+    const T zero = static_cast<T>(0);
+
+    if constexpr (A == Axis::X)
+    {
+        return Matrix4<T>(
+            one, zero, zero, zero,
+            factor_s, one, zero, zero,
+            factor_t, zero, one, zero,
+            zero, zero, zero, one
+        );
+    }
+    else if constexpr (A == Axis::Y)
+    {
+        return Matrix4<T>(
+            one, factor_s, zero, zero,
+            zero, one, zero, zero,
+            zero, factor_t, one, zero,
+            zero, zero, zero, one
+        );
+    }
+    else
+    {
+        return Matrix4<T>(
+            one, zero, factor_s, zero,
+            zero, one, factor_t, zero,
+            zero, zero, one, zero,
+            zero, zero, zero, one
+        );
+    }
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> shear(const Vector3<T> &axis, const T &factor)
+{
+    Vector3<T> &n = normalize(axis);
+    const T factor_x = n[0] * (factor - 1);
+    const T factor_y = n[1] * (factor - 1);
+    const T factor_z = n[2] * (factor - 1);
+
+    Matrix4<T> r;
+    Vector4<T> r0, r1, r2, r3;
+
+    r[0][0] = factor_x * n[0] + 1;
+    r[0][1] = factor_y * n[0];
+    r[0][2] = factor_z * n[0];
+
+    r[1][0] = factor_x * n[1];
+    r[1][1] = factor_y * n[1] + 1;
+    r[1][2] = factor_z * n[1];
+
+    r[2][0] = factor_x * n[2];
+    r[2][1] = factor_z * n[2];
+    r[2][2] = factor_z * n[2] + 1;
+
+    r[3][3] = static_cast<T>(1);
+
+    return r;
+}
 
 }
 
