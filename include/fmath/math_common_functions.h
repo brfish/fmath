@@ -49,37 +49,61 @@ FMATH_INLINE FMATH_CONSTEXPR angle_t toRadian(angle_t degree)
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T sin(const T &angle)
 {
+#if defined(FMATH_USE_DEGREE)
+    return std::sin(toRadian(angle));
+#else
     return std::sin(angle);
+#endif
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T cos(const T &angle)
 {
+#if defined(FMATH_USE_DEGREE)
+    return std::cos(toRadian(angle));
+#else
     return std::cos(angle);
+#endif
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T tan(const T &angle)
 {
+#if defined(FMATH_USE_DEGREE)
+    return std::tan(toRadian(angle));
+#else
     return std::tan(angle);
+#endif
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T asin(const T &angle)
 {
+#if defined(FMATH_USE_DEGREE)
+    return std::asin(toRadian(angle));
+#else
     return std::asin(angle);
+#endif
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T acos(const T &angle)
 {
+#if defined(FMATH_USE_DEGREE)
+    return std::acos(toRadian(angle));
+#else
     return std::acos(angle);
+#endif
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T atan(const T &angle)
 {
+#if defined(FMATH_USE_DEGREE)
+    return std::atan(toRadian(angle));
+#else
     return std::atan(angle);
+#endif
 }
 
 template<typename T>
