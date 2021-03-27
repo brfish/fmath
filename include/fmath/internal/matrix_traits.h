@@ -1100,7 +1100,7 @@ FMATH_INLINE void MatrixTraits_Output<T, N>::write(std::ostream &output, const B
 {
     output << '[';
     for (index_t i = 0; i < N; ++i)
-        output << mat[i] << (" " + (i == N - 1));
+        output << mat[i] << (" "[i == N - 1]);
     output << ']';
 }
 #pragma endregion
