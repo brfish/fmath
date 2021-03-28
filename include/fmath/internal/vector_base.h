@@ -15,6 +15,12 @@ struct VectorBase : VectorStorage<T, N>
 
     explicit VectorBase(const T *data, size_t count);
 
+    template<typename U>
+    explicit VectorBase(const VectorBase<U, N - 1> &vec, const T &value);
+
+    template<typename U>
+    explicit VectorBase(const T &value, const VectorBase<U, N - 1> &vec);
+
     FMATH_INLINE FMATH_CONSTEXPR size_t size() const;
 
     FMATH_INLINE FMATH_CONSTEXPR const T *data() const;
@@ -36,6 +42,24 @@ template<typename T, size_t N>
 VectorBase<T, N>::VectorBase(const T *data, size_t count)
 {
     memcpy(this->data(), data, sizeof(T) * min(N, count));
+}
+
+template<typename T, size_t N>
+    template<typename U>
+VectorBase<T, N>::VectorBase(const VectorBase<U, N - 1> &vec, const T &value)
+{
+    static_assert(N >= 1);
+    memcpy(this->data(), vec.data(), sizeof(T) * (N - 1));
+    this->values[N - 1] = value;
+}
+
+template<typename T, size_t N>
+    template<typename U>
+VectorBase<T, N>::VectorBase(const T &value, const VectorBase<U, N - 1> &vec)
+{
+    static_assert(N >= 1);
+    this->values[0] = value;
+    memcpy(this->data() + sizeof(T), vec.data(), sizeof(T) * (N - 1));
 }
 
 template<typename T, size_t N>

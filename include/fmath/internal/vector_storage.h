@@ -35,6 +35,10 @@ struct VectorStorage<T, 2>
     explicit FMATH_CONSTEXPR VectorStorage(const T &x = 0, const T &y = 0)
         :   values { x, y }
     {}
+
+    explicit FMATH_CONSTEXPR VectorStorage(const T *data)
+        :   values { data[0], data[1] }
+    {}
 };
 
 template<typename T>
@@ -49,6 +53,10 @@ struct VectorStorage<T, 3>
     explicit FMATH_CONSTEXPR VectorStorage(const T &x = 0, const T &y = 0, const T &z = 0)
         :   values { x, y, z }
     {}
+
+    explicit FMATH_CONSTEXPR VectorStorage(const T *data)
+        :   values { data[0], data[1], data[2] }
+    {}
 };
 
 template<typename T>
@@ -62,6 +70,10 @@ struct VectorStorage<T, 4>
 
     explicit FMATH_CONSTEXPR VectorStorage(const T &x = 0, const T &y = 0, const T &z = 0, const T &w = 0)
         :   values { x, y, z, w }
+    {}
+
+    explicit FMATH_CONSTEXPR VectorStorage(const T *data)
+        :   values { data[0], data[1], data[2], data[3] }
     {}
 };
 
