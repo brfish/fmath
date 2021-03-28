@@ -246,6 +246,30 @@ FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const T &a, const T &b, const 
     return !equalEpsilon(a, b, epsilon);
 }
 
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool less(const T &a, const T &b)
+{
+    return a < b;
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool greater(const T &a, const T &b)
+{
+    return a > b;
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool lessOrEqual(const T &a, const T &b)
+{
+    return a <= b;
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool greaterOrEqual(const T &a, const T &b)
+{
+    return a >= b;
+}
+
 }
 
 #endif

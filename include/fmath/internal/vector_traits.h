@@ -741,7 +741,11 @@ FMATH_INLINE FMATH_CONSTEXPR std::string VectorTraits_Stringify<T, N>::toString(
     ss << std::fixed << std::setprecision(precision);
     ss << '[';
     for (index_t i = 0; i < N; ++i)
-        ss << base[i] << (","[i == N - 1]);
+    {
+        const char *comma = ",";
+        comma += (i == N - 1);
+        ss << base[i] << comma;
+    }
     ss << ']';
     return ss.str();
 }
