@@ -208,6 +208,12 @@ FMATH_INLINE FMATH_CONSTEXPR T clamp(const T &v, const T &minv, const T &maxv)
     return min(maxv, max(v, minv));
 }
 
+template<typename T, typename U, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
+FMATH_INLINE FMATH_CONSTEXPR T clamp(const T &v, const U &minv, const U &maxv)
+{
+    return min(static_cast<T>(maxv), max(v, static_cast<T>(minv)));
+}
+
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T lerp(const T &a, const T &b, double t)
 {
