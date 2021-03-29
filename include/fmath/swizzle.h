@@ -1,5 +1,5 @@
-#ifndef _FMATH_INTERNAL_SWIZZLE_H_
-#define _FMATH_INTERNAL_SWIZZLE_H_
+#ifndef _FMATH_SWIZZLE_H_
+#define _FMATH_SWIZZLE_H_
 
 #include <type_traits>
 
