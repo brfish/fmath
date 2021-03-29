@@ -25,7 +25,7 @@ FMATH_INLINE FMATH_CONSTEXPR bool isNaN(const T &value)
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR bool isInf(const T &value)
+FMATH_INLINE FMATH_CONSTEXPR bool isInfinite(const T &value)
 {
     return std::isinf(value);
 }
@@ -215,17 +215,11 @@ FMATH_INLINE FMATH_CONSTEXPR T clamp(const T &v, const U &minv, const U &maxv)
 }
 
 template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR T lerp(const T &a, const T &b, double t)
+FMATH_INLINE FMATH_CONSTEXPR T lerp(const T &a, const T &b, const T &t)
 {
     static_assert(std::is_floating_point_v<T>);
-    FMATH_ASSERT(!isInf(a) && !isInf(b) && !isInf(t));
+    FMATH_ASSERT(!isInfinite(a) && !isInfinite(b) && !isInfinite(t));
     return a + t * (b - a);
-}
-
-template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR T lerp(const T &a, const T &b, float t)
-{
-    return lerp(a, b, static_cast<double>(t));
 }
 
 template<typename T>
