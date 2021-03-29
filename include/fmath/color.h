@@ -52,6 +52,17 @@ struct ColorRangeTraits<uint8>
     static constexpr uint8 RANGE_MAX = 255;
 };
 
+template<typename T, size_t N>
+struct VectorTraits_TypeInfo<Color<T, N>>
+{
+    template<typename U, size_t M>
+    using VectorType = Color<U, M>;
+
+    using ValueType = T;
+
+    static constexpr size_t SIZE = N;
+};
+
 };
 
 template<typename T, size_t N>
