@@ -4,7 +4,8 @@
 #include <array>
 
 #include "common.h"
-#include "functions.h"
+#include "math_common_functions.h"
+#include "vector.h"
 
 namespace fmath
 {
@@ -24,108 +25,94 @@ namespace internal
 {
 
 template<typename T, size_t N>
-struct ColorStorageBase
-{};
-
-template<ColorFormat Format>
 struct ColorStorage
 {};
 
 template<>
-struct ColorStorage<ColorFormat::BIT> : ColorStorageBase<bool, 1>
+struct ColorStorage<float, 3>
 {
     union
     {
-        std::array<bool, 1> values;
-        bool v;
-    };
-
-    explicit FMATH_CONSTEXPR ColorStorage(const bool &v)
-        :   values { v }
-    {}
-};
-
-template<>
-struct ColorStorage<ColorFormat::GREY> : ColorStorageBase<uint8, 1>
-{
-    union
-    {
-        std::array<uint8, 1> values;
-        uint8 v;
-    };
-
-    explicit FMATH_CONSTEXPR ColorStorage(const uint8 &v)
-        :   values { v }
-    {}
-};
-
-template<>
-struct ColorStorage<ColorFormat::GREY16> : ColorStorageBase<uint16, 1>
-{
-    union
-    {
-        std::array<uint16, 1> values;
-        uint16 v;
-    };
-
-    explicit FMATH_CONSTEXPR ColorStorage(const uint16 &v)
-        :   values { v }
-    {}
-};
-
-template<>
-struct ColorStorage<ColorFormat::RGB> : ColorStorageBase<float, 3>
-{
-    union
-    {
-        std::array<float, 3> values;
+        Vector3<float> values;
         struct { float r, g, b; };
     };
 
-    explicit FMATH_CONSTEXPR ColorStorage(const float &r, const float &g, const float &b)
+    explicit FMATH_CONSTEXPR ColorStorage(const float &r = 0.0F, const float &g = 0.0F, const float &b = 0.0F)
         :   values { clamp(r, 0.0F, 1.0F), clamp(g, 0.0F, 1.0F), clamp(b, 0.0F, 1.0F) }
     {}
-};
 
-template<>
-struct ColorStorage<ColorFormat::RGB_I> : ColorStorageBase<uint8, 3>
-{
-    union
-    {
-        std::array<uint8, 3> values;
-        struct { uint8 r, g, b; };
-    };
+    FMATH_CONSTEXPR ColorStorage(const Vector3<float> &vec)
+        :   values { vec }
+    {}
 
-    explicit FMATH_CONSTEXPR ColorStorage(const uint8 &r, const uint8 &g, const uint8 &b)
-        :   values { r, g, b }
+    explicit FMATH_CONSTEXPR ColorStorage(const float *data)
+        :   ColorStorage(data[0], data[1], data[2])
     {}
 };
 
 template<>
-struct ColorStorage<ColorFormat::RGBA> : ColorStorageBase<float, 4>
+struct ColorStorage<float, 4>
 {
     union
     {
-        std::array<float, 4> values;
+        Vector4<float> values;
         struct { float r, g, b, a; };
     };
 
-    explicit FMATH_CONSTEXPR ColorStorage(const float &r, const float &g, const float &b, const float &a)
+    explicit FMATH_CONSTEXPR ColorStorage(const float &r = 0.0F, const float &g = 0.0F, const float &b = 0.0F, const float &a = 1.0F)
         :   values { clamp(r, 0.0F, 1.0F), clamp(g, 0.0F, 1.0F), clamp(b, 0.0F, 1.0F), clamp(a, 0.0F, 1.0F) }
+    {}
+
+    FMATH_CONSTEXPR ColorStorage(const Vector4<float> &vec)
+        :   values { vec }
+    {}
+
+    explicit FMATH_CONSTEXPR ColorStorage(const float *data)
+        :   ColorStorage(data[0], data[1], data[2], data[3])
     {}
 };
 
 template<>
-struct ColorStorage<ColorFormat::RGBA_I> : ColorStorageBase<uint8, 4>
+struct ColorStorage<uint8, 3>
 {
     union
     {
-        std::array<uint8, 4> values;
+        Vector3<uint8> values;
+        struct { uint8 r, g, b; };
+    };
+
+    explicit FMATH_CONSTEXPR ColorStorage(const uint8 &r = 0, const uint8 &g = 0, const uint8 &b = 0)
+        :   values { clamp(r, 0, 255), clamp(g, 0, 255), clamp(b, 0, 255) }
+    {}
+
+    FMATH_CONSTEXPR ColorStorage(const Vector3<uint8> &vec)
+        :   values { vec }
+    {}
+
+    explicit FMATH_CONSTEXPR ColorStorage(const uint8 *data)
+        :   ColorStorage(data[0], data[1], data[2])
+    {}
+};
+
+template<>
+struct ColorStorage<uint8, 4>
+{
+    union
+    {
+        Vector4<uint8> values;
         struct { uint8 r, g, b, a; };
     };
 
-    explicit FMATH_CONSTEXPR ColorStorage(const uint8 &r, const uint8 &g, const uint8 &b, const uint8 &a)
-        :   values { r, g, b, a }
+    explicit FMATH_CONSTEXPR ColorStorage(const uint8 &r = 0, const uint8 &g = 0, const uint8 &b = 0, const uint8 &a = 255)
+        :   values { clamp(r, 0, 255), clamp(g, 0, 255), clamp(b, 0, 255), clamp(a, 0, 255) }
+    {}
+
+    FMATH_CONSTEXPR ColorStorage(const Vector4<uint8> &vec)
+        :   values { vec }
+    {}
+
+    explicit FMATH_CONSTEXPR ColorStorage(const uint8 *data)
+        :   ColorStorage(data[0], data[1], data[2], data[3])
     {}
 };
 
