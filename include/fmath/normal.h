@@ -309,6 +309,12 @@ FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> clamp(const Normal<T, N> &normal, cons
     return internal::NormalTraits<T, N>::clamp(normal, minv, maxv);
 }
 
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> lerp(const Normal<T, N> &n1, const Normal<T, N> &n2, const T &t)
+{
+    return n1 + (n2 - n1) * t;
+}
+
 namespace constants
 {
 

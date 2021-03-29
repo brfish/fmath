@@ -383,6 +383,12 @@ FMATH_INLINE FMATH_CONSTEXPR Point<T, N> clamp(const Point<T, N> &point, const T
     return internal::PointTraits<T, N>::clamp(point, minv, maxv);
 }
 
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> lerp(const Point<T, N> &p1, const Point<T, N> &p2, const T &t)
+{
+    return p1 + (p2 - p1) * t;
+}
+
 namespace constants
 {
 

@@ -7,8 +7,8 @@
 #include "internal/vector_base.h"
 #include "internal/vector_traits.h"
 #include "common.h"
-#include "compile_config.h"
 #include "constants.h"
+#include "math_common_functions.h"
 
 namespace fmath
 {
@@ -440,6 +440,12 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> clamp(const Vector<T, N> &vec, const T
 {
     return internal::VectorTraits<T, N>::clamp(vec, minv, maxv);
 }
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> lerp(const Vector<T, N> &v1, const Vector<T, N> &v2, const T &t)
+{
+    return v1 + (v2 - v1) * t;
+};
 
 namespace constants
 {
