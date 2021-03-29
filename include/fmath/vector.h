@@ -65,6 +65,7 @@ struct VectorTraits_TypeInfo<Vector<T, N>>
 template<typename T, size_t N>
 struct VectorTraits : 
     VectorTraits_Add<T, N, Vector<T, N>>,
+    VectorTraits_Clamp<T, N, Vector<T, N>>,
     VectorTraits_Compare<T, N>,
     VectorTraits_Constants<T, N, Vector<T, N>>,
     VectorTraits_Dot<T, N>,
@@ -426,6 +427,18 @@ template<typename T, size_t N>
 FMATH_CONSTEXPR Vector<T, N> Vector<T, N>::zero()
 {
     return Vector();
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> clamp(const Vector<T, N> &vec, const Vector<T, N> &minv, const Vector<T, N> &maxv)
+{
+    return internal::VectorTraits<T, N>::clamp(vec, minv, maxv);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> clamp(const Vector<T, N> &vec, const T &minv, const T &maxv)
+{
+    return internal::VectorTraits<T, N>::clamp(vec, minv, maxv);
 }
 
 namespace constants

@@ -63,6 +63,7 @@ struct VectorTraits_TypeInfo<Point<T, N>>
 template<typename T, size_t N>
 struct PointTraits :
     VectorTraits_Add<T, N, Point<T, N>>,
+    VectorTraits_Clamp<T, N, Point<T, N>>,
     VectorTraits_Compare<T, N>,
     VectorTraits_Constants<T, N, Point<T, N>>,
     VectorTraits_Input<T, N>,
@@ -368,6 +369,18 @@ template<typename T, size_t N>
 FMATH_CONSTEXPR Point<T, N> Point<T, N>::zero()
 {
     return Point();
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> clamp(const Point<T, N> &point, const Point<T, N> &minv, const Point<T, N> &maxv)
+{
+    return internal::PointTraits<T, N>::clamp(point, minv, maxv);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> clamp(const Point<T, N> &point, const T &minv, const T &maxv)
+{
+    return internal::PointTraits<T, N>::clamp(point, minv, maxv);
 }
 
 namespace constants

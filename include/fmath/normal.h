@@ -46,6 +46,8 @@ struct VectorTraits_TypeInfo<Normal<T, N>>
 
 template<typename T, size_t N>
 struct NormalTraits :
+    VectorTraits_Add<T, N, Normal<T, N>>,
+    VectorTraits_Clamp<T, N, Normal<T, N>>,
     VectorTraits_Compare<T, N>,
     VectorTraits_Constants<T, N, Normal<T, N>>,
     VectorTraits_Input<T, N>,
@@ -293,6 +295,18 @@ template<typename T, size_t N>
 FMATH_CONSTEXPR Normal<T, N> Normal<T, N>::zero()
 {
     return Normal();
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> clamp(const Normal<T, N> &normal, const Normal<T, N> &minv, const Normal<T, N> &maxv)
+{
+    return internal::NormalTraits<T, N>::clamp(normal, minv, maxv);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> clamp(const Normal<T, N> &normal, const T &minv, const T &maxv)
+{
+    return internal::NormalTraits<T, N>::clamp(normal, minv, maxv);
 }
 
 namespace constants

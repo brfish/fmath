@@ -9,7 +9,7 @@
 
 #include "internal/vector_base.h"
 #include "constants.h"
-#include "functions.h"
+#include "math_common_functions.h"
 
 namespace fmath::internal
 {
@@ -724,6 +724,90 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Norm<T, 4>::length2(const Base &v)
 {
     return v[0] * v[0] + v[1] * v[1] + v[2] * v[2] + v[3] * v[3];
+}
+#pragma endregion
+
+#pragma region VectorTraits_Clamp
+template<typename T, size_t N, typename VectorT>
+struct VectorTraits_Clamp
+{};
+
+template<typename T, typename VectorT>
+struct VectorTraits_Clamp<T, 2, VectorT>
+{
+    using Base = VectorBase<T, 2>;
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT clamp(const Base &v, const Base &minv, const Base &maxv);
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT clamp(const Base &v, const T &minv, const T &maxv);
+};
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Clamp<T, 2, VectorT>::clamp(const Base &v, const Base &minv, const Base &maxv)
+{
+    return VectorT(fmath::clamp(v[0], minv[0], maxv[0]),
+        fmath::clamp(v[1], minv[1], maxv[1])
+    );
+}
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Clamp<T, 2, VectorT>::clamp(const Base &v, const T &minv, const T &maxv)
+{
+    return VectorT(fmath::clamp(v[0], minv, maxv),
+        fmath::clamp(v[1], minv, maxv)
+    );
+}
+
+template<typename T, typename VectorT>
+struct VectorTraits_Clamp<T, 3, VectorT>
+{
+    using Base = VectorBase<T, 3>;
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT clamp(const Base &v, const Base &minv, const Base &maxv);
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT clamp(const Base &v, const T &minv, const T &maxv);
+};
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Clamp<T, 3, VectorT>::clamp(const Base &v, const Base &minv, const Base &maxv)
+{
+    return VectorT(fmath::clamp(v[0], minv[0], maxv[0]),
+        fmath::clamp(v[1], minv[1], maxv[1]),
+        fmath::clamp(v[2], minv[2], maxv[2])
+    );
+}
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Clamp<T, 3, VectorT>::clamp(const Base &v, const T &minv, const T &maxv)
+{
+    return VectorT(fmath::clamp(v[0], minv, maxv),
+        fmath::clamp(v[1], minv, maxv),
+        fmath::clamp(v[2], minv, maxv)
+    );
+}
+
+template<typename T, typename VectorT>
+struct VectorTraits_Clamp<T, 4, VectorT>
+{
+    using Base = VectorBase<T, 4>;
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT clamp(const Base &v, const Base &minv, const Base &maxv);
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT clamp(const Base &v, const T &minv, const T &maxv);
+};
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Clamp<T, 4, VectorT>::clamp(const Base &v, const Base &minv, const Base &maxv)
+{
+    return VectorT(fmath::clamp(v[0], minv[0], maxv[0]),
+        fmath::clamp(v[1], minv[1], maxv[1]),
+        fmath::clamp(v[2], minv[2], maxv[2]),
+        fmath::clamp(v[3], minv[3], maxv[3])
+    );
+}
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Clamp<T, 4, VectorT>::clamp(const Base &v, const T &minv, const T &maxv)
+{
+    return VectorT(fmath::clamp(v[0], minv, maxv),
+        fmath::clamp(v[1], minv, maxv),
+        fmath::clamp(v[2], minv, maxv),
+        fmath::clamp(v[3], minv, maxv)
+    );
 }
 #pragma endregion
 
