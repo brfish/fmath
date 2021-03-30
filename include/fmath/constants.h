@@ -20,7 +20,7 @@ struct Inf
 template<typename T>
 struct MinValue
 {
-    static constexpr T value = std::numeric_limits<T>::min();
+    static constexpr T value = std::numeric_limits<T>::lowest();
 };
 
 template<typename T>
