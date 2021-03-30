@@ -36,14 +36,36 @@ FMATH_INLINE FMATH_CONSTEXPR bool isFinite(const T &value)
     return std::isfinite(value);
 }
 
-FMATH_INLINE FMATH_CONSTEXPR angle_t toDegree(angle_t radian)
+FMATH_INLINE FMATH_CONSTEXPR float toDegree(float radian)
 {
-    return radian / constants::Pi<angle_t>::value * static_cast<angle_t>(180);
+    return radian / constants::Pi<float>::value * 180.0F;
 }
 
-FMATH_INLINE FMATH_CONSTEXPR angle_t toRadian(angle_t degree)
+FMATH_INLINE FMATH_CONSTEXPR double toDegree(double radian)
 {
-    return degree / static_cast<angle_t>(180) * constants::Pi<angle_t>::value;
+    return radian / constants::Pi<double>::value * 180.0;
+}
+
+template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+FMATH_INLINE FMATH_CONSTEXPR double toDegree(const T &radian)
+{
+    return toDegree(static_cast<T>(radian));
+}
+
+FMATH_INLINE FMATH_CONSTEXPR float toRadian(float degree)
+{
+    return degree / 180.0F * constants::Pi<float>::value;
+}
+
+FMATH_INLINE FMATH_CONSTEXPR double toRadian(double degree)
+{
+    return degree / 180.0 * constants::Pi<double>::value;
+}
+
+template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
+FMATH_INLINE FMATH_CONSTEXPR double toRadian(const T &degree)
+{
+    return toRadian(static_cast<T>(degree));
 }
 
 template<typename T>
