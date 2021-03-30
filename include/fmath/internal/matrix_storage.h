@@ -12,8 +12,11 @@ namespace fmath
 namespace internal
 {
 
+struct MatrixInterface
+{};
+
 template<typename T, size_t N>
-struct MatrixStorage
+struct MatrixStorage : MatrixInterface;
 {
     static_assert(N != 0);
     std::array<Vector<T, N>, N> values;
@@ -33,7 +36,7 @@ struct MatrixStorage
 };
 
 template<typename T>
-struct MatrixStorage<T, 2>
+struct MatrixStorage<T, 2> : MatrixInterface
 {
     union
     {
@@ -51,7 +54,7 @@ struct MatrixStorage<T, 2>
 };
 
 template<typename T>
-struct MatrixStorage<T, 3>
+struct MatrixStorage<T, 3> : MatrixInterface
 {
     union
     {
@@ -75,7 +78,7 @@ struct MatrixStorage<T, 3>
 };
 
 template<typename T>
-struct MatrixStorage<T, 4>
+struct MatrixStorage<T, 4> : MatrixInterface
 {
     union
     {

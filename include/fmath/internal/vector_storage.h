@@ -12,6 +12,9 @@ namespace fmath
 namespace internal
 {
 
+struct VectorInterface
+{};
+
 template<typename T, size_t N>
 struct VectorStorage
 {
@@ -24,7 +27,7 @@ struct VectorStorage
 };
 
 template<typename T>
-struct VectorStorage<T, 2>
+struct VectorStorage<T, 2> : VectorInterface
 {
     union
     {
@@ -42,7 +45,7 @@ struct VectorStorage<T, 2>
 };
 
 template<typename T>
-struct VectorStorage<T, 3>
+struct VectorStorage<T, 3> : VectorInterface
 {
     union
     {
@@ -60,7 +63,7 @@ struct VectorStorage<T, 3>
 };
 
 template<typename T>
-struct VectorStorage<T, 4>
+struct VectorStorage<T, 4> : VectorInterface
 {
     union
     {
