@@ -230,6 +230,10 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> orthographic(const T &left, const T &right, const T &bottom, const T &top,
     const T &near, const T &far)
 {
+    FMATH_ASSERT(notEqualEpsilon(right - left, static_cast<T>(0)));
+    FMATH_ASSERT(notEqualEpsilon(top - bottom, static_cast<T>(0)));
+    FMATH_ASSERT(notEqualEpsilon(far - near, static_cast<T>(0)));
+
     const T zero = static_cast<T>(0);
     const T one = static_cast<T>(1);
     const T two = static_cast<T>(2);
@@ -246,6 +250,10 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> perspective(const T &left, const T &right, const T &bottom, const T &top,
     const T &near, const T &far)
 {
+    FMATH_ASSERT(notEqualEpsilon(right - left, static_cast<T>(0)));
+    FMATH_ASSERT(notEqualEpsilon(top - bottom, static_cast<T>(0)));
+    FMATH_ASSERT(notEqualEpsilon(far - near, static_cast<T>(0)));
+
     const T zero = static_cast<T>(0);
     const T one = static_cast<T>(1);
     const T two = static_cast<T>(2);
@@ -262,6 +270,10 @@ FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> perspective(const T &left, const T &righ
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> perspective(const T &fovy, const T &aspect, const T &near, const T &far)
 {
+    FMATH_ASSERT(notEqualEpsilon(fovy, static_cast<T>(0)));
+    FMATH_ASSERT(notEqualEpsilon(aspect, static_cast<T>(0)));
+    FMATH_ASSERT(notEqualEpsilon(far - near, static_cast<T>(0)));
+
     const T zero = static_cast<T>(0);
     const T one = static_cast<T>(1);
     const T two = static_cast<T>(2);
@@ -712,16 +724,16 @@ FMATH_INLINE FMATH_CONSTEXPR Point3<T> Transform<T>::apply(const Point3<ValueTyp
     Vector4<ValueType> result = mat_ * Vector4<ValueType>(point[0], point[1], point[2], static_cast<ValueType>(1));
     ValueType w = result[3];
     if (w != static_cast<ValueType>(1))
-        return Point3<T>(result[0], result[1], result[2]) / w;
-    return Point3<T>(result[0], result[1], result[2]);
+        return Point3<ValueType>(result[0], result[1], result[2]) / w;
+    return Point3<ValueType>(result[0], result[1], result[2]);
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Normal3<T> Transform<T>::apply(const Normal3<ValueType> &normal) const
 {
-    Matrix4<T> inv = fmath::inverse(mat_);
-    Vector4<T> r = Vector4<T>(normal[0], normal[1], normal[2], 0) * inv;
-    return Normal3<T>(r[0], r[1], r[2]);
+    Matrix4<ValueType> inv = fmath::inverse(mat_);
+    Vector4<ValueType> r = Vector4<ValueType>(normal[0], normal[1], normal[2], static_cast<ValueType>(0)) * inv;
+    return Normal3<ValueType>(r[0], r[1], r[2]);
 }
 
 template<typename T>
