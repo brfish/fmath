@@ -1,6 +1,7 @@
 #ifndef _FMATH_INTERNAL_VECTOR_BASE_H_
 #define _FMATH_INTERNAL_VECTOR_BASE_H_
 
+#include "internal/interfaces.h"
 #include "internal/vector_storage.h"
 
 namespace fmath
@@ -9,7 +10,7 @@ namespace internal
 {
 
 template<typename T, size_t N>
-struct VectorBase : VectorStorage<T, N>
+struct VectorBase : VectorInterface, VectorStorage<T, N>
 {
     using VectorStorage<T, N>::VectorStorage;
 

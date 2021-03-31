@@ -1,6 +1,7 @@
 #ifndef _FMATH_INTERNAL_MATRIX_BASE_H_
 #define _FMATH_INTERNAL_MATRIX_BASE_H_
 
+#include "internal/interfaces.h"
 #include "internal/matrix_storage.h"
 #include "common.h"
 #include "compile_config.h"
@@ -12,9 +13,9 @@ namespace internal
 {
 
 template<typename T, size_t N>
-struct MatrixBase : internal::MatrixStorage<T, N>
+struct MatrixBase : MatrixInterface, MatrixStorage<T, N>
 {
-    using internal::MatrixStorage<T, N>::MatrixStorage;
+    using MatrixStorage<T, N>::MatrixStorage;
 
     explicit MatrixBase(const T *data, size_t count);
 
