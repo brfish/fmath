@@ -402,8 +402,8 @@ using Matrix4lf = Matrix4<double>;
 template<Axis A, typename T>
 FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> rotate(const T &angle)
 {
-    const T cost = cos(static_cast<angle_t>(angle)); 
-    const T sint = sin(static_cast<angle_t>(angle));
+    const T cost = cos(angle); 
+    const T sint = sin(angle);
     const T one = static_cast<T>(1);
     const T zero = static_cast<T>(0);
 
@@ -411,25 +411,25 @@ FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> rotate(const T &angle)
     {
         return Matrix4<T>(
             one, zero, zero, zero,
-            zero, cost, -sint, zero,
-            zero, sint, cost, zero,
+            zero, cost, sint, zero,
+            zero, -sint, cost, zero,
             zero, zero, zero, one
         );
     }
     else if constexpr (A == Axis::Y)
     {
         return Matrix4<T>(
-            cost, zero, sint, zero,
+            cost, zero, -sint, zero,
             zero, one, zero, zero,
-            -sint, zero, cost, zero,
+            sint, zero, cost, zero,
             zero, zero, zero, one
         );
     }
     else
     {
         return Matrix4<T>(
-            cost, -sint, zero, zero,
-            sint, cost, zero, zero,
+            cost, sint, zero, zero,
+            -sint, cost, zero, zero,
             zero, zero, one, zero,
             zero, zero, zero, one
         );
@@ -440,8 +440,8 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> rotate(const Vector3<T> &axis, const T &angle)
 {
     Vector3<T> n = normalize(axis);
-    const T cost = cos(static_cast<angle_t>(angle));
-    const T sint = sin(static_cast<angle_t>(angle));
+    const T cost = cos(angle);
+    const T sint = sin(angle);
     const T minus_cost = static_cast<T>(1) - cost;
     const T factor_x = n[0] * minus_cost;
     const T factor_y = n[1] * minus_cost;
@@ -450,15 +450,15 @@ FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> rotate(const Vector3<T> &axis, const T &
     Matrix4<T> r;
 
     r[0][0] = factor_x * n[0] + cost;
-    r[0][1] = factor_y * n[0] - sint * n[2];
-    r[0][2] = factor_z * n[0] + sint * n[1];
+    r[0][1] = factor_x * n[1] + sint * n[2];
+    r[0][2] = factor_x * n[2] - sint * n[1];
 
-    r[1][0] = factor_x * n[1] + sint * n[2];
+    r[1][0] = factor_y * n[0] - sint * n[2];
     r[1][1] = factor_y * n[1] + cost;
-    r[1][2] = factor_z * n[1] - sint * n[0];
+    r[1][2] = factor_y * n[2] + sint * n[0];
 
-    r[2][0] = factor_x * n[2] - sint * n[1];
-    r[2][1] = factor_y * n[2] + sint * n[0];
+    r[2][0] = factor_z * n[0] + sint * n[1];
+    r[2][1] = factor_z * n[1] - sint * n[0];
     r[2][2] = factor_z * n[2] + cost;
 
     r[3][3] = static_cast<T>(1);
@@ -600,6 +600,56 @@ FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> shear(const Vector3<T> &axis, const T &f
     r[3][3] = static_cast<T>(1);
 
     return r;
+}
+
+template<typename T>
+Matrix4<T> orthographic(const T &left, const T &right, const T &bottom, const T &top,
+    const T &near, const T &far)
+{
+    const T zero = static_cast<T>(0);
+    const T one = static_cast<T>(1);
+    const T two = static_cast<T>(2);
+
+    return Matrix4<T>(
+        two / (right - left), zero, zero, zero,
+        zero, two / (top - bottom), zero, zero,
+        zero, zero, two / (near - far), zero,
+        (right + left) / (left - right), (top + bottom) / (bottom - top), (near + far) / (far - near), one
+    );
+}
+
+template<typename T>
+Matrix4<T> perspective(const T &left, const T &right, const T &bottom, const T &top,
+    const T &near, const T &far)
+{
+    const T zero = static_cast<T>(0);
+    const T one = static_cast<T>(1);
+    const T two = static_cast<T>(2);
+    const T two_n = two * near;
+
+    return Matrix4<T>(
+        two * near / (right - left), zero, zero, zero,
+        zero, two_n / (top - bottom), zero, zero,
+        (right + left) / (right - left), (top + bottom) / (top - bottom), (far + near) / (near - far), -one,
+        zero, zero, two_n * far / (near - far), zero
+    );
+}
+
+template<typename T>
+Matrix4<T> perspective(const T &fovy, const T &aspect, const T &near, const T &far)
+{
+    const T zero = static_cast<T>(0);
+    const T one = static_cast<T>(1);
+    const T two = static_cast<T>(2);
+
+    const T tanv = tan(fovy / two);
+
+    return Matrix4<T>(
+        one / (aspect * tanv), zero, zero, zero,
+        zero, one / tanv, zero, zero,
+        zero, zero, (near + far) / (near - far), -one,
+        zero, zero, (two * far * near) / (near - far), zero
+    );
 }
 
 }
