@@ -1,7 +1,6 @@
 #ifndef _FMATH_TRANSFORM_H_
 #define _FMATH_TRANSFORM_H_
 
-#include "euler_angle.h"
 #include "matrix.h"
 #include "vector.h"
 #include "point.h"
