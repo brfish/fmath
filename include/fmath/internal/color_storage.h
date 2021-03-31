@@ -10,17 +10,6 @@
 namespace fmath
 {
 
-enum class ColorFormat
-{
-    BIT,
-    GREY,
-    GREY16,
-    RGB,
-    RGB_I,
-    RGBA,
-    RGBA_I
-};
-
 namespace internal
 {
 
