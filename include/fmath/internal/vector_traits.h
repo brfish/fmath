@@ -822,13 +822,21 @@ template<typename T, size_t  N>
 FMATH_INLINE FMATH_CONSTEXPR std::string VectorTraits_Stringify<T, N>::toString(const VectorBase<T, N> &base, uint32 precision)
 {
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(precision);
     ss << '[';
+    ss << std::fixed << std::setprecision(precision);
+    
     for (index_t i = 0; i < N; ++i)
     {
         const char *comma = ",";
         comma += (i == N - 1);
-        ss << base[i] << comma;
+
+        if constexpr (std::is_integral_v<T> && sizeof(T) < 2)
+        {
+            using LargeType = std::conditional_t<std::is_signed_v<T>, int32, uint32>;
+            ss << static_cast<LargeType>(base[i]) << comma;
+        }
+        else
+            ss << base[i] << comma;
     }
     ss << ']';
     return ss.str();
