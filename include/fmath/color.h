@@ -29,6 +29,10 @@ public:
     FMATH_INLINE Color &operator/=(const Color &other);
 
     FMATH_INLINE Color &operator/=(const ValueType &value);
+
+    FMATH_INLINE FMATH_CONSTEXPR uint32 toHex() const;
+
+    static FMATH_CONSTEXPR Color fromHex(uint32 hex);
 };
 
 namespace internal
@@ -62,6 +66,34 @@ struct VectorTraits_TypeInfo<Color<T, N>>
 
     static constexpr size_t SIZE = N;
 };
+
+uint32 colorToHex(uint8 r, uint8 g, uint8 b)
+{
+    return (static_cast<uint32>(r) << 16) | 
+        (static_cast<uint32>(g) << 8) |
+        (static_cast<uint32>(b));
+}
+
+void colorFromHex(uint32 hex, uint8 &r, uint8 &g, uint8 &b)
+{
+    r = (hex >> 16) & 0xFF;
+    g = (hex >> 8) & 0xFF;
+    b = (hex) & 0xFF;
+}
+
+uint32 colorToHex(float r, float g, float b)
+{
+    return (static_cast<uint32>(r * 255.0F) << 16) | 
+        (static_cast<uint32>(g * 255.0F) << 8) |
+        (static_cast<uint32>(b * 255.0F));
+}
+
+void colorFromHex(uint32 hex, float &r, float &g, float &b)
+{
+    r = ((hex >> 16) & 0xFF) / 255.0F;
+    g = ((hex >> 8) & 0xFF) / 255.0F;
+    b = ((hex) & 0xFF) / 255.0F;
+}
 
 };
 
@@ -200,6 +232,20 @@ FMATH_INLINE Color<T, N> &Color<T, N>::operator/=(const ValueType &value)
 {
     *this = (*this) / value;
     return *this;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR uint32 Color<T, N>::toHex() const
+{
+    return internal::colorToHex((*this)[0], (*this)[1], (*this)[2]);
+}
+
+template<typename T, size_t N>
+FMATH_CONSTEXPR Color<T, N> Color<T, N>::fromHex(uint32 hex)
+{
+    T r, g, b;
+    internal::colorFromHex(hex, r, g, b);
+    return Color(r, g, b);
 }
 
 using Rgb = Color<float, 3>;
