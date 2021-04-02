@@ -266,6 +266,12 @@ FMATH_INLINE FMATH_CONSTEXPR T dot(const Vector<T, N> &v1, const Vector<T, N> &v
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T absDot(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return abs(dot(v1, v2));
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> hadamardMul(const Vector<T, N> &v1, const Vector<T, N> &v2)
 {
     return internal::VectorTraits<T, N>::hadamardMul(v1, v2);
