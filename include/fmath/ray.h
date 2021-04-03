@@ -13,7 +13,7 @@ class Ray
 {
 public:
     using ValueType = T;
-    static constexpr size_t SIZE = N;
+    static constexpr size_t DIMENSION = N;
 
 public:
     FMATH_CONSTEXPR Ray(const Ray &other);
@@ -41,8 +41,8 @@ public:
     FMATH_INLINE void setDirection(const Vector<T, N> &direction);
 
 private:
-    Point<ValueType, SIZE> origin_;
-    Vector<ValueType, SIZE> direction_;
+    Point<ValueType, DIMENSION> origin_;
+    Vector<ValueType, DIMENSION> direction_;
 };
 
 template<typename T, size_t N>

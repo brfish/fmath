@@ -13,7 +13,7 @@ class Line
 {
 public:
     using ValueType = T;
-    static constexpr size_t SIZE = N;
+    static constexpr size_t DIMENSION = N;
 
 public:
     FMATH_CONSTEXPR Line(const Line &other);
@@ -47,8 +47,8 @@ public:
     FMATH_INLINE void setEnd(const Point<ValueType, N> &end);
 
 private:
-    Point<ValueType, SIZE> start_;
-    Point<ValueType, SIZE> end_;
+    Point<ValueType, DIMENSION> start_;
+    Point<ValueType, DIMENSION> end_;
 };
 
 template<typename T, size_t N>

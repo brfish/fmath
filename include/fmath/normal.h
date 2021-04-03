@@ -13,7 +13,7 @@ class Normal : public internal::VectorBase<T, N>
 {
 public:
     using ValueType = T;
-    static constexpr size_t SIZE = N;
+    static constexpr size_t DIMENSION = N;
 
 public:
     using internal::VectorBase<T, N>::VectorBase;
@@ -41,7 +41,7 @@ struct VectorTraits_TypeInfo<Normal<T, N>>
     using VectorType = Normal<U, M>;
 
     using ValueType = T;
-    static constexpr size_t SIZE = N;
+    static constexpr size_t DIMENSION = N;
 };
 
 template<typename T, size_t N>

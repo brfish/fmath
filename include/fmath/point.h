@@ -17,7 +17,7 @@ class Point : public internal::VectorBase<T, N>
 {
 public:
     using ValueType = T;
-    static constexpr size_t SIZE = N;
+    static constexpr size_t DIMENSION = N;
 
 public:
     using internal::VectorBase<T, N>::VectorBase;
@@ -57,7 +57,7 @@ struct VectorTraits_TypeInfo<Point<T, N>>
     using VectorType = Point<U, M>;
 
     using ValueType = T;
-    static constexpr size_t SIZE = N;
+    static constexpr size_t DIMENSION = N;
 };
 
 template<typename T, size_t N>
@@ -297,7 +297,7 @@ template<typename T, size_t N>
     template<typename U, size_t M, typename>
 Point<T, N>::Point(const Point<U, M> &other)
 {
-    constexpr size_t REAL = min(SIZE, M);
+    constexpr size_t REAL = min(DIMENSION, M);
     for (index_t i = 0; i < REAL; ++i)
         this->values[i] = static_cast<ValueType>(other[i]);
 }
@@ -306,7 +306,7 @@ template<typename T, size_t N>
     template<typename U, size_t M, typename>
 Point<T, N> &Point<T, N>::operator=(const Point<U, M> &other)
 {
-    constexpr size_t REAL = min(SIZE, M);
+    constexpr size_t REAL = min(DIMENSION, M);
     for (index_t i = 0; i < REAL; ++i)
         this->values[i] = static_cast<ValueType>(other[i]);
 }

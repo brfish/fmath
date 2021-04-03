@@ -17,7 +17,7 @@ class Quat
 {
 public:
     using ValueType = T;
-    static constexpr size_t SIZE = 4;
+    static constexpr size_t DIMENSION = 4;
 public:
     FMATH_CONSTEXPR Quat(const Quat &other);
 
@@ -29,7 +29,7 @@ public:
     explicit FMATH_CONSTEXPR Quat(const ValueType &s);
 
     template<typename VectorT,
-        typename = std::enable_if_t<std::is_base_of_v<internal::VectorInterface, VectorT> && VectorT::SIZE == 3>>
+        typename = std::enable_if_t<std::is_base_of_v<internal::VectorInterface, VectorT> && VectorT::DIMENSION == 3>>
     explicit FMATH_CONSTEXPR Quat(const VectorT &v);
 
     FMATH_CONSTEXPR Quat &operator=(const Quat &other);
@@ -300,7 +300,7 @@ FMATH_CONSTEXPR Quat<T> &Quat<T>::operator=(const Vector3<T> &v)
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR size_t Quat<T>::size() const
 {
-    return SIZE;
+    return DIMENSION;
 }
 
 template<typename T>

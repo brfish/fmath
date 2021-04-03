@@ -18,7 +18,7 @@ class Vector : public internal::VectorBase<T, N>
 {
 public:
     using ValueType = T;
-    static constexpr size_t SIZE = N;
+    static constexpr size_t DIMENSION = N;
 
 public:
     using internal::VectorBase<T, N>::VectorBase;
@@ -59,7 +59,7 @@ struct VectorTraits_TypeInfo<Vector<T, N>>
 
     using ValueType = T;
 
-    static constexpr size_t SIZE = N;
+    static constexpr size_t DIMENSION = N;
 };
 
 template<typename T, size_t N>
@@ -367,7 +367,7 @@ template<typename T, size_t N>
 Vector<T, N>::Vector(const Vector<U, M> &other)
     :   Vector()
 {
-    constexpr size_t REAL = min(SIZE, M);
+    constexpr size_t REAL = min(DIMENSION, M);
     for (index_t i = 0; i < REAL; ++i)
         this->values[i] = static_cast<ValueType>(other[i]);
 }
@@ -376,7 +376,7 @@ template<typename T, size_t N>
     template<typename U, size_t M, typename>
 Vector<T, N> &Vector<T, N>::operator=(const Vector<U, M> &other)
 {
-    constexpr size_t REAL = min(SIZE, M);
+    constexpr size_t REAL = min(DIMENSION, M);
     for (index_t i = 0; i < REAL; ++i)
         this->values[i] = static_cast<ValueType>(other[i]);
     return *this;

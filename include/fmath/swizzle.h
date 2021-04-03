@@ -15,8 +15,8 @@ auto swizzle(const VectorT &v)
     using Traits = internal::VectorTraits_TypeInfo<Vector3f>;
     using ResultType = typename Traits::template VectorType<Traits::ValueType, 2>;
 
-    static_assert(C0 >= 0 && C0 < Traits::SIZE);
-    static_assert(C1 >= 0 && C1 < Traits::SIZE);
+    static_assert(C0 >= 0 && C0 < Traits::DIMENSION);
+    static_assert(C1 >= 0 && C1 < Traits::DIMENSION);
 
     return ResultType(v[C0], v[C1]);
 }
@@ -27,9 +27,9 @@ auto swizzle(const VectorT &v)
     using Traits = internal::VectorTraits_TypeInfo<VectorT>;
     using ResultType = typename Traits::template VectorType<typename Traits::ValueType, 3>;
 
-    static_assert(C0 >= 0 && C0 < Traits::SIZE);
-    static_assert(C1 >= 0 && C1 < Traits::SIZE);
-    static_assert(C2 >= 0 && C2 < Traits::SIZE);
+    static_assert(C0 >= 0 && C0 < Traits::DIMENSION);
+    static_assert(C1 >= 0 && C1 < Traits::DIMENSION);
+    static_assert(C2 >= 0 && C2 < Traits::DIMENSION);
 
     return ResultType(v[C0], v[C1], v[C2]);
 }
@@ -40,10 +40,10 @@ auto swizzle(const VectorT &v)
     using Traits = internal::VectorTraits_TypeInfo<VectorT>;
     using ResultType = typename Traits::template VectorType<typename Traits::ValueType, 4>;
 
-    static_assert(C0 >= 0 && C0 < Traits::SIZE);
-    static_assert(C1 >= 0 && C1 < Traits::SIZE);
-    static_assert(C2 >= 0 && C2 < Traits::SIZE);
-    static_assert(C3 >= 0 && C3 < Traits::SIZE);
+    static_assert(C0 >= 0 && C0 < Traits::DIMENSION);
+    static_assert(C1 >= 0 && C1 < Traits::DIMENSION);
+    static_assert(C2 >= 0 && C2 < Traits::DIMENSION);
+    static_assert(C3 >= 0 && C3 < Traits::DIMENSION);
 
     return ResultType(v[C0], v[C1], v[C2], v[C3]);
 }

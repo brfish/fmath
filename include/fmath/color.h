@@ -13,7 +13,7 @@ class Color : public internal::ColorBase<T, N>
 {
 public:
     using ValueType = T;
-    static constexpr size_t SIZE = N;
+    static constexpr size_t DIMENSION = N;
 
 public:
     using internal::ColorBase<T, N>::ColorBase;
@@ -64,7 +64,7 @@ struct VectorTraits_TypeInfo<Color<T, N>>
 
     using ValueType = T;
 
-    static constexpr size_t SIZE = N;
+    static constexpr size_t DIMENSION = N;
 };
 
 uint32 colorToHex(uint8 r, uint8 g, uint8 b)
