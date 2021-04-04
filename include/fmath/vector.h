@@ -23,11 +23,11 @@ public:
 public:
     using internal::VectorBase<T, N>::VectorBase;
 
-    template<typename U, size_t M, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
-    Vector(const Vector<U, M> &other);
+    template<typename VectorU>
+    FMATH_CONSTEXPR Vector(const VectorU &other);
 
-    template<typename U, size_t M, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
-    Vector &operator=(const Vector<U, M> &other);
+    template<typename VectorU>
+    FMATH_CONSTEXPR Vector &operator=(const VectorU &other);
 
     FMATH_INLINE FMATH_CONSTEXPR Vector operator+() const;
 
@@ -65,6 +65,7 @@ struct VectorTraits_TypeInfo<Vector<T, N>>
 template<typename T, size_t N>
 struct VectorTraits : 
     VectorTraits_Add<T, N, Vector<T, N>>,
+    VectorTraits_Assign<T, N, Vector<T, N>>,
     VectorTraits_Clamp<T, N, Vector<T, N>>,
     VectorTraits_Compare<T, N>,
     VectorTraits_Constants<T, N, Vector<T, N>>,
@@ -363,22 +364,18 @@ FMATH_INLINE std::istream &operator>>(std::istream &input, Vector<T, N> &vec)
 }
 
 template<typename T, size_t N>
-    template<typename U, size_t M, typename>
-Vector<T, N>::Vector(const Vector<U, M> &other)
+    template<typename VectorU>
+FMATH_CONSTEXPR Vector<T, N>::Vector(const VectorU &other)
     :   Vector()
 {
-    constexpr size_t REAL = min(DIMENSION, M);
-    for (index_t i = 0; i < REAL; ++i)
-        this->values[i] = static_cast<ValueType>(other[i]);
+    internal::VectorTraits<T, N>::template assign(*this, other);
 }
 
 template<typename T, size_t N>
-    template<typename U, size_t M, typename>
-Vector<T, N> &Vector<T, N>::operator=(const Vector<U, M> &other)
+    template<typename VectorU>
+FMATH_CONSTEXPR Vector<T, N> &Vector<T, N>::operator=(const VectorU &other)
 {
-    constexpr size_t REAL = min(DIMENSION, M);
-    for (index_t i = 0; i < REAL; ++i)
-        this->values[i] = static_cast<ValueType>(other[i]);
+    internal::VectorTraits<T, N>::template assign(*this, other);
     return *this;
 }
 

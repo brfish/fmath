@@ -22,11 +22,11 @@ public:
 public:
     using internal::VectorBase<T, N>::VectorBase;
 
-    template<typename U, size_t M, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
-    Point(const Point<U, M> &other);
+    template<typename VectorU>
+    FMATH_CONSTEXPR Point(const VectorU &other);
 
-    template<typename U, size_t M, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
-    Point &operator=(const Point<U, M> &other);
+    template<typename VectorU>
+    FMATH_CONSTEXPR Point &operator=(const VectorU &other);
 
     FMATH_INLINE FMATH_CONSTEXPR Point operator+() const;
 
@@ -63,6 +63,7 @@ struct VectorTraits_TypeInfo<Point<T, N>>
 template<typename T, size_t N>
 struct PointTraits :
     VectorTraits_Add<T, N, Point<T, N>>,
+    VectorTraits_Assign<T, N, Point<T, N>>,
     VectorTraits_Clamp<T, N, Point<T, N>>,
     VectorTraits_Compare<T, N>,
     VectorTraits_Constants<T, N, Point<T, N>>,
@@ -294,21 +295,18 @@ std::istream &operator>>(std::istream &input, Point<T, N> &p)
 }
 
 template<typename T, size_t N>
-    template<typename U, size_t M, typename>
-Point<T, N>::Point(const Point<U, M> &other)
+    template<typename VectorU>
+FMATH_CONSTEXPR Point<T, N>::Point(const VectorU &other)
 {
-    constexpr size_t REAL = min(DIMENSION, M);
-    for (index_t i = 0; i < REAL; ++i)
-        this->values[i] = static_cast<ValueType>(other[i]);
+    internal::PointTraits<T, N>::assign(*this, other);
 }
 
 template<typename T, size_t N>
-    template<typename U, size_t M, typename>
-Point<T, N> &Point<T, N>::operator=(const Point<U, M> &other)
+    template<typename VectorU>
+FMATH_CONSTEXPR Point<T, N> &Point<T, N>::operator=(const VectorU &other)
 {
-    constexpr size_t REAL = min(DIMENSION, M);
-    for (index_t i = 0; i < REAL; ++i)
-        this->values[i] = static_cast<ValueType>(other[i]);
+    internal::PointTraits<T, N>::assign(*this, other);
+    return *this;
 }
 
 template<typename T, size_t N>

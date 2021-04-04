@@ -18,6 +18,12 @@ public:
 public:
     using internal::VectorBase<T, N>::VectorBase;
 
+    template<typename VectorU>
+    FMATH_CONSTEXPR Normal(const VectorU &other);
+
+    template<typename VectorU>
+    FMATH_CONSTEXPR Normal &operator=(const VectorU &other);
+
     FMATH_INLINE FMATH_CONSTEXPR Normal operator+() const;
     FMATH_INLINE FMATH_CONSTEXPR Normal operator-() const;
 
@@ -47,6 +53,7 @@ struct VectorTraits_TypeInfo<Normal<T, N>>
 template<typename T, size_t N>
 struct NormalTraits :
     VectorTraits_Add<T, N, Normal<T, N>>,
+    VectorTraits_Assign<T, N, Normal<T, N>>,
     VectorTraits_Clamp<T, N, Normal<T, N>>,
     VectorTraits_Compare<T, N>,
     VectorTraits_Constants<T, N, Normal<T, N>>,
@@ -235,6 +242,21 @@ FMATH_INLINE std::istream &operator>>(std::istream &input, Normal<T, N> &n)
 {
     internal::NormalTraits<T, N>::read(input, n);
     return input;
+}
+
+template<typename T, size_t N>
+    template<typename VectorU>
+FMATH_CONSTEXPR Normal<T, N>::Normal(const VectorU &other)
+{
+    internal::NormalTraits<T, N>::template assign(*this, other);
+}
+
+template<typename T, size_t N>
+    template<typename VectorU>
+FMATH_CONSTEXPR Normal<T, N> &Normal<T, N>::operator=(const VectorU &other)
+{
+    internal::NormalTraits<T, N>::template assign(*this, other);
+    return *this;
 }
 
 template<typename T, size_t N>
