@@ -18,6 +18,72 @@ template<typename VectorT>
 struct VectorTraits_TypeInfo
 {};
 
+#pragma region VectorTraits_Assign
+template<typename T, size_t N, typename VectorT>
+struct VectorTraits_Assign
+{};
+
+template<typename T, typename VectorT>
+struct VectorTraits_Assign<T, 2, VectorT>
+{
+    template<typename VectorU>
+    static FMATH_INLINE FMATH_CONSTEXPR void assign(VectorT &dst, const VectorU &src);
+};
+
+template<typename T, typename VectorT>
+    template<typename VectorU>
+FMATH_INLINE FMATH_CONSTEXPR void VectorTraits_Assign<T, 2, VectorT>::assign(VectorT &dst, const VectorU &src)
+{
+    dst[0] = static_cast<T>(src[0]);
+    dst[1] = static_cast<T>(src[1]);
+}
+
+template<typename T, typename VectorT>
+struct VectorTraits_Assign<T, 3, VectorT>
+{
+    template<typename VectorU>
+    static FMATH_INLINE FMATH_CONSTEXPR void assign(VectorT &dst, const VectorU &src);
+};
+
+template<typename T, typename VectorT>
+    template<typename VectorU>
+FMATH_INLINE FMATH_CONSTEXPR void VectorTraits_Assign<T, 3, VectorT>::assign(VectorT &dst, const VectorU &src)
+{
+    dst[0] = static_cast<T>(src[0]);
+    dst[1] = static_cast<T>(src[1]);
+
+    if constexpr (VectorU::DIMENSION >= 3)
+        dst[2] = static_cast<T>(src[2]);
+    else
+        dst[2] = static_cast<T>(0);
+}
+
+template<typename T, typename VectorT>
+struct VectorTraits_Assign<T, 4, VectorT>
+{
+    template<typename VectorU>
+    static FMATH_INLINE FMATH_CONSTEXPR void assign(VectorT &dst, const VectorU &src);
+};
+
+template<typename T, typename VectorT>
+    template<typename VectorU>
+FMATH_INLINE FMATH_CONSTEXPR void VectorTraits_Assign<T, 4, VectorT>::assign(VectorT &dst, const VectorU &src)
+{
+    dst[0] = static_cast<T>(src[0]);
+    dst[1] = static_cast<T>(src[1]);
+   
+    if constexpr (VectorU::DIMENSION >= 3)
+        dst[2] = static_cast<T>(src[2]);
+    else
+        dst[2] = static_cast<T>(0);
+
+    if constexpr (VectorU::DIMENSION >= 4)
+        dst[3] = static_cast<T>(src[3]);
+    else
+        dst[3] = static_cast<T>(0);
+}
+#pragma endregion
+
 #pragma region VectorTraits_Compare
 template<typename T, size_t N>
 struct VectorTraits_Compare
@@ -830,10 +896,10 @@ FMATH_INLINE FMATH_CONSTEXPR std::string VectorTraits_Stringify<T, N>::toString(
         const char *comma = ",";
         comma += (i == N - 1);
 
-        if constexpr (std::is_integral_v<T> && sizeof(T) < 2)
+        if constexpr (std::is_integral_v<T> && sizeof(T) <= 2)
         {
-            using LargeType = std::conditional_t<std::is_signed_v<T>, int32, uint32>;
-            ss << static_cast<LargeType>(base[i]) << comma;
+            using PromotedType = std::conditional_t<std::is_signed_v<T>, int32, uint32>;
+            ss << static_cast<PromotedType>(base[i]) << comma;
         }
         else
             ss << base[i] << comma;
