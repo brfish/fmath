@@ -2,6 +2,7 @@
 #define _FMATH_INTERNAL_COLOR_BASE_H_
 
 #include "internal/color_storage.h"
+#include "internal/interfaces.h"
 
 namespace fmath
 {
@@ -9,9 +10,9 @@ namespace internal
 {
 
 template<typename T, size_t N>
-struct ColorBase : internal::ColorStorage<T, N>
+struct ColorBase : ColorStorage<T, N>, VectorInterface
 {
-    using internal::ColorStorage<T, N>::ColorStorage;
+    using ColorStorage<T, N>::ColorStorage;
 
     FMATH_INLINE FMATH_CONSTEXPR size_t size() const;
 
