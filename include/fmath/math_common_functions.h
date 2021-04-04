@@ -36,43 +36,43 @@ FMATH_INLINE FMATH_CONSTEXPR bool isFinite(const T &value)
     return std::isfinite(value);
 }
 
-FMATH_INLINE FMATH_CONSTEXPR float toDegree(float radian)
+FMATH_INLINE FMATH_CONSTEXPR float toDegrees(float radian)
 {
     return radian / constants::Pi<float>::value * 180.0F;
 }
 
-FMATH_INLINE FMATH_CONSTEXPR double toDegree(double radian)
+FMATH_INLINE FMATH_CONSTEXPR double toDegrees(double radian)
 {
     return radian / constants::Pi<double>::value * 180.0;
 }
 
 template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-FMATH_INLINE FMATH_CONSTEXPR double toDegree(const T &radian)
+FMATH_INLINE FMATH_CONSTEXPR double toDegrees(const T &radian)
 {
-    return toDegree(static_cast<T>(radian));
+    return toDegrees(static_cast<T>(radian));
 }
 
-FMATH_INLINE FMATH_CONSTEXPR float toRadian(float degree)
+FMATH_INLINE FMATH_CONSTEXPR float toRadians(float degree)
 {
     return degree / 180.0F * constants::Pi<float>::value;
 }
 
-FMATH_INLINE FMATH_CONSTEXPR double toRadian(double degree)
+FMATH_INLINE FMATH_CONSTEXPR double toRadians(double degree)
 {
     return degree / 180.0 * constants::Pi<double>::value;
 }
 
 template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
-FMATH_INLINE FMATH_CONSTEXPR double toRadian(const T &degree)
+FMATH_INLINE FMATH_CONSTEXPR double toRadians(const T &degree)
 {
-    return toRadian(static_cast<T>(degree));
+    return toRadians(static_cast<T>(degree));
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T sin(const T &angle)
 {
 #if defined(FMATH_USE_DEGREE)
-    return std::sin(toRadian(angle));
+    return std::sin(toRadians(angle));
 #else
     return std::sin(angle);
 #endif
@@ -82,7 +82,7 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T cos(const T &angle)
 {
 #if defined(FMATH_USE_DEGREE)
-    return std::cos(toRadian(angle));
+    return std::cos(toRadians(angle));
 #else
     return std::cos(angle);
 #endif
@@ -92,7 +92,7 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T tan(const T &angle)
 {
 #if defined(FMATH_USE_DEGREE)
-    return std::tan(toRadian(angle));
+    return std::tan(toRadians(angle));
 #else
     return std::tan(angle);
 #endif
@@ -102,7 +102,7 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T asin(const T &angle)
 {
 #if defined(FMATH_USE_DEGREE)
-    return std::asin(toRadian(angle));
+    return std::asin(toRadians(angle));
 #else
     return std::asin(angle);
 #endif
@@ -112,7 +112,7 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T acos(const T &angle)
 {
 #if defined(FMATH_USE_DEGREE)
-    return std::acos(toRadian(angle));
+    return std::acos(toRadians(angle));
 #else
     return std::acos(angle);
 #endif
@@ -122,7 +122,7 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T atan(const T &angle)
 {
 #if defined(FMATH_USE_DEGREE)
-    return std::atan(toRadian(angle));
+    return std::atan(toRadians(angle));
 #else
     return std::atan(angle);
 #endif
