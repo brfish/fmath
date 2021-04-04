@@ -16,6 +16,72 @@ namespace fmath
 namespace internal
 {
 
+#pragma region MatrixTraits_Assign
+template<typename T, size_t N, typename MatrixT>
+struct MatrixTraits_Assign
+{};
+
+template<typename T, typename MatrixT>
+struct MatrixTraits_Assign<T, 2, MatrixT>
+{
+    template<typename MatrixU>
+    static FMATH_INLINE FMATH_CONSTEXPR void assign(MatrixT &dst, const MatrixU &src);
+};
+
+template<typename T, typename MatrixT>
+    template<typename MatrixU>
+FMATH_INLINE FMATH_CONSTEXPR void MatrixTraits_Assign<T, 2, MatrixT>::assign(MatrixT &dst, const MatrixU &src)
+{
+    dst[0] = src[0];
+    dst[1] = src[1];
+}
+
+template<typename T, typename MatrixT>
+struct MatrixTraits_Assign<T, 3, MatrixT>
+{
+    template<typename MatrixU>
+    static FMATH_INLINE FMATH_CONSTEXPR void assign(MatrixT &dst, const MatrixU &src);
+};
+
+template<typename T, typename MatrixT>
+    template<typename MatrixU>
+FMATH_INLINE FMATH_CONSTEXPR void MatrixTraits_Assign<T, 3, MatrixT>::assign(MatrixT &dst, const MatrixU &src)
+{
+    dst[0] = src[0];
+    dst[1] = src[1];
+
+    if constexpr (MatrixU::DIMENSION >= 3)
+        dst[2] = src[2];
+    else
+        dst[2] = std::decay_t<decltype(dst[2])>();
+}
+
+template<typename T, typename MatrixT>
+struct MatrixTraits_Assign<T, 4, MatrixT>
+{
+    template<typename MatrixU>
+    static FMATH_INLINE FMATH_CONSTEXPR void assign(MatrixT &dst, const MatrixU &src);
+};
+
+template<typename T, typename MatrixT>
+    template<typename MatrixU>
+FMATH_INLINE FMATH_CONSTEXPR void MatrixTraits_Assign<T, 4, MatrixT>::assign(MatrixT &dst, const MatrixU &src)
+{
+    dst[0] = src[0];
+    dst[1] = src[1];
+
+    if constexpr (MatrixU::DIMENSION >= 3)
+        dst[2] = src[2];
+    else
+        dst[2] = std::decay_t<decltype(dst[2])>();
+    
+    if constexpr (MatrixU::DIMENSION >= 4)
+        dst[3] = src[3];
+    else
+        dst[3] = std::decay_t<decltype(dst[3])>();
+}
+#pragma endregion
+
 #pragma region MatrixTraits_Compare
 template<typename T, size_t N>
 struct MatrixTraits_Compare

@@ -25,11 +25,11 @@ public:
 public:
     using internal::MatrixBase<T, N>::MatrixBase;
 
-    template<typename U, size_t M, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
-    Matrix(const Matrix<U, M> &other);
+    template<typename MatrixU>
+    FMATH_CONSTEXPR Matrix(const MatrixU &other);
 
-    template<typename U, size_t M, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
-    Matrix &operator=(const Matrix<U, M> &other);
+    template<typename MatrixU>
+    FMATH_CONSTEXPR Matrix &operator=(const MatrixU &other);
 
     FMATH_INLINE FMATH_CONSTEXPR Matrix operator+() const;
 
@@ -50,6 +50,7 @@ public:
     FMATH_INLINE Matrix &operator/=(const ValueType &value);
 
     static FMATH_CONSTEXPR Matrix zero();
+
     static FMATH_CONSTEXPR Matrix identity();
 };
 
@@ -58,6 +59,7 @@ namespace internal
 
 template<typename T, size_t N>
 struct MatrixTraits :
+    MatrixTraits_Assign<T, N, Matrix<T, N>>,
     MatrixTraits_Basic<T, N, Matrix<T, N>>,
     MatrixTraits_Compare<T, N>,
     MatrixTraits_Hadamard<T, N, Matrix<T, N>>,
@@ -279,23 +281,17 @@ FMATH_INLINE std::istream &operator>>(std::istream &input, Matrix<T, N> &mat)
 }
 
 template<typename T, size_t N>
-    template<typename U, size_t M, typename>
-Matrix<T, N>::Matrix(const Matrix<U, M> &other)
+    template<typename MatrixU>
+FMATH_CONSTEXPR Matrix<T, N>::Matrix(const MatrixU &other)
 {
-    constexpr size_t REAL = min(N, M);
-    for (index_t i = 0; i < REAL; ++i)
-        for (index_t j = 0; j < REAL; ++j)
-            (*this)[i][j] = static_cast<ValueType>(other[i][j]);
+    internal::MatrixTraits<T, N>::assign(*this, other);
 }
 
 template<typename T, size_t N>
-    template<typename U, size_t M, typename>
-Matrix<T, N> &Matrix<T, N>::operator=(const Matrix<U, M> &other)
+    template<typename MatrixU>
+FMATH_CONSTEXPR Matrix<T, N> &Matrix<T, N>::operator=(const MatrixU &other)
 {
-    constexpr size_t REAL = min(M, N);
-    for (index_t i = 0; i < REAL; ++i)
-        for (index_t j = 0; j < REAL; ++j)
-            (*this)[i][j] = static_cast<ValueType>(other.data[i][j]);
+    internal::MatrixTraits<T, N>::assign(*this, other);
     return *this;
 }
 
