@@ -819,6 +819,72 @@ struct VectorTraits_Constants<T, 4, VectorT>
 };
 #pragma endregion
 
+#pragma region VectorTraits_ComponentWise
+template<typename T, size_t N, typename VectorT>
+struct VectorTraits_ComponentWise
+{};
+
+template<typename T, typename VectorT>
+struct VectorTraits_ComponentWise<T, 2, VectorT>
+{
+    using Base = VectorBase<T, 2>;
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT componentWiseMin(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT componentWiseMax(const Base &v1, const Base &v2);
+};
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_ComponentWise<T, 2, VectorT>::componentWiseMin(const Base &v1, const Base &v2)
+{
+    return VectorT(min(v1[0], v2[0]), min(v1[1], v2[1]));
+}
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_ComponentWise<T, 2, VectorT>::componentWiseMax(const Base &v1, const Base &v2)
+{
+    return VectorT(max(v1[0], v2[0]), max(v1[1], v2[1]));
+}
+
+template<typename T, typename VectorT>
+struct VectorTraits_ComponentWise<T, 3, VectorT>
+{
+    using Base = VectorBase<T, 3>;
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT componentWiseMin(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT componentWiseMax(const Base &v1, const Base &v2);
+};
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_ComponentWise<T, 3, VectorT>::componentWiseMin(const Base &v1, const Base &v2)
+{
+    return VectorT(min(v1[0], v2[0]), min(v1[1], v2[1]), min(v1[2], v2[2]));
+}
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_ComponentWise<T, 3, VectorT>::componentWiseMax(const Base &v1, const Base &v2)
+{
+    return VectorT(max(v1[0], v2[0]), max(v1[1], v2[1]), max(v1[2], v2[2]));
+}
+
+template<typename T, typename VectorT>
+struct VectorTraits_ComponentWise<T, 4, VectorT>
+{
+    using Base = VectorBase<T, 4>;
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT componentWiseMin(const Base &v1, const Base &v2);
+    static FMATH_INLINE FMATH_CONSTEXPR VectorT componentWiseMax(const Base &v1, const Base &v2);
+};
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_ComponentWise<T, 4, VectorT>::componentWiseMin(const Base &v1, const Base &v2)
+{
+    return VectorT(min(v1[0], v2[0]), min(v1[1], v2[1]), min(v1[2], v2[2]), min(v1[3], v2[3]));
+}
+
+template<typename T, typename VectorT>
+FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_ComponentWise<T, 4, VectorT>::componentWiseMax(const Base &v1, const Base &v2)
+{
+    return VectorT(max(v1[0], v2[0]), max(v1[1], v2[1]), max(v1[2], v2[2]), max(v1[3], v2[3]));
+}
+#pragma endregion
+
 }
 
 #endif

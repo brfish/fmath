@@ -68,6 +68,7 @@ struct VectorTraits :
     VectorTraits_Assign<T, N, Vector<T, N>>,
     VectorTraits_Clamp<T, N, Vector<T, N>>,
     VectorTraits_Compare<T, N>,
+    VectorTraits_ComponentWise<T, N, Vector<T, N>>,
     VectorTraits_Constants<T, N, Vector<T, N>>,
     VectorTraits_Dot<T, N>,
     VectorTraits_Hadamard<T, N, Vector<T, N>>,
@@ -449,6 +450,18 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> lerp(const Vector<T, N> &v1, const Vec
 {
     return v1 + (v2 - v1) * t;
 };
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> componentWiseMin(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return internal::VectorTraits<T, N>::componentWiseMin(v1, v2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> componentWiseMax(const Vector<T, N> &v1, const Vector<T, N> &v2)
+{
+    return internal::VectorTraits<T, N>::componentWiseMax(v1, v2);
+}
 
 namespace constants
 {

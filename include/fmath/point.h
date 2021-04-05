@@ -66,6 +66,7 @@ struct PointTraits :
     VectorTraits_Assign<T, N, Point<T, N>>,
     VectorTraits_Clamp<T, N, Point<T, N>>,
     VectorTraits_Compare<T, N>,
+    VectorTraits_ComponentWise<T, N, Point<T, N>>,
     VectorTraits_Constants<T, N, Point<T, N>>,
     VectorTraits_Input<T, N>,
     VectorTraits_Norm<T, N>,
@@ -385,6 +386,18 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Point<T, N> lerp(const Point<T, N> &p1, const Point<T, N> &p2, const T &t)
 {
     return p1 + (p2 - p1) * t;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> componentWiseMin(const Point<T, N> &p1, const Point<T, N> &p2)
+{
+    return internal::PointTraits<T, N>::componentWiseMin(p1, p2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> componentWiseMax(const Point<T, N> &p1, const Point<T, N> &p2)
+{
+    return internal::PointTraits<T, N>::componentWiseMax(p1, p2);
 }
 
 namespace constants

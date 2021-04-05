@@ -56,6 +56,7 @@ struct NormalTraits :
     VectorTraits_Assign<T, N, Normal<T, N>>,
     VectorTraits_Clamp<T, N, Normal<T, N>>,
     VectorTraits_Compare<T, N>,
+    VectorTraits_ComponentWise<T, N, Normal<T, N>>,
     VectorTraits_Constants<T, N, Normal<T, N>>,
     VectorTraits_Input<T, N>,
     VectorTraits_Norm<T, N>,
@@ -335,6 +336,18 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> lerp(const Normal<T, N> &n1, const Normal<T, N> &n2, const T &t)
 {
     return n1 + (n2 - n1) * t;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> componentWiseMin(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return internal::NormalTraits<T, N>::componentWiseMin(n1, n2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> componentWiseMax(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return internal::NormalTraits<T, N>::componentWiseMax(n1, n2);
 }
 
 namespace constants
