@@ -87,59 +87,7 @@ FMATH_INLINE FMATH_CONSTEXPR void VectorTraits_Assign<T, 4, VectorT>::assign(Vec
 #pragma region VectorTraits_Compare
 template<typename T, size_t N>
 struct VectorTraits_Compare
-{
-    using Base = VectorBase<T, N>;
-    static FMATH_INLINE FMATH_CONSTEXPR bool equal(const Base &v1, const Base &v2);
-    static FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Base &v1, const Base &v2, const T &epsilon);
-    static FMATH_INLINE FMATH_CONSTEXPR T minComponent(const Base &v);
-    static FMATH_INLINE FMATH_CONSTEXPR T maxComponent(const Base &v);
-};
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, N>::equal(const Base &v1, const Base &v2)
-{
-    if (&v1 == &v2)
-        return true;
-    
-    for (index_t i = 0; i < N; ++i)
-    {
-        if (v1[i] != v2[i])
-            return false;
-    }
-    return true;
-}
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, N>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
-{
-    if (&v1 == &v2)
-        return true;
-
-    for (index_t i = 0; i < N; ++i)
-    {
-        if (!fmath::equalEpsilon(v1[i], v2[i], epsilon))
-            return false;
-    }
-    return true;
-}
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Compare<T, N>::minComponent(const Base &v)
-{
-    T result = v[0];
-    for (index_t i = 1; i < N; ++i)
-        result = min(result, v[i]);
-    return result;
-}
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Compare<T, N>::maxComponent(const Base &v)
-{
-    T result = v[0];
-    for (index_t i = 1; i < N; ++i)
-        result = max(result, v[i]);
-    return result;
-}
+{};
 
 template<typename T>
 struct VectorTraits_Compare<T, 2>
@@ -346,49 +294,7 @@ FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Compare<T, 4>::maxComponent(const Ba
 #pragma region VectorTraits_Add
 template<typename T, size_t N, typename VectorT>
 struct VectorTraits_Add
-{
-    using Base = VectorBase<T, N>;
-    static FMATH_INLINE FMATH_CONSTEXPR VectorT add(const Base &v1, const Base &v2);
-    static FMATH_INLINE FMATH_CONSTEXPR VectorT add(const Base &v, const T &value);
-    static FMATH_INLINE FMATH_CONSTEXPR VectorT sub(const Base &v1, const Base &v2);
-    static FMATH_INLINE FMATH_CONSTEXPR VectorT sub(const Base &v, const T &value);
-};
-
-template<typename T, size_t N, typename VectorT>
-FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, N, VectorT>::add(const Base &v1, const Base &v2)
-{
-    VectorT result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v1[i] + v2[i];
-    return result;
-}
-
-template<typename T, size_t N, typename VectorT>
-FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, N, VectorT>::add(const Base &v, const T &value)
-{
-    VectorT result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v[i] + value;
-    return result;
-}
-
-template<typename T, size_t N, typename VectorT>
-FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, N, VectorT>::sub(const Base &v1, const Base &v2)
-{
-    VectorT result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v1[i] - v2[i];
-    return result;
-}
-
-template<typename T, size_t N, typename VectorT>
-FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, N, VectorT>::sub(const Base &v, const T &value)
-{
-    VectorT result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v[i] - value;
-    return result;
-}
+{};
 
 template<typename T, typename VectorT>
 struct VectorTraits_Add<T, 2, VectorT>
@@ -496,19 +402,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Add<T, 4, VectorT>::sub(const 
 #pragma region VectorTraits_Dot
 template<typename T, size_t N>
 struct VectorTraits_Dot
-{
-    using Base = VectorBase<T, N>;
-    FMATH_INLINE FMATH_CONSTEXPR static T dot(const Base &v1, const Base &v2);
-};
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Dot<T, N>::dot(const Base &v1, const Base &v2)
-{
-    T result = 0;
-    for (index_t i = 0; i < N; ++i)
-        result += v1[i] * v2[i];
-    return result;
-}
+{};
 
 template<typename T>
 struct VectorTraits_Dot<T, 2>
@@ -553,30 +447,7 @@ FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Dot<T, 4>::dot(const Base &v1, const
 #pragma region VectorTraits_Scale
 template<typename T, size_t N, typename VectorT>
 struct VectorTraits_Scale
-{
-    using Base = VectorBase<T, N>;
-    FMATH_INLINE static VectorT mul(const Base &v, const T &value);
-    FMATH_INLINE static VectorT div(const Base &v, const T &value);
-};
-
-template<typename T, size_t N, typename VectorT>
-FMATH_INLINE VectorT VectorTraits_Scale<T, N, VectorT>::mul(const Base &v, const T &value)
-{
-    VectorT result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v[i] * value;
-    return result;
-}
-
-template<typename T, size_t N, typename VectorT>
-FMATH_INLINE VectorT VectorTraits_Scale<T, N, VectorT>::div(const Base &v, const T &value)
-{
-    FMATH_ASSERT(value != 0);
-    VectorT result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v[i] / value;
-    return result;
-}
+{};
 
 template<typename T, typename VectorT>
 struct VectorTraits_Scale<T, 2, VectorT>
@@ -645,32 +516,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 4, VectorT>::div(cons
 #pragma region VectorTraits_Hadamard
 template<typename T, size_t N, typename VectorT>
 struct VectorTraits_Hadamard
-{
-    using Base = VectorBase<T, N>;
-    FMATH_INLINE FMATH_CONSTEXPR static VectorT hadamardMul(const Base &v1, const Base &v2);
-    FMATH_INLINE FMATH_CONSTEXPR static VectorT hadamardDiv(const Base &v1, const Base &v2);
-};
-
-template<typename T, size_t N, typename VectorT>
-FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, N, VectorT>::hadamardMul(const Base &v1, const Base &v2)
-{
-    VectorT result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = v1[i] * v2[i];
-    return result;
-}
-
-template<typename T, size_t N, typename VectorT>
-FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, N, VectorT>::hadamardDiv(const Base &v1, const Base &v2)
-{
-    VectorT result;
-    for (index_t i = 0; i < N; ++i)
-    {
-        FMATH_ASSERT(v2[i] != 0);
-        result[i] = v1[i] / v2[i];
-    }   
-    return result;
-}
+{};
 
 template<typename T, typename VectorT>
 struct VectorTraits_Hadamard<T, 2, VectorT>
@@ -739,19 +585,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 4, VectorT>::hadam
 #pragma region VectorTraits_Norm
 template<typename T, size_t N>
 struct VectorTraits_Norm
-{
-    using Base = VectorBase<T, N>;
-    FMATH_INLINE FMATH_CONSTEXPR static T length2(const Base &v);
-};
-
-template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR T VectorTraits_Norm<T, N>::length2(const Base &v)
-{
-    T result = 0;
-    for (index_t i = 0; i < N; ++i)
-        result += v[i] * v[i];
-    return result;
-}
+{};
 
 template<typename T>
 struct VectorTraits_Norm<T, 2>

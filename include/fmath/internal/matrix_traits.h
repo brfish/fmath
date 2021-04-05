@@ -119,67 +119,8 @@ FMATH_INLINE bool MatrixTraits_Compare<T, N>::equalEpsilon(const Base &m1, const
 #pragma region MatrixTraits_Add
 template<typename T, size_t N, typename MatrixT>
 struct MatrixTraits_Add
-{
-    using Base = MatrixBase<T, N>;
-    static FMATH_INLINE MatrixT add(const Base &m1, const Base &m2);
-    static FMATH_INLINE MatrixT add(const Base &m, const T &value);
-    static FMATH_INLINE FMATH_CONSTEXPR void addBy(Base &m, const Base &other);
-    static FMATH_INLINE FMATH_CONSTEXPR void addBy(Base &m, const T &value);
-    static FMATH_INLINE MatrixT sub(const Base &m1, const Base &m2);
-    static FMATH_INLINE MatrixT sub(const Base &m, const T &value);
-    static FMATH_INLINE FMATH_CONSTEXPR void subBy(Base &m, const Base &other);
-    static FMATH_INLINE FMATH_CONSTEXPR void subBy(Base &m, const T &value);
-};
+{};
 
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE MatrixT MatrixTraits_Add<T, N, MatrixT>::add(const Base &m1, const Base &m2)
-{
-    MatrixT result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = m1[i] + m2[i];
-    return result;
-}
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE MatrixT MatrixTraits_Add<T, N, MatrixT>::add(const Base &m, const T &value)
-{
-    MatrixT result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = m[i] + value;
-    return m;
-}
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR void MatrixTraits_Add<T, N, MatrixT>::addBy(Base &m, const Base &other)
-{
-    for (index_t i = 0; i < N; ++i)
-        m[i] += other[i];
-}
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR void MatrixTraits_Add<T, N, MatrixT>::addBy(Base &m, const T &value)
-{
-    for (index_t i = 0; i < N; ++i)
-        m[i] += value;
-}
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE MatrixT MatrixTraits_Add<T, N, MatrixT>::sub(const Base &m1, const Base &m2)
-{
-    MatrixT result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = m1[i] - m2[i];
-    return result;
-}
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE MatrixT MatrixTraits_Add<T, N, MatrixT>::sub(const Base &m, const T &value)
-{
-    MatrixT result;
-    for (index_t i = 0; i < N; ++i)
-        result[i] = m[i] - value;
-    return result;
-}
 template<typename T, typename MatrixT>
 struct MatrixTraits_Add<T, 2, MatrixT>
 {
@@ -394,45 +335,7 @@ FMATH_INLINE FMATH_CONSTEXPR void MatrixTraits_Add<T, 4, MatrixT>::subBy(Base &m
 #pragma region MatrixTraits_Scale
 template<typename T, size_t N, typename MatrixT>
 struct MatrixTraits_Scale
-{
-    using Base = MatrixBase<T, N>;
-    static FMATH_INLINE FMATH_CONSTEXPR MatrixT scalarMul(const Base &m, const T &value);
-    static FMATH_INLINE FMATH_CONSTEXPR void scalarMulBy(Base &m, const T &value);
-    static FMATH_INLINE FMATH_CONSTEXPR MatrixT scalarDiv(const Base &m, const T &value);
-    static FMATH_INLINE FMATH_CONSTEXPR void scalarDivBy(Base &m, const T &value);
-};
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Scale<T, N, MatrixT>::scalarMul(const Base &m, const T &value)
-{
-    MatrixT mat;
-    for (index_t i = 0; i < N; ++i)
-        mat[i] = m[i] * value;
-    return mat;
-}
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR void MatrixTraits_Scale<T, N, MatrixT>::scalarMulBy(Base &m, const T &value)
-{
-    for (index_t i = 0; i < N; ++i)
-        m[i] *= value;
-}
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Scale<T, N, MatrixT>::scalarDiv(const Base &m, const T &value)
-{
-    MatrixT mat;
-    for (index_t i = 0; i < N; ++i)
-        mat[i] = m[i] / value;
-    return mat;
-}
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR void MatrixTraits_Scale<T, N, MatrixT>::scalarDivBy(Base &m, const T &value)
-{
-    for (index_t i = 0; i < N; ++i)
-        m[i] /= value;
-}
+{};
 
 template<typename T, typename MatrixT>
 struct MatrixTraits_Scale<T, 2, MatrixT>
@@ -552,20 +455,7 @@ FMATH_INLINE FMATH_CONSTEXPR void MatrixTraits_Scale<T, 4, MatrixT>::scalarDivBy
 #pragma region MatrixTraits_Transpose
 template<typename T, size_t N, typename MatrixT>
 struct MatrixTraits_Transpose
-{
-    using Base = MatrixBase<T, N>;
-    static FMATH_INLINE FMATH_CONSTEXPR MatrixT transpose(const Base &m);
-};
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Transpose<T, N, MatrixT>::transpose(const Base &m)
-{
-    MatrixT result;
-    for (index_t i = 0; i < N; ++i)
-        for (index_t j = 0; j < N; +j)
-            result[i][j] = m[j][i];
-    return result;
-}
+{};
 
 template<typename T, typename MatrixT>
 struct MatrixTraits_Transpose<T, 2, MatrixT>
@@ -624,21 +514,7 @@ struct MatrixTraits_Basic :
 #pragma region MatrixTraits_Mul
 template<typename T, size_t N, typename MatrixT>
 struct MatrixTraits_Mul
-{
-    using Base = MatrixBase<T, N>;
-    static FMATH_INLINE FMATH_CONSTEXPR MatrixT mul(const Base &m1, const Base &m2);
-};
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Mul<T, N, MatrixT>::mul(const Base &m1, const Base &m2)
-{
-    MatrixT result;
-    for (index_t k = 0; k < N; ++k)
-        for (index_t i = 0; i < N; ++i)
-            for (index_t j = 0; j < N; ++j)
-                result[k] += m1[i] * m2[k][j];
-    return result;
-}
+{};
 
 template<typename T, typename MatrixT>
 struct MatrixTraits_Mul<T, 2, MatrixT>
@@ -698,12 +574,7 @@ FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Mul<T, 4, MatrixT>::mul(const 
 #pragma region MatrixTraits_VectorMul
 template<typename T, size_t N, typename VectorT>
 struct MatrixTraits_VectorMul
-{
-    using VecBase = VectorBase<T, N>;
-    using MatBase = MatrixBase<T, N>;
-    static FMATH_INLINE FMATH_CONSTEXPR VectorT vectorMul(const VecBase &v, const MatBase &m);
-    static FMATH_INLINE FMATH_CONSTEXPR VectorT vectorMul(const MatBase &m, const VecBase &v);
-};
+{};
 
 template<typename T, typename VectorT>
 struct MatrixTraits_VectorMul<T, 2, VectorT>
@@ -789,31 +660,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT MatrixTraits_VectorMul<T, 4, VectorT>::vect
 #pragma region MatrixTraits_Hadamard
 template<typename T, size_t N, typename MatrixT>
 struct MatrixTraits_Hadamard
-{
-    using Base = MatrixBase<T, N>;
-    static FMATH_INLINE FMATH_CONSTEXPR MatrixT hadamardMul(const Base &m1, const Base &m2);
-    static FMATH_INLINE FMATH_CONSTEXPR MatrixT hadamardDiv(const Base &m1, const Base &m2);
-};
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Hadamard<T, N, MatrixT>::hadamardMul(const Base &m1, const Base &m2)
-{
-    MatrixT result;
-    for (index_t i = 0; i < N; ++i)
-        for (index_t j = 0; j < N; ++j)
-            result[i][j] = m1[i][j] * m2[i][j];
-    return result;
-}
-
-template<typename T, size_t N, typename MatrixT>
-FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Hadamard<T, N, MatrixT>::hadamardDiv(const Base &m1, const Base &m2)
-{
-    MatrixT result;
-    for (index_t i = 0; i < N; ++i)
-        for (index_t j = 0; j < N; ++j)
-            result[i][j] = m1[i][j] / m2[i][j];
-    return result;
-}
+{};
 
 template<typename T, typename MatrixT>
 struct MatrixTraits_Hadamard<T, 2, MatrixT>
@@ -893,11 +740,7 @@ FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Hadamard<T, 4, MatrixT>::hadam
 #pragma region MatrixTraits_Square
 template<typename T, size_t N, typename MatrixT>
 struct MatrixTraits_Square
-{
-    using Base = MatrixBase<T, N>;
-    static FMATH_INLINE FMATH_CONSTEXPR MatrixT inverse(const Base &m);
-    static FMATH_INLINE FMATH_CONSTEXPR T determinant(const Base &m);
-};
+{};
 
 template<typename T, typename MatrixT>
 struct MatrixTraits_Square<T, 2, MatrixT>
