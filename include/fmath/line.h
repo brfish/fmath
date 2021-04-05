@@ -1,6 +1,7 @@
 #ifndef _FMATH_LINE_H_
 #define _FMATH_LINE_H_
 
+#include "box.h"
 #include "common.h"
 #include "constants.h"
 #include "point.h"
@@ -20,27 +21,31 @@ public:
 
     explicit FMATH_CONSTEXPR Line(const Point<ValueType, N> &start, const Point<ValueType, N> &end);
 
+    explicit FMATH_CONSTEXPR Line(const Point<ValueType, N> &start, const Vector<ValueType, N> &delta);
+
     FMATH_CONSTEXPR Line &operator=(const Line &other);
 
-    FMATH_INLINE FMATH_CONSTEXPR const Point<ValueType, N> &start() const;
+    FMATH_INLINE FMATH_CONSTEXPR const Point<T, N> &start() const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Point<ValueType, N> &start();
+    FMATH_INLINE FMATH_CONSTEXPR Point<T, N> &start();
 
     FMATH_INLINE FMATH_CONSTEXPR const Point<ValueType, N> &end() const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Point<ValueType, N> &end();
+    FMATH_INLINE FMATH_CONSTEXPR Point<T, N> &end();
 
-    FMATH_INLINE FMATH_CONSTEXPR Point<ValueType, N> at(const ValueType &t);
+    FMATH_INLINE FMATH_CONSTEXPR Point<T, N> at(const ValueType &t);
 
-    FMATH_INLINE FMATH_CONSTEXPR Point<ValueType, N> middle() const;
+    FMATH_INLINE FMATH_CONSTEXPR Point<T, N> middle() const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Vector<ValueType, N> deltaVector() const;
+    FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> deltaVector() const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Vector<ValueType, N> direction() const;
+    FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> direction() const;
 
-    FMATH_INLINE FMATH_CONSTEXPR ValueType length2() const;
+    FMATH_INLINE FMATH_CONSTEXPR T length2() const;
 
-    FMATH_INLINE FMATH_CONSTEXPR ValueType length() const;
+    FMATH_INLINE FMATH_CONSTEXPR T length() const;
+
+    FMATH_INLINE FMATH_CONSTEXPR Box<T, N> bound() const;
 
     FMATH_INLINE void setStart(const Point<ValueType, N> &start);
 
@@ -131,10 +136,17 @@ T distance(const Point<T, N> &p, const Line<T, N> &l)
 }
 
 template<typename T, size_t N>
+FMATH_INLINE std::string toString(const Line<T, N> &l, uint32 precision = 6)
+{
+    std::stringstream ss;
+    ss << '(' << toString(l.start(), precision) << ',' << toString(l.end(), precision) << ')';
+    return ss.str();
+}
+
+template<typename T, size_t N>
 FMATH_INLINE std::ostream &operator<<(std::ostream &output, const Line<T, N> &l)
 {
     output << '(' << l.start() << ',' << l.end() << ')';
-    
     return output;
 }
 
@@ -151,11 +163,16 @@ FMATH_CONSTEXPR Line<T, N>::Line(const Point<ValueType, N> &start, const Point<V
 {}
 
 template<typename T, size_t N>
+FMATH_CONSTEXPR Line<T, N>::Line(const Point<ValueType, N> &start, const Vector<ValueType, N> &delta)
+    :   start_(start),
+        end_(start + delta)
+{}
+
+template<typename T, size_t N>
 FMATH_CONSTEXPR Line<T, N> &Line<T, N>::operator=(const Line &other)
 {
     start_ = other.start_;
     end_ = other.end_;
-    
     return *this;
 }
 
@@ -217,6 +234,12 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR T Line<T, N>::length() const
 {
     return distance(start_, end_);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Box<T, N> Line<T, N>::bound() const
+{
+    return Box<T, N>(start_, end_);
 }
 
 template<typename T, size_t N>

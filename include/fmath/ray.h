@@ -36,6 +36,10 @@ public:
 
     FMATH_INLINE FMATH_CONSTEXPR Line<T, N> toLine(const ValueType &t0, const ValueType &t1);
 
+    FMATH_INLINE FMATH_CONSTEXPR Line<T, N> toLine(const ValueType &t);
+
+    FMATH_INLINE FMATH_CONSTEXPR Ray<T, N> negate() const;
+
     FMATH_INLINE void setOrigin(const Point<T, N> &origin);
 
     FMATH_INLINE void setDirection(const Vector<T, N> &direction);
@@ -83,6 +87,21 @@ bool notEqualEpsilon(const Ray<T, N> &r1, const Ray<T, N> &r2, const T &epsilon 
 }
 
 template<typename T, size_t N>
+FMATH_INLINE std::string toString(const Ray<T, N> &r, uint32 precision = 6)
+{
+    std::stringstream ss;
+    ss << '(' << toString(r.origin(), precision) << ',' << toString(r.direction(), precision) << ')';
+    return ss.str();
+}
+
+template<typename T, size_t N>
+FMATH_INLINE std::ostream &operator<<(std::ostream &output, const Ray<T, N> &r)
+{
+    output << '(' << r.origin() << ',' << r.direction() << ')';
+    return output;
+}
+
+template<typename T, size_t N>
 FMATH_CONSTEXPR Ray<T, N>::Ray(const Ray &other)
     :   origin_(other.origin_),
         direction_(other.direction_)
@@ -91,7 +110,7 @@ FMATH_CONSTEXPR Ray<T, N>::Ray(const Ray &other)
 template<typename T, size_t N>
 FMATH_CONSTEXPR Ray<T, N>::Ray(const Point<T, N> &origin, const Vector<T, N> &direction)
     :   origin_(origin),
-        direction_(direction)
+        direction_(normalize(direction))
 {}
 
 template<typename T, size_t N>
@@ -142,6 +161,18 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Line<T, N> Ray<T, N>::toLine(const ValueType &t0, const ValueType &t1)
 {
     return Line<T, N>(origin_ + direction_ * t0, origin_ + direction_ * t1);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Line<T, N> Ray<T, N>::toLine(const ValueType &t)
+{
+    return toLine(static_cast<T>(0), t);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Ray<T, N> Ray<T, N>::negate() const
+{
+    return Ray(origin_, -direction_);
 }
 
 template<typename T, size_t N>
