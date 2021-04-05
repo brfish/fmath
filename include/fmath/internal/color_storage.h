@@ -31,7 +31,7 @@ struct ColorStorage<float, 3>
     {}
 
     FMATH_CONSTEXPR ColorStorage(const Vector3<float> &vec)
-        :   values { vec }
+        :   ColorStorage(vec[0], vec[1], vec[2])
     {}
 
     explicit FMATH_CONSTEXPR ColorStorage(const float *data)
@@ -53,7 +53,7 @@ struct ColorStorage<float, 4>
     {}
 
     FMATH_CONSTEXPR ColorStorage(const Vector4<float> &vec)
-        :   values { vec }
+        :   ColorStorage(vec[0], vec[1], vec[2], vec[3])
     {}
 
     explicit FMATH_CONSTEXPR ColorStorage(const float *data)
@@ -75,7 +75,7 @@ struct ColorStorage<uint8, 3>
     {}
 
     FMATH_CONSTEXPR ColorStorage(const Vector3<uint8> &vec)
-        :   values { vec }
+        :   ColorStorage(vec[0], vec[1], vec[2])
     {}
 
     explicit FMATH_CONSTEXPR ColorStorage(const uint8 *data)
@@ -97,7 +97,7 @@ struct ColorStorage<uint8, 4>
     {}
 
     FMATH_CONSTEXPR ColorStorage(const Vector4<uint8> &vec)
-        :   values { vec }
+        :   ColorStorage(vec[0], vec[1], vec[2], vec[3])
     {}
 
     explicit FMATH_CONSTEXPR ColorStorage(const uint8 *data)
