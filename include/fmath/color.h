@@ -179,6 +179,12 @@ FMATH_INLINE FMATH_CONSTEXPR Color<T, N> operator/(const Color<T, N> &c, const T
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR std::string toString(const Color<T, N> &c)
+{
+    return toString(c.values);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR std::ostream &operator<<(std::ostream &output, const Color<T, N> &c)
 {
     output << c.values;
