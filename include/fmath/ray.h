@@ -30,13 +30,13 @@ public:
 
     FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> &direction();
 
-    FMATH_INLINE FMATH_CONSTEXPR Point<T, N> at(const ValueType &t);
+    FMATH_INLINE FMATH_CONSTEXPR Point<T, N> at(const ValueType &t) const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Point<T, N> operator()(const ValueType &t);
+    FMATH_INLINE FMATH_CONSTEXPR Point<T, N> operator()(const ValueType &t) const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Line<T, N> toLine(const ValueType &t0, const ValueType &t1);
+    FMATH_INLINE FMATH_CONSTEXPR Line<T, N> toLine(const ValueType &t0, const ValueType &t1) const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Line<T, N> toLine(const ValueType &t);
+    FMATH_INLINE FMATH_CONSTEXPR Line<T, N> toLine(const ValueType &t) const;
 
     FMATH_INLINE FMATH_CONSTEXPR Ray<T, N> negate() const;
 
@@ -176,25 +176,25 @@ FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> &Ray<T, N>::direction()
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR Point<T, N> Ray<T, N>::at(const ValueType &t)
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> Ray<T, N>::at(const ValueType &t) const
 {
     return origin_ + direction_ * t;
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR Point<T, N> Ray<T, N>::operator()(const ValueType &t)
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> Ray<T, N>::operator()(const ValueType &t) const
 {
     return at(t);
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR Line<T, N> Ray<T, N>::toLine(const ValueType &t0, const ValueType &t1)
+FMATH_INLINE FMATH_CONSTEXPR Line<T, N> Ray<T, N>::toLine(const ValueType &t0, const ValueType &t1) const
 {
     return Line<T, N>(origin_ + direction_ * t0, origin_ + direction_ * t1);
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR Line<T, N> Ray<T, N>::toLine(const ValueType &t)
+FMATH_INLINE FMATH_CONSTEXPR Line<T, N> Ray<T, N>::toLine(const ValueType &t) const
 {
     return toLine(static_cast<T>(0), t);
 }

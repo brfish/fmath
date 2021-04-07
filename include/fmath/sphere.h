@@ -31,11 +31,11 @@ public:
 
     FMATH_INLINE FMATH_CONSTEXPR Box<T, N> bound() const;
 
-    FMATH_INLINE FMATH_CONSTEXPR bool contains(const Point<ValueType, N> &point);
+    FMATH_INLINE FMATH_CONSTEXPR bool contains(const Point<ValueType, N> &point) const;
 
-    FMATH_INLINE FMATH_CONSTEXPR bool contains(const Sphere &other);
+    FMATH_INLINE FMATH_CONSTEXPR bool contains(const Sphere &other) const;
 
-    FMATH_INLINE FMATH_CONSTEXPR bool overlaps(const Sphere &other);
+    FMATH_INLINE FMATH_CONSTEXPR bool overlaps(const Sphere &other) const;
 
     FMATH_INLINE void setCenter(const Point<ValueType, N> &center);
 
@@ -166,19 +166,19 @@ FMATH_INLINE FMATH_CONSTEXPR Box<T, N> Sphere<T, N>::bound() const
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR bool Sphere<T, N>::contains(const Point<T, N> &point)
+FMATH_INLINE FMATH_CONSTEXPR bool Sphere<T, N>::contains(const Point<T, N> &point) const
 {
     return distance2(point, center_) <= radius_ * radius_;
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR bool Sphere<T, N>::contains(const Sphere &other)
+FMATH_INLINE FMATH_CONSTEXPR bool Sphere<T, N>::contains(const Sphere &other) const
 {
     return distance2(*this, other) <= (radius_ - other.radius_) * (radius_ - other.radius_);
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR bool Sphere<T, N>::overlaps(const Sphere &other)
+FMATH_INLINE FMATH_CONSTEXPR bool Sphere<T, N>::overlaps(const Sphere &other) const
 {
     return distance2(*this, other) <= (radius_ + other.radius_) * (radius_ + other.radius_);
 }

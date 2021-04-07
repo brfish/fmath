@@ -33,7 +33,7 @@ public:
 
     FMATH_INLINE FMATH_CONSTEXPR Point<T, N> &end();
 
-    FMATH_INLINE FMATH_CONSTEXPR Point<T, N> at(const ValueType &t);
+    FMATH_INLINE FMATH_CONSTEXPR Point<T, N> at(const ValueType &t) const;
 
     FMATH_INLINE FMATH_CONSTEXPR Point<T, N> middle() const;
 
@@ -201,7 +201,7 @@ FMATH_INLINE FMATH_CONSTEXPR Point<T, N> &Line<T, N>::end()
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR Point<T, N> Line<T, N>::at(const ValueType &t)
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> Line<T, N>::at(const ValueType &t) const
 {
     return start_ + (end_ - start_) * t;
 }
