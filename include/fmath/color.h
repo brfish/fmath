@@ -67,28 +67,28 @@ struct VectorTraits_TypeInfo<Color<T, N>>
     static constexpr size_t DIMENSION = N;
 };
 
-FMATH_INLINE FMATH_CONSTEXPR uint32 colorToHex(uint8 r, uint8 g, uint8 b)
+static FMATH_ALWAYS_INLINE FMATH_CONSTEXPR uint32 colorToHex(uint8 r, uint8 g, uint8 b)
 {
     return (static_cast<uint32>(r) << 16) | 
         (static_cast<uint32>(g) << 8) |
         (static_cast<uint32>(b));
 }
 
-FMATH_INLINE FMATH_CONSTEXPR void colorFromHex(uint32 hex, uint8 &r, uint8 &g, uint8 &b)
+static FMATH_ALWAYS_INLINE FMATH_CONSTEXPR void colorFromHex(uint32 hex, uint8 &r, uint8 &g, uint8 &b)
 {
     r = (hex >> 16) & 0xFF;
     g = (hex >> 8) & 0xFF;
     b = (hex) & 0xFF;
 }
 
-FMATH_INLINE FMATH_CONSTEXPR uint32 colorToHex(float r, float g, float b)
+static FMATH_ALWAYS_INLINE FMATH_CONSTEXPR uint32 colorToHex(float r, float g, float b)
 {
     return (static_cast<uint32>(r * 255.0F) << 16) | 
         (static_cast<uint32>(g * 255.0F) << 8) |
         (static_cast<uint32>(b * 255.0F));
 }
 
-FMATH_INLINE FMATH_CONSTEXPR void colorFromHex(uint32 hex, float &r, float &g, float &b)
+static FMATH_ALWAYS_INLINE FMATH_CONSTEXPR void colorFromHex(uint32 hex, float &r, float &g, float &b)
 {
     r = ((hex >> 16) & 0xFF) / 255.0F;
     g = ((hex >> 8) & 0xFF) / 255.0F;
