@@ -4,7 +4,7 @@
 #include <cmath>
 #include <type_traits>
 
-#include "common.h"
+#include "../common.h"
 
 namespace fmath
 {

@@ -4,8 +4,8 @@
 #include <array>
 #include <initializer_list>
 
-#include "common.h"
-#include "vector.h"
+#include "../common.h"
+#include "../vector.h"
 
 namespace fmath
 {

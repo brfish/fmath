@@ -3,9 +3,9 @@
 
 #include <array>
 
-#include "common.h"
-#include "math_common_functions.h"
-#include "vector.h"
+#include "../common.h"
+#include "../math_common_functions.h"
+#include "../vector.h"
 
 namespace fmath
 {

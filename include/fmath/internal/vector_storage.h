@@ -3,9 +3,9 @@
 
 #include <array>
 
-#include "common.h"
-#include "compile_config.h"
-#include "functions.h"
+#include "../common.h"
+#include "../compile_config.h"
+#include "../functions.h"
 
 namespace fmath
 {

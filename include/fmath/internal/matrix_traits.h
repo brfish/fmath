@@ -7,9 +7,9 @@
 #include <sstream>
 #include <string>
 
-#include "internal/matrix_base.h"
-#include "common.h"
-#include "functions.h"
+#include "matrix_base.h"
+#include "../common.h"
+#include "../functions.h"
 
 namespace fmath
 {

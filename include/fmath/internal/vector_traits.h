@@ -7,9 +7,9 @@
 #include <sstream>
 #include <string>
 
-#include "internal/vector_base.h"
-#include "constants.h"
-#include "math_common_functions.h"
+#include "vector_base.h"
+#include "../constants.h"
+#include "../math_common_functions.h"
 
 namespace fmath::internal
 {

@@ -1,11 +1,11 @@
 #ifndef _FMATH_INTERNAL_MATRIX_BASE_H_
 #define _FMATH_INTERNAL_MATRIX_BASE_H_
 
-#include "internal/interfaces.h"
-#include "internal/matrix_storage.h"
-#include "common.h"
-#include "compile_config.h"
-#include "functions.h"
+#include "interfaces.h"
+#include "matrix_storage.h"
+#include "../common.h"
+#include "../compile_config.h"
+#include "../functions.h"
 
 namespace fmath
 {

@@ -1,8 +1,8 @@
 #ifndef _FMATH_INTERNAL_VECTOR_BASE_H_
 #define _FMATH_INTERNAL_VECTOR_BASE_H_
 
-#include "internal/interfaces.h"
-#include "internal/vector_storage.h"
+#include "interfaces.h"
+#include "vector_storage.h"
 
 namespace fmath
 {

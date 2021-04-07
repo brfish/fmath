@@ -1,8 +1,8 @@
 #ifndef _FMATH_INTERNAL_COLOR_BASE_H_
 #define _FMATH_INTERNAL_COLOR_BASE_H_
 
-#include "internal/color_storage.h"
-#include "internal/interfaces.h"
+#include "color_storage.h"
+#include "interfaces.h"
 
 namespace fmath
 {
