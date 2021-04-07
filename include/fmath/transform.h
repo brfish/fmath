@@ -287,6 +287,22 @@ FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> perspective(const T &fovy, const T &aspe
     );
 }
 
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> lookAt(const Point3<T> &eye, const Point3<T> &target, const Vector3<T> &up)
+{
+    Vector3<T> w = normalize(target - eye);
+    Vector3<T> u = normalize(cross(up, w));
+    Vector3<T> v = cross(w, u);
+    
+    const Vector3<T> &e = *reinterpret_cast<const Vector3<T> *>(&eye);
+
+    return Matrix4<T>(
+        u[0], u[1], u[2], -dot(u, e),
+        v[0], v[1], v[2], -dot(v, e),
+        w[0], w[1], w[2], -dot(w, e),
+        static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)
+    );
+}
 
 template<typename T>
 class Transform
@@ -575,7 +591,6 @@ template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::rotate(const ValueType &angle)
 {
     mat_ = fmath::rotate<A>(angle) * mat_;
-
     return *this;
 }
 
@@ -583,7 +598,6 @@ template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::rotate(const Vector3<ValueType> &axis, const ValueType &angle)
 {
     mat_ = fmath::rotate(axis, angle) * mat_;
-
     return *this;
 }
 
@@ -591,7 +605,6 @@ template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::rotate(const Quat<ValueType> &q)
 {
     mat_ = q.toMatrix() * mat_;
-    
     return *this;
 }
 
@@ -599,7 +612,6 @@ template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::scale(const Vector3<ValueType> &factors)
 {
     mat_ = fmath::scale(factors) * mat_;
-
     return *this;
 }
 
@@ -607,7 +619,6 @@ template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::scale(const ValueType &uniform_factor)
 {
     mat_ = fmath::scale(uniform_factor) * mat_;
-
     return *this;
 }
 
@@ -615,7 +626,6 @@ template<typename T>
 Transform<T> &Transform<T>::scale(const Vector3<T> &axis, const ValueType &factor)
 {
     mat_ = fmath::scale(axis, factor) * mat_;
-
     return *this;
 }
 
@@ -623,7 +633,6 @@ template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::translate(const Vector3<ValueType> &translation)
 {
     mat_[3] += translation;
-
     return *this;
 }
 
@@ -632,7 +641,6 @@ template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::shear(const ValueType &factor_s, const ValueType &factor_t)
 {
     mat_ = fmath::shear<A>(factor_s, factor_t) * mat_;
-
     return *this;
 }
 
@@ -640,7 +648,6 @@ template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::shear(const Vector3<ValueType> &axis, const ValueType &factor)
 {
     mat_ = fmath::shear(axis, factor) * mat_;
-
     return *this;
 }
 
@@ -662,7 +669,6 @@ FMATH_INLINE Transform<T> &Transform<T>::orthographic(const ValueType &left, con
     const ValueType &bottom, const ValueType &top, const ValueType &near, const ValueType &far)
 {
     mat_ = fmath::orthographic(left, right, bottom, top, near, far) * mat_;
-
     return *this;
 }
 
@@ -671,7 +677,6 @@ FMATH_INLINE Transform<T> &Transform<T>::perspective(const ValueType &left, cons
     const ValueType &bottom, const ValueType &top, const ValueType &near, const ValueType &far)
 {
     mat_ = fmath::perspective(left, right, bottom, top, near, far) * mat_;
-    
     return *this;
 }
 
@@ -680,27 +685,13 @@ FMATH_INLINE Transform<T> &Transform<T>::perspective(const ValueType &fovy, cons
         const ValueType &near, const ValueType &far)
 {
     mat_ = fmath::perspective(fovy, aspect, near, far) * mat_;
-    
     return *this;
 }
 
 template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::lookAt(const Point3<ValueType> &eye, const Point3<ValueType> &target, const Vector3<ValueType> &up)
 {
-    Vector3<ValueType> w = normalize(target - eye);
-    Vector3<ValueType> u = normalize(cross(up, w));
-    Vector3<ValueType> v = cross(w, u);
-    
-    const Vector3<ValueType> &e = *reinterpret_cast<const Vector3<ValueType> *>(&eye);
-
-    Matrix4<ValueType> l(
-        u[0], u[1], u[2], -dot(u, e),
-        v[0], v[1], v[2], -dot(v, e),
-        w[0], w[1], w[2], -dot(w, e),
-        static_cast<ValueType>(0), static_cast<ValueType>(0), static_cast<ValueType>(0), static_cast<ValueType>(1)
-    );
-    mat_ = l * mat_;
-
+    mat_ = fmath::lookAt(eye, target, up) * mat_;
     return *this;
 }
 
@@ -708,6 +699,7 @@ template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::clear()
 {
     mat_ = Matrix4<ValueType>::identity();
+    return *this;
 }
 
 template<typename T>
