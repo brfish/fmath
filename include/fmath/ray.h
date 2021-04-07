@@ -224,7 +224,7 @@ template<typename T>
 using Ray3 = Ray<T, 3>;
 
 using Ray2f = Ray2<float>;
-using Ray3lf = Ray2<double>;
+using Ray2lf = Ray2<double>;
 
 using Ray3f = Ray3<float>;
 using Ray3lf = Ray3<double>;
