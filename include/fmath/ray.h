@@ -50,40 +50,70 @@ private:
 };
 
 template<typename T, size_t N>
-bool operator==(const Ray<T, N> &r1, const Ray<T, N> &r2)
+FMATH_INLINE FMATH_CONSTEXPR bool operator==(const Ray<T, N> &r1, const Ray<T, N> &r2)
 {
     return r1.origin() == r2.origin() && r1.direction() == r2.direction();
 }
 
 template<typename T, size_t N>
-bool operator!=(const Ray<T, N> &r1, const Ray<T, N> &r2)
+FMATH_INLINE FMATH_CONSTEXPR bool operator!=(const Ray<T, N> &r1, const Ray<T, N> &r2)
 {
     return !(r1 == r2);
 }
 
 template<typename T, size_t N>
-bool equal(const Ray<T, N> &r1, const Ray<T, N> &r2)
+FMATH_INLINE FMATH_CONSTEXPR bool equal(const Ray<T, N> &r1, const Ray<T, N> &r2)
 {
     return r1 == r2;
 }
 
 template<typename T, size_t N>
-bool notEqual(const Ray<T, N> &r1, const Ray<T, N> &r2)
+FMATH_INLINE FMATH_CONSTEXPR bool notEqual(const Ray<T, N> &r1, const Ray<T, N> &r2)
 {
     return r1 != r2;
 }
 
 template<typename T, size_t N>
-bool equalEpsilon(const Ray<T, N> &r1, const Ray<T, N> &r2, const T &epsilon = constants::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Ray<T, N> &r1, const Ray<T, N> &r2, const T &epsilon = constants::Epsilon<T>::value)
 {
     return equalEpsilon(r1.origin(), r2.origin(), epsilon) &&
         equalEpsilon(r1.direction(), r2.direction(), epsilon);
 }
 
 template<typename T, size_t N>
-bool notEqualEpsilon(const Ray<T, N> &r1, const Ray<T, N> &r2, const T &epsilon = constants::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Ray<T, N> &r1, const Ray<T, N> &r2, const T &epsilon = constants::Epsilon<T>::value)
 {
     return !equalEpsilon(r1, r2, epsilon);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T distance2(const Ray<T, N> &r, const Point<T, N> &p)
+{
+    Vector3<T> hypotenuse = r.origin() - p;
+    Vector3<T> direction = r.direction();
+
+    return length2(hypotenuse - (hypotenuse * direction) * direction);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T distance2(const Point<T, N> &p, const Ray<T, N> &r)
+{
+    return distance2(r, p);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T distance(const Ray<T, N> &r, const Point<T, N> &p)
+{
+    Vector3<T> hypotenuse = r.origin() - p;
+    Vector3<T> direction = r.direction();
+
+    return length(hypotenuse - (hypotenuse * direction) * direction);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T distance(const Point<T, N> &p, const Ray<T, N> &r)
+{
+    return distance(r, p);
 }
 
 template<typename T, size_t N>

@@ -57,80 +57,80 @@ private:
 };
 
 template<typename T, size_t N>
-bool operator==(const Line<T, N> &l1, const Line<T, N> &l2)
+FMATH_INLINE FMATH_CONSTEXPR bool operator==(const Line<T, N> &l1, const Line<T, N> &l2)
 {
     return l1.start() == l2.start() && l1.end() == l2.end();
 }
 
 template<typename T, size_t N>
-bool operator!=(const Line<T, N> &l1, const Line<T, N> &l2)
+FMATH_INLINE FMATH_CONSTEXPR bool operator!=(const Line<T, N> &l1, const Line<T, N> &l2)
 {
     return !(l1 == l2);
 }
 
 template<typename T, size_t N>
-bool equal(const Line<T, N> &l1, const Line<T, N> &l2)
+FMATH_INLINE FMATH_CONSTEXPR bool equal(const Line<T, N> &l1, const Line<T, N> &l2)
 {
     return l1 == l2;
 }
 
 template<typename T, size_t N>
-bool notEqual(const Line<T, N> &l1, const Line<T, N> &l2)
+FMATH_INLINE FMATH_CONSTEXPR bool notEqual(const Line<T, N> &l1, const Line<T, N> &l2)
 {
     return l1 != l2;
 }
 
 template<typename T, size_t N>
-bool equalEpsilon(const Line<T, N> &l1, const Line<T, N> &l2, const T &epsilon = constants::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Line<T, N> &l1, const Line<T, N> &l2, const T &epsilon = constants::Epsilon<T>::value)
 {
     return equalEpsilon(l1.start(), l2.start(), epsilon) &&
         equalEpsilon(l1.end(), l2.end(), epsilon);
 }
 
 template<typename T, size_t N>
-bool notEqualEpsilon(const Line<T, N> &l1, const Line<T, N> &l2, const T &epsilon = constants::Epsilon<T>::value)
+FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Line<T, N> &l1, const Line<T, N> &l2, const T &epsilon = constants::Epsilon<T>::value)
 {
     return !equalEpsilon(l1, l2, epsilon);
 }
 
 template<typename T, size_t N>
-T length2(const Line<T, N> &l)
+FMATH_INLINE FMATH_CONSTEXPR T length2(const Line<T, N> &l)
 {
     return distance2(l.start(), l.end());
 }
 
 template<typename T, size_t N>
-T length(const Line<T, N> &l)
+FMATH_INLINE FMATH_CONSTEXPR T length(const Line<T, N> &l)
 {
     return distance(l.start(), l.end());
 }
 
 template<typename T, size_t N>
-T distance2(const Line<T, N> &l, const Point<T, N> &p)
+FMATH_INLINE FMATH_CONSTEXPR T distance2(const Line<T, N> &l, const Point<T, N> &p)
 {
-    Vector<T, N> d = l.start() - p;
-    Vector<T, N> n = l.direction();
+    Vector<T, N> hypotenuse = l.start() - p;
+    Vector<T, N> direction = l.direction();
 
-    return d - (d * n) * n;
+    return length2(hypotenuse - (hypotenuse * direction) * direction);
 }
 
 template<typename T, size_t N>
-T distance2(const Point<T, N> &p, const Line<T, N> &l)
+FMATH_INLINE FMATH_CONSTEXPR T distance2(const Point<T, N> &p, const Line<T, N> &l)
 {
     return distance2(l, p);
 }
 
 template<typename T, size_t N>
-T distance(const Line<T, N> &l, const Point<T, N> &p)
+FMATH_INLINE FMATH_CONSTEXPR T distance(const Line<T, N> &l, const Point<T, N> &p)
 {
-    Vector<T, N> d = l.start() - p;
-    Vector<T, N> n = l.direction();
+    Vector<T, N> hypotenuse = l.start() - p;
+    Vector<T, N> direction = l.direction();
 
-    return d - (d * n) * n;
+    return length(hypotenuse - (hypotenuse * direction) * direction);
 }
 
 template<typename T, size_t N>
-T distance(const Point<T, N> &p, const Line<T, N> &l)
+FMATH_INLINE FMATH_CONSTEXPR T distance(const Point<T, N> &p, const Line<T, N> &l)
 {
     return distance(l, p);
 }
