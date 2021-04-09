@@ -21,8 +21,11 @@ public:
 public:
     FMATH_CONSTEXPR Box(const Box &other);
 
-    explicit FMATH_CONSTEXPR Box(const Point<T, N> &p0 = constants::MIN_VALUE<Point<T, N>>, 
-        const Point<T, N> &p1 = constants::MAX_VALUE<Point<T, N>>);
+    FMATH_CONSTEXPR Box();
+
+    explicit FMATH_CONSTEXPR Box(const Point<ValueType, N> &p0, const Point<ValueType, N> &p1);
+
+    explicit FMATH_CONSTEXPR Box(const Point<ValueType, N> &p);
 
     FMATH_CONSTEXPR Box &operator=(const Box &other);
 
@@ -135,10 +138,22 @@ FMATH_CONSTEXPR Box<T, N>::Box(const Box &other)
         max_(other.max_)
 {}
 
+template<typename T ,size_t N>
+FMATH_CONSTEXPR Box<T, N>::Box()
+    :   min_(constants::MinValue<Point<T, N>>::value),
+        max_(constants::MaxValue<Point<T, N>>::value)
+{}
+
 template<typename T, size_t N>
-FMATH_CONSTEXPR Box<T, N>::Box(const Point<T, N> &p0, const Point<T, N> &p1)
+FMATH_CONSTEXPR Box<T, N>::Box(const Point<ValueType, N> &p0, const Point<ValueType, N> &p1)
     :   min_(componentWiseMin(p0, p1)),
         max_(componentWiseMax(p0, p1))
+{}
+
+template<typename T, size_t N>
+FMATH_CONSTEXPR Box<T, N>::Box(const Point<ValueType, N> &p)
+    :   min_(p),
+        max_(p)
 {}
 
 template<typename T, size_t N>
