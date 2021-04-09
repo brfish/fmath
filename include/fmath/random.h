@@ -7,6 +7,7 @@
 #include "common.h"
 #include "normal.h"
 #include "point.h"
+#include "traits.h"
 #include "vector.h"
 
 namespace fmath
@@ -14,7 +15,8 @@ namespace fmath
 namespace internal
 {
 
-static std::mt19937 global_random_engine { static_cast<int32>(time(NULL)) };
+static std::mt19937 global_random_engine { static_cast<std::mt19937::result_type>(time(NULL)) };
+static std::mt19937_64 global_random_engine64 { static_cast<std::mt19937_64::result_type>(time(NULL)) };
 
 template<typename T, typename R, typename = void>
 struct RandomTraits
@@ -50,7 +52,7 @@ struct RandomTraits<T, R, std::enable_if_t<std::is_floating_point_v<T>>>
 };
 
 template<typename T, typename R>
-struct RandomTraits<T, R, std::enable_if_t<std::is_base_of_v<VectorInterface, T>>>
+struct RandomTraits<T, R, std::enable_if_t<is_vector_v<T>>>
 {
     static FMATH_INLINE T uniform(const T &minv, const T &maxv, R &engine)
     {
