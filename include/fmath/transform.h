@@ -1,11 +1,13 @@
 #ifndef _FMATH_TRANSFORM_H_
 #define _FMATH_TRANSFORM_H_
 
+#include "line.h"
 #include "matrix.h"
-#include "vector.h"
+#include "normal.h"
 #include "point.h"
 #include "quaternion.h"
-#include "normal.h"
+#include "ray.h"
+#include "vector.h"
 
 namespace fmath
 {
@@ -294,7 +296,7 @@ FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> lookAt(const Point3<T> &eye, const Point
     Vector3<T> u = normalize(cross(up, w));
     Vector3<T> v = cross(w, u);
     
-    const Vector3<T> &e = *reinterpret_cast<const Vector3<T> *>(&eye);
+    const Vector3<T> &e = reinterpret_cast<const Vector3<T> &>(eye);
 
     return Matrix4<T>(
         u[0], u[1], u[2], -dot(u, e),
@@ -311,13 +313,13 @@ public:
     using ValueType = T;
 
 public:
-    Transform(const Transform &other);
+    FMATH_CONSTEXPR Transform(const Transform &other);
 
-    Transform();
+    FMATH_CONSTEXPR Transform();
 
-    Transform(const Matrix4<ValueType> &mat);
+    FMATH_CONSTEXPR Transform(const Matrix4<ValueType> &mat);
 
-    Transform &operator=(const Transform &other);
+    FMATH_CONSTEXPR Transform &operator=(const Transform &other);
 
     FMATH_INLINE FMATH_CONSTEXPR Matrix3<T> linear() const;
 
@@ -379,21 +381,33 @@ public:
 
     FMATH_INLINE Transform &clear();
 
-    FMATH_INLINE FMATH_CONSTEXPR Vector3<ValueType> apply(const Vector3<ValueType> &v) const;
+    FMATH_INLINE FMATH_CONSTEXPR Vector3<T> apply(const Vector3<ValueType> &v) const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Point3<ValueType> apply(const Point3<ValueType> &p) const;
+    FMATH_INLINE FMATH_CONSTEXPR Point3<T> apply(const Point3<ValueType> &p) const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Normal3<ValueType> apply(const Normal3<ValueType> &n) const;
+    FMATH_INLINE FMATH_CONSTEXPR Normal3<T> apply(const Normal3<ValueType> &n) const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Vector3<ValueType> operator()(const Vector3<ValueType> &v) const;
+    FMATH_INLINE FMATH_CONSTEXPR Ray3<T> apply(const Ray3<T> &r) const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Point3<ValueType> operator()(const Point3<ValueType> &p) const;
+    FMATH_INLINE FMATH_CONSTEXPR Line3<T> apply(const Line3<T> &l) const;
 
-    FMATH_INLINE FMATH_CONSTEXPR Normal3<ValueType> operator()(const Normal3<ValueType> &n) const;
+    FMATH_INLINE FMATH_CONSTEXPR Box3<T> apply(const Box3<ValueType> &b) const;
+
+    FMATH_INLINE FMATH_CONSTEXPR Vector3<T> operator()(const Vector3<ValueType> &v) const;
+
+    FMATH_INLINE FMATH_CONSTEXPR Point3<T> operator()(const Point3<ValueType> &p) const;
+
+    FMATH_INLINE FMATH_CONSTEXPR Normal3<T> operator()(const Normal3<ValueType> &n) const;
+
+    FMATH_INLINE FMATH_CONSTEXPR Ray3<T> operator()(const Ray3<ValueType> &r) const;
+
+    FMATH_INLINE FMATH_CONSTEXPR Line3<T> operator()(const Line3<ValueType> &l) const;
+
+    FMATH_INLINE FMATH_CONSTEXPR Box3<T> operator()(const Box3<ValueType> &b) const;
 
     FMATH_INLINE FMATH_CONSTEXPR Transform inverse() const;
 
-    FMATH_INLINE FMATH_CONSTEXPR const Matrix4<ValueType> &toMatrix() const;
+    FMATH_INLINE FMATH_CONSTEXPR const Matrix4<T> &toMatrix() const;
 
 private:
     Matrix4<ValueType> mat_;
@@ -406,22 +420,22 @@ FMATH_INLINE FMATH_CONSTEXPR Transform<T> operator*(const Transform<T> &t1, cons
 }
 
 template<typename T>
-Transform<T>::Transform(const Transform &other)
+FMATH_CONSTEXPR Transform<T>::Transform(const Transform &other)
     :   mat_(other.mat_)
 {}
 
 template<typename T>
-Transform<T>::Transform()
+FMATH_CONSTEXPR Transform<T>::Transform()
     :   mat_(Matrix4<ValueType>::identity())
 {}
 
 template<typename T>
-Transform<T>::Transform(const Matrix4<ValueType> &mat)
+FMATH_CONSTEXPR Transform<T>::Transform(const Matrix4<ValueType> &mat)
     :   mat_(mat)
 {}
 
 template<typename T>
-Transform<T> &Transform<T>::operator=(const Transform &other)
+FMATH_CONSTEXPR Transform<T> &Transform<T>::operator=(const Transform &other)
 {
     mat_ = other.mat_;
     return *this;
@@ -518,7 +532,6 @@ template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::preRotate(const Quat<ValueType> &q)
 {
     mat_ *= q.toMatrix();
-
     return *this;
 }
 
@@ -728,6 +741,36 @@ FMATH_INLINE FMATH_CONSTEXPR Normal3<T> Transform<T>::apply(const Normal3<ValueT
 }
 
 template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Ray3<T> Transform<T>::apply(const Ray3<ValueType> &r) const
+{
+    return Ray3<ValueType>(apply(r.origin()), apply(r.direction()));
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Line3<T> Transform<T>::apply(const Line3<ValueType> &l) const
+{
+    return Line3<ValueType>(apply(l.start()), apply(l.end()));
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Box3<T> Transform<T>::apply(const Box3<ValueType> &b) const
+{
+    const Point<ValueType, N> &pmin = b.min();
+    const Point<ValueType, N> &pmax = b.max();
+    
+    Box3<ValueType> result(apply(pmin));
+    result += apply(Point<ValueType, N>(pmax[0], pmin[1], pmin[2]));
+    result += apply(Point<ValueType, N>(pmin[0], pmax[1], pmin[2]));
+    result += apply(Point<ValueType, N>(pmin[0], pmin[1], pmax[2]));
+    result += apply(Point<ValueType, N>(pmin[0], pmax[1], pmax[2]));
+    result += apply(Point<ValueType, N>(pmax[0], pmax[1], pmin[2]));
+    result += apply(Point<ValueType, N>(pmax[0], pmin[1], pmax[2]));
+    result += apply(Point<ValueType, N>(pmax[0], pmax[1], pmax[2]));
+
+    return result;
+}
+
+template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Vector3<T> Transform<T>::operator()(const Vector3<ValueType> &v) const
 {
     return apply(v);
@@ -743,6 +786,24 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Normal3<T> Transform<T>::operator()(const Normal3<ValueType> &n) const
 {
     return apply(n);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Ray3<T> Transform<T>::operator()(const Ray3<ValueType> &r) const
+{
+    return apply(r);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Line3<T> Transform<T>::operator()(const Line3<ValueType> &l) const
+{
+    return apply(l);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Box3<T> Transform<T>::operator()(const Box3<ValueType> &b) const
+{
+    return apply(b);
 }
 
 template<typename T>
