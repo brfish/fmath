@@ -755,17 +755,17 @@ FMATH_INLINE FMATH_CONSTEXPR Line3<T> Transform<T>::apply(const Line3<ValueType>
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Box3<T> Transform<T>::apply(const Box3<ValueType> &b) const
 {
-    const Point<ValueType, N> &pmin = b.min();
-    const Point<ValueType, N> &pmax = b.max();
-    
+    const Point3<ValueType> &pmin = b.min();
+    const Point3<ValueType> &pmax = b.max();
+
     Box3<ValueType> result(apply(pmin));
-    result += apply(Point<ValueType, N>(pmax[0], pmin[1], pmin[2]));
-    result += apply(Point<ValueType, N>(pmin[0], pmax[1], pmin[2]));
-    result += apply(Point<ValueType, N>(pmin[0], pmin[1], pmax[2]));
-    result += apply(Point<ValueType, N>(pmin[0], pmax[1], pmax[2]));
-    result += apply(Point<ValueType, N>(pmax[0], pmax[1], pmin[2]));
-    result += apply(Point<ValueType, N>(pmax[0], pmin[1], pmax[2]));
-    result += apply(Point<ValueType, N>(pmax[0], pmax[1], pmax[2]));
+    result += apply(Point3<ValueType>(pmax[0], pmin[1], pmin[2]));
+    result += apply(Point3<ValueType>(pmin[0], pmax[1], pmin[2]));
+    result += apply(Point3<ValueType>(pmin[0], pmin[1], pmax[2]));
+    result += apply(Point3<ValueType>(pmin[0], pmax[1], pmax[2]));
+    result += apply(Point3<ValueType>(pmax[0], pmax[1], pmin[2]));
+    result += apply(Point3<ValueType>(pmax[0], pmin[1], pmax[2]));
+    result += apply(Point3<ValueType>(pmax[0], pmax[1], pmax[2]));
 
     return result;
 }
