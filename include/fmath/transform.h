@@ -7,6 +7,7 @@
 #include "point.h"
 #include "quaternion.h"
 #include "ray.h"
+#include "triangle.h"
 #include "vector.h"
 
 namespace fmath
@@ -243,7 +244,7 @@ FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> orthographic(const T &left, const T &rig
         two / (right - left), zero, zero, zero,
         zero, two / (top - bottom), zero, zero,
         zero, zero, two / (near - far), zero,
-        (right + left) / (left - right), (top + bottom) / (bottom - top), (near + far) / (far - near), one
+        (right + left) / (left - right), (top + bottom) / (bottom - top), (near + far) / (near - far), one
     );
 }
 
@@ -293,16 +294,16 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> lookAt(const Point3<T> &eye, const Point3<T> &target, const Vector3<T> &up)
 {
     Vector3<T> w = normalize(target - eye);
-    Vector3<T> u = normalize(cross(up, w));
-    Vector3<T> v = cross(w, u);
+    Vector3<T> u = normalize(cross(w, up));
+    Vector3<T> v = cross(u, w);
     
     const Vector3<T> &e = reinterpret_cast<const Vector3<T> &>(eye);
 
     return Matrix4<T>(
-        u[0], u[1], u[2], -dot(u, e),
-        v[0], v[1], v[2], -dot(v, e),
-        w[0], w[1], w[2], -dot(w, e),
-        static_cast<T>(0), static_cast<T>(0), static_cast<T>(0), static_cast<T>(1)
+        u[0], v[0], -w[0], static_cast<T>(0),
+        u[1], v[1], -w[1], static_cast<T>(0),
+        u[2], v[2], -w[2], static_cast<T>(0),
+        -dot(u, e), -dot(v, e), dot(w, e), static_cast<T>(1)
     );
 }
 
@@ -320,6 +321,10 @@ public:
     FMATH_CONSTEXPR Transform(const Matrix4<ValueType> &mat);
 
     FMATH_CONSTEXPR Transform &operator=(const Transform &other);
+
+    FMATH_INLINE FMATH_CONSTEXPR const T *data() const;
+
+    FMATH_INLINE FMATH_CONSTEXPR T *data();
 
     FMATH_INLINE FMATH_CONSTEXPR Matrix3<T> linear() const;
 
@@ -393,6 +398,8 @@ public:
 
     FMATH_INLINE FMATH_CONSTEXPR Box3<T> apply(const Box3<ValueType> &b) const;
 
+    FMATH_INLINE FMATH_CONSTEXPR Triangle3<T> apply(const Triangle3<T> &t) const;
+
     FMATH_INLINE FMATH_CONSTEXPR Vector3<T> operator()(const Vector3<ValueType> &v) const;
 
     FMATH_INLINE FMATH_CONSTEXPR Point3<T> operator()(const Point3<ValueType> &p) const;
@@ -404,6 +411,8 @@ public:
     FMATH_INLINE FMATH_CONSTEXPR Line3<T> operator()(const Line3<ValueType> &l) const;
 
     FMATH_INLINE FMATH_CONSTEXPR Box3<T> operator()(const Box3<ValueType> &b) const;
+
+    FMATH_INLINE FMATH_CONSTEXPR Triangle3<T> operator()(const Triangle3<ValueType> &t) const;
 
     FMATH_INLINE FMATH_CONSTEXPR Transform inverse() const;
 
@@ -417,6 +426,19 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Transform<T> operator*(const Transform<T> &t1, const Transform<T> &t2)
 {
     return Transform<T>(t1.toMatrix() * t2.toMatrix());
+}
+
+template<typename T>
+FMATH_INLINE std::string toString(const Transform<T> &t, uint32 precision = 6)
+{
+    return toString(t.toMatrix(), precision);
+}
+
+template<typename T>
+FMATH_INLINE std::ostream &operator<<(std::ostream &output, const Transform<T> &t)
+{
+    output << t.toMatrix();
+    return output;
 }
 
 template<typename T>
@@ -439,6 +461,18 @@ FMATH_CONSTEXPR Transform<T> &Transform<T>::operator=(const Transform &other)
 {
     mat_ = other.mat_;
     return *this;
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR const T *Transform<T>::data() const
+{
+    return mat_.data();
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR T *Transform<T>::data()
+{
+    return mat_.data();
 }
 
 template<typename T>
@@ -771,6 +805,12 @@ FMATH_INLINE FMATH_CONSTEXPR Box3<T> Transform<T>::apply(const Box3<ValueType> &
 }
 
 template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Triangle3<T> Transform<T>::apply(const Triangle3<ValueType> &t) const
+{
+    return Triangle3<ValueType>(apply(t[0]), apply(t[1]), apply(t[2]));
+}
+
+template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Vector3<T> Transform<T>::operator()(const Vector3<ValueType> &v) const
 {
     return apply(v);
@@ -804,6 +844,12 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Box3<T> Transform<T>::operator()(const Box3<ValueType> &b) const
 {
     return apply(b);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR Triangle3<T> Transform<T>::operator()(const Triangle3<ValueType> &t) const
+{
+    return apply(t);
 }
 
 template<typename T>

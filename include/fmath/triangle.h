@@ -53,6 +53,63 @@ private:
 };
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator==(const Triangle<T, N> &t1, const Triangle<T, N> &t2)
+{
+    return t1[0] == t2[0] && t1[1] == t2[1] && t1[2] == t2[2];
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool operator!=(const Triangle<T, N> &t1, const Triangle<T, N> &t2)
+{
+    return !(t1 == t2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool equal(const Triangle<T, N> &t1, const Triangle<T, N> &t2)
+{
+    return t1 == t2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool notEqual(const Triangle<T, N> &t1, const Triangle<T, N> &t2)
+{
+    return t1 != t2;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Triangle<T, N> &t1, const Triangle<T, N> &t2, 
+    const T epsilon = constants::Epsilon<T>::value)
+{
+    return equalEpsilon(t1[0], t2[0], epsilon) &&
+        equalEpsilon(t1[1], t2[1], epsilon) &&
+        equalEpsilon(t1[2], t2[2], epsilon);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR bool notEqualEpsilon(const Triangle<T, N> &t1, const Triangle<T, N> &t2, 
+    const T epsilon = constants::Epsilon<T>::value)
+{
+    return !equalEpsilon(t1, t2, epsilon);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE std::string toString(const Triangle<T, N> &t, uint32 precision = 6)
+{
+    std::stringstream ss;
+    ss << '(' << toString(t[0], precision) << ',' 
+        << toString(t[1], precision) << ',' 
+        << toString(t[2], precision) << ')';
+    return ss.str();
+}
+
+template<typename T, size_t N>
+FMATH_INLINE std::ostream &operator<<(std::ostream &output, const Triangle<T, N> &t)
+{
+    output << '(' << t[0] << ',' << t[1] << ',' << t[2] << ')';
+    return output;
+}
+
+template<typename T, size_t N>
 FMATH_CONSTEXPR Triangle<T, N>::Triangle(const Triangle &other)
     :   vertices_(other.vertices_)
 {}
@@ -154,7 +211,7 @@ FMATH_INLINE FMATH_CONSTEXPR void Triangle<T, N>::set(index_t index, const Point
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Plane<T> Triangle<T, N>::toPlane() const
 {
-    return Plane(vertices_[0], vertices_[1], vertices_[2]);
+    return Plane<T>(vertices_[0], vertices_[1], vertices_[2]);
 }
 
 template<typename T>

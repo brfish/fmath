@@ -1,5 +1,5 @@
 #ifndef _FMATH_PLANE_H_
-#define _FMTHA_PLANE_H_
+#define _FMATH_PLANE_H_
 
 #include "common.h"
 #include "point.h"
