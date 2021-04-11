@@ -4,6 +4,7 @@
 #include "internal/vector_base.h"
 #include "internal/vector_traits.h"
 #include "common.h"
+#include "vector.h"
 
 namespace fmath
 {
@@ -25,13 +26,23 @@ public:
     FMATH_CONSTEXPR Normal &operator=(const VectorU &other);
 
     FMATH_INLINE FMATH_CONSTEXPR Normal operator+() const;
+
     FMATH_INLINE FMATH_CONSTEXPR Normal operator-() const;
 
     FMATH_INLINE Normal &operator+=(const Normal &other);
+
+    FMATH_INLINE Normal &operator+=(const Vector<T, N> &vec);
+
     FMATH_INLINE Normal &operator+=(const ValueType &value);
+
     FMATH_INLINE Normal &operator-=(const Normal &other);
+
+    FMATH_INLINE Normal &operator-=(const Vector<T, N> &vec);
+
     FMATH_INLINE Normal &operator-=(const ValueType &value);
+
     FMATH_INLINE Normal &operator*=(const ValueType &value);
+
     FMATH_INLINE Normal &operator/=(const ValueType &value);
 
     static FMATH_CONSTEXPR Normal zero();
@@ -170,6 +181,12 @@ FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator+(const Normal<T, N> &n1, cons
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator+(const Normal<T, N> &n, const Vector<T, N> &v)
+{
+    return internal::NormalTraits<T, N>::add(n, v);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator+(const Normal<T, N> &n, const T &value)
 {
     return internal::NormalTraits<T, N>::add(n, value);
@@ -179,6 +196,12 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator-(const Normal<T, N> &n1, const Normal<T, N> &n2)
 {
     return internal::NormalTraits<T, N>::sub(n1, n2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator-(const Normal<T, N> &n, const Vector<T, N> &v)
+{
+    return internal::NormalTraits<T, N>::sub(n, v);
 }
 
 template<typename T, size_t N>
@@ -280,6 +303,13 @@ FMATH_INLINE Normal<T, N> &Normal<T, N>::operator+=(const Normal &other)
 }
 
 template<typename T, size_t N>
+FMATH_INLINE Normal<T, N> &Normal<T, N>::operator+=(const Vector<T, N> &vec)
+{
+    *this = (*this) + vec;
+    return *this;
+}
+
+template<typename T, size_t N>
 FMATH_INLINE Normal<T, N> &Normal<T, N>::operator+=(const ValueType &value)
 {
     *this = (*this) + value;
@@ -290,6 +320,13 @@ template<typename T, size_t N>
 FMATH_INLINE Normal<T, N> &Normal<T, N>::operator-=(const Normal &other)
 {
     *this = (*this) - other;
+    return *this;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE Normal<T, N> &Normal<T, N>::operator-=(const Vector<T, N> &vec)
+{
+    *this = (*this) - vec;
     return *this;
 }
 

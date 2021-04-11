@@ -7,6 +7,7 @@
 #include "internal/vector_traits.h"
 #include "common.h"
 #include "constants.h"
+#include "normal.h"
 #include "vector.h"
 
 namespace fmath
@@ -34,9 +35,13 @@ public:
 
     FMATH_INLINE Point &operator+=(const Vector<T, N> &vec);
 
+    FMATH_INLINE Point &operator+=(const Normal<T, N> &normal);
+
     FMATH_INLINE Point &operator+=(const ValueType &value);
 
     FMATH_INLINE Point &operator-=(const Vector<T, N> &vec);
+
+    FMATH_INLINE Point &operator-=(const Normal<T, N> &normal);
 
     FMATH_INLINE Point &operator-=(const ValueType &value);
 
@@ -180,6 +185,12 @@ FMATH_INLINE FMATH_CONSTEXPR Point<T, N> operator+(const Point<T, N> &p, const V
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> operator+(const Point<T, N> &p, const Normal<T, N> &n)
+{
+    return internal::PointTraits<T, N>::add(p, n);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Point<T, N> operator+(const Point<T, N> &p, const T &value)
 {
     return internal::PointTraits<T, N>::add(p, value);
@@ -189,6 +200,12 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Point<T, N> operator-(const Point<T, N> &p, const Vector<T, N> &v)
 {
     return internal::PointTraits<T, N>::sub(p, v);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> operator-(const Point<T, N> &p, const Normal<T, N> &n)
+{
+    return internal::PointTraits<T, N>::sub(p, n);
 }
 
 template<typename T, size_t N>
@@ -228,9 +245,27 @@ FMATH_INLINE FMATH_CONSTEXPR Point<T, N> add(const Point<T, N> &p, const Vector<
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> add(const Point<T, N> &p, const Normal<T, N> &n)
+{
+    return p + n;
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Point<T, N> add(const Point<T, N> &p, const T &value)
 {
     return p + value;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> sub(const Point<T, N> &p, const Vector<T, N> &v)
+{
+    return p - v;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Point<T, N> sub(const Point<T, N> &p, const Normal<T, N> &n)
+{
+    return p + n;
 }
 
 template<typename T, size_t N>
@@ -330,6 +365,13 @@ FMATH_INLINE Point<T, N> &Point<T, N>::operator+=(const Vector<T, N> &vec)
 }
 
 template<typename T, size_t N>
+FMATH_INLINE Point<T, N> &Point<T, N>::operator+=(const Normal<T, N> &normal)
+{
+    *this = (*this) + normal;
+    return *this;
+}
+
+template<typename T, size_t N>
 FMATH_INLINE Point<T, N> &Point<T, N>::operator+=(const ValueType &value)
 {
     *this = (*this) + value;
@@ -340,6 +382,13 @@ template<typename T, size_t N>
 FMATH_INLINE Point<T, N> &Point<T, N>::operator-=(const Vector<T, N> &vec)
 {
     *this = (*this) - vec;
+    return *this;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE Point<T, N> &Point<T, N>::operator-=(const Normal<T, N> &normal)
+{
+    *this = (*this) - normal;
     return *this;
 }
 
