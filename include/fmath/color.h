@@ -179,6 +179,24 @@ FMATH_INLINE FMATH_CONSTEXPR Color<T, N> operator/(const Color<T, N> &c, const T
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Color<T, N> clamp(const Color<T, N> &c, const Color<T, N> &minv, const Color<T, N> &maxv)
+{
+    return Color<T, N>(clamp(c.values, minv.values, maxv.values));
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Color<T, N> clamp(const Color<T, N> &c, const T &minv, const T &maxv)
+{
+    return Color<T, N>(clamp(c.values, minv, maxv));
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Color<T, N> lerp(const Color<T, N> &c1, const Color<T, N> &c2, const T &t)
+{
+    return c1 + (c2 - c1) * t;
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR std::string toString(const Color<T, N> &c)
 {
     return toString(c.values);
