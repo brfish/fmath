@@ -329,7 +329,7 @@ FMATH_INLINE FMATH_CONSTEXPR float angle(const Vector<T, N> &v1, const Vector<T,
 template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> reflect(const Vector<T, N> &v, const Vector<T, N> &n)
 {
-    return 2 * (n * v) * n - v;
+    return static_cast<T>(2) * (n * v) * n - v;
 }
 
 template<typename T, size_t N>

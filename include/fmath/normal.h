@@ -249,6 +249,12 @@ FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> normalize(const Normal<T, N> &n)
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> reflect(const Vector<T, N> &v, const Normal<T, N> &n)
+{
+    return static_cast<T>(2) * (n * v) * n - v;
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR std::string toString(const Normal<T, N> &vec, uint32 precision = 6)
 {
     return internal::NormalTraits<T, N>::toString(vec, precision);
