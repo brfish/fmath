@@ -19,6 +19,8 @@ public:
 public:
     FMATH_CONSTEXPR Line(const Line &other);
 
+    FMATH_CONSTEXPR Line();
+
     explicit FMATH_CONSTEXPR Line(const Point<ValueType, N> &start, const Point<ValueType, N> &end);
 
     explicit FMATH_CONSTEXPR Line(const Point<ValueType, N> &start, const Vector<ValueType, N> &delta);
@@ -154,6 +156,12 @@ template<typename T, size_t N>
 FMATH_CONSTEXPR Line<T, N>::Line(const Line &other)
     :   start_(other.start_),
         end_(other.end_)
+{}
+
+template<typename T, size_t N>
+FMATH_CONSTEXPR Line<T, N>::Line()
+    :   start_(Point<T, N>::zero()),
+        end_(Point<T, N>::zero())
 {}
 
 template<typename T, size_t N>

@@ -18,6 +18,8 @@ public:
 public:
     FMATH_CONSTEXPR Ray(const Ray &other);
 
+    FMATH_CONSTEXPR Ray();
+
     explicit FMATH_CONSTEXPR Ray(const Point<ValueType, N> &origin, const Vector<ValueType, N> &direction);
 
     FMATH_CONSTEXPR Ray &operator=(const Ray &other);
@@ -135,6 +137,12 @@ template<typename T, size_t N>
 FMATH_CONSTEXPR Ray<T, N>::Ray(const Ray &other)
     :   origin_(other.origin_),
         direction_(other.direction_)
+{}
+
+template<typename T, size_t N>
+FMATH_CONSTEXPR Ray<T, N>::Ray()
+    :   origin_(Point<T, N>::zero()),
+        direction_(Vector<T, N>(-static_cast<T>(1)))
 {}
 
 template<typename T, size_t N>

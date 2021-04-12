@@ -21,6 +21,8 @@ public:
 public:
     FMATH_CONSTEXPR Triangle(const Triangle &other);
 
+    FMATH_CONSTEXPR Triangle();
+
     // The points are given counterclockwise
     explicit FMATH_CONSTEXPR Triangle(const Point<T, N> &v0, const Point<T, N> &v1, const Point<T, N> &v2);
 
@@ -112,6 +114,11 @@ FMATH_INLINE std::ostream &operator<<(std::ostream &output, const Triangle<T, N>
 template<typename T, size_t N>
 FMATH_CONSTEXPR Triangle<T, N>::Triangle(const Triangle &other)
     :   vertices_(other.vertices_)
+{}
+
+template<typename T, size_t N>
+FMATH_CONSTEXPR Triangle<T, N>::Triangle()
+    :   vertices_ { fmath::Point3f::zero(), fmath::Point3f::zero(), fmath::Point3f::zero() }
 {}
 
 template<typename T, size_t N>

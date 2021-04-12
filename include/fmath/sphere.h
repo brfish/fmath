@@ -17,6 +17,9 @@ public:
 
 public:
     FMATH_CONSTEXPR Sphere(const Sphere &other);
+
+    FMATH_CONSTEXPR Sphere();
+
     explicit FMATH_CONSTEXPR Sphere(const Point<ValueType, N> &center, const ValueType &radius);
 
     FMATH_CONSTEXPR Sphere &operator=(const Sphere &other);
@@ -118,6 +121,12 @@ template<typename T, size_t N>
 FMATH_CONSTEXPR Sphere<T, N>::Sphere(const Sphere &other)
     :   center_(other.center_),
         radius_(other.radius_)
+{}
+
+template<typename T, size_t N>
+FMATH_CONSTEXPR Sphere<T, N>::Sphere()
+    :   center_(Point<T, N>::zero()),
+        radius_(-static_cast<T>(1))
 {}
 
 template<typename T, size_t N>
