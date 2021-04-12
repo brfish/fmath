@@ -33,6 +33,16 @@ public:
     FMATH_INLINE FMATH_CONSTEXPR uint32 toHex() const;
 
     static FMATH_CONSTEXPR Color fromHex(uint32 hex);
+
+    static FMATH_CONSTEXPR Color black();
+
+    static FMATH_CONSTEXPR Color white();
+
+    static FMATH_CONSTEXPR Color red();
+    
+    static FMATH_CONSTEXPR Color green();
+
+    static FMATH_CONSTEXPR Color blue();
 };
 
 namespace internal
@@ -270,6 +280,36 @@ FMATH_CONSTEXPR Color<T, N> Color<T, N>::fromHex(uint32 hex)
     T r, g, b;
     internal::colorFromHex(hex, r, g, b);
     return Color(r, g, b);
+}
+
+template<typename T, size_t N>
+FMATH_CONSTEXPR Color<T, N> Color<T, N>::black()
+{
+    return fromHex(0x000000);
+}
+
+template<typename T, size_t N>
+FMATH_CONSTEXPR Color<T, N> Color<T, N>::white()
+{
+    return fromHex(0xFFFFFF);
+}
+
+template<typename T, size_t N>
+FMATH_CONSTEXPR Color<T, N> Color<T, N>::red()
+{
+    return fromHex(0xFF0000);
+}
+
+template<typename T, size_t N>
+FMATH_CONSTEXPR Color<T, N> Color<T, N>::green()
+{
+    return fromHex(0x00FF00);
+}
+
+template<typename T, size_t N>
+FMATH_CONSTEXPR Color<T, N> Color<T, N>::blue()
+{
+    return fromHex(0x0000FF);
 }
 
 using Rgb = Color<float, 3>;
