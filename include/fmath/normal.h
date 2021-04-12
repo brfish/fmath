@@ -69,6 +69,7 @@ struct NormalTraits :
     VectorTraits_Compare<T, N>,
     VectorTraits_ComponentWise<T, N, Normal<T, N>>,
     VectorTraits_Constants<T, N, Normal<T, N>>,
+    VectorTraits_Dot<T, N>,
     VectorTraits_Input<T, N>,
     VectorTraits_Norm<T, N>,
     VectorTraits_Output<T, N>,
@@ -223,6 +224,18 @@ FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator*(const T &value, const Normal
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T operator*(const Normal<T, N> &n, const Vector<T, N> &v)
+{
+    return internal::NormalTraits<T, N>::dot(n, v);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T operator*(const Vector<T, N> &v, const Normal<T, N> &n)
+{
+    return internal::NormalTraits<T, N>::dot(n, v);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator/(const Normal<T, N> &n, const T &value)
 {
     return internal::NormalTraits<T, N>::div(n, value);
@@ -239,6 +252,18 @@ FMATH_INLINE FMATH_CONSTEXPR T length(const Normal<T, N> &n)
 {
     static_assert(std::is_floating_point_v<T>);
     return sqrt(internal::NormalTraits<T, N>::length2(n));
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T dot(const Normal<T, N> &n, const Vector<T, N> &v)
+{
+    return n * v;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T dot(const Vector<T, N> &v, const Normal<T, N> &n)
+{
+    return n * v;
 }
 
 template<typename T, size_t N>
