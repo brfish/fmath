@@ -4,6 +4,10 @@
 #include <cassert>
 #include <cstdint>
 #include <cstdlib>
+#include <iomanip>
+#include <sstream>
+#include <string>
+#include <type_traits>
 
 #include "compile_config.h"
 
@@ -42,6 +46,22 @@ enum class Component
     X = 0, Y = 1, Z = 2, W = 3,
     R = 0, G = 1, B = 2, A = 3,
 };
+
+template<typename T>
+std::string toString(const T &value, uint32 precision = 6)
+{
+    std::stringstream ss;
+    ss << std::fixed << std::setprecision(precision);
+
+    if constexpr (std::is_integral_v<T> && sizeof(T) <= 2)
+    {
+        using PromotedType = std::conditional_t<std::is_signed_v<T>, int32, uint32>;
+        ss << static_cast<PromotedType>(value);
+    }
+    else
+        ss << value;
+    return ss.str();
+}
 
 }
 
