@@ -71,7 +71,6 @@ struct RandomTraits<T, R, std::enable_if_t<is_vector_v<T>>>
 template<typename T, typename R>
 FMATH_INLINE T random(const T &minv, const T &maxv, R &engine)
 {
-    FMATH_ASSERT(minv <= maxv);
     return internal::RandomTraits<T, R>::uniform(minv, maxv, engine);
 }
 
