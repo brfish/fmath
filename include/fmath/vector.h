@@ -327,9 +327,50 @@ FMATH_INLINE FMATH_CONSTEXPR float angle(const Vector<T, N> &v1, const Vector<T,
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> reflect(const Vector<T, N> &v, const Vector<T, N> &n)
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> reflect(const Vector<T, N> &incident, const Vector<T, N> &normal)
 {
-    return static_cast<T>(2) * (n * v) * n - v;
+    return incident - static_cast<T>(2) * (normal * incident) * normal;
+}
+
+// See https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> refract(const Vector<T, N> &incident, const Vector<T, N> &normal, const T &n)
+{
+    T cosi = -(incident * normal);
+    T sint2 = n * n * (static_cast<T>(1) - cosi * cosi);
+
+    if (sint2 <= static_cast<T>(1))
+        return Vector<T, N>::zero();
+
+    T cost = sqrt(static_cast<T>(1) - sint2);
+    return n * incident + (n * cosi - cost) * normal;
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> refract(const Vector<T, N> &incident, const Vector<T, N> &normal, 
+    const T &n1, const T &n2)
+{
+    return refract(incident, normal, n1 / n2);
+}
+
+// See https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T refractance(const Vector<T, N> &incident, const Vector<T, N> &normal,
+    const T &n1, const T &n2)
+{
+    T n = n1 / n2;
+    T cosi = -(incident * normal);
+    T sint2 = n * n * (static_cast<T>(1) - cosi * cosi);
+
+    if (sint2 > static_cast<T>(1))
+        return static_cast<T>(1);
+
+    T cost = sqrt(static_cast<T>(1) - sint2);
+
+    T perpendicular = (n1 * cosi - n2 * cost) / (n1 * cosi + n2 * cost);
+    T parallel = (n2 * cosi - n1 * cost) / (n2 * cosi + n1 * cost);
+
+    return (perpendicular * perpendicular + parallel * parallel) / static_cast<T>(2);
 }
 
 template<typename T, size_t N>

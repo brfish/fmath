@@ -188,6 +188,12 @@ FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator+(const Normal<T, N> &n, const
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator+(const Vector<T, N> &v, const Normal<T, N> &n)
+{
+    return internal::VectorTraits<T, N>::add(v, n);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator+(const Normal<T, N> &n, const T &value)
 {
     return internal::NormalTraits<T, N>::add(n, value);
@@ -206,6 +212,12 @@ FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator-(const Normal<T, N> &n, const
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> operator-(const Vector<T, N> &v, const Normal<T, N> &n)
+{
+    return internal::VectorTraits<T, N>::sub(v, n);
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator-(const Normal<T, N> &n, const T &value)
 {
     return internal::NormalTraits<T, N>::sub(n, value);
@@ -221,6 +233,12 @@ template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> operator*(const T &value, const Normal<T, N> &n)
 {
     return internal::NormalTraits<T, N>::mul(n, value);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T operator*(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return internal::NormalTraits<T, N>::dot(n1, n2);
 }
 
 template<typename T, size_t N>
@@ -255,6 +273,12 @@ FMATH_INLINE FMATH_CONSTEXPR T length(const Normal<T, N> &n)
 }
 
 template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T dot(const Normal<T, N> &n1, const Normal<T, N> &n2)
+{
+    return n1 * n2;
+}
+
+template<typename T, size_t N>
 FMATH_INLINE FMATH_CONSTEXPR T dot(const Normal<T, N> &n, const Vector<T, N> &v)
 {
     return n * v;
@@ -274,9 +298,29 @@ FMATH_INLINE FMATH_CONSTEXPR Normal<T, N> normalize(const Normal<T, N> &n)
 }
 
 template<typename T, size_t N>
-FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> reflect(const Vector<T, N> &v, const Normal<T, N> &n)
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> reflect(const Vector<T, N> &incident, const Normal<T, N> &normal)
 {
-    return static_cast<T>(2) * (n * v) * n - v;
+    return reflect(incident, static_cast<const Vector<T, N> &>(normal));
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> refract(const Vector<T, N> &incident, const Normal<T, N> &normal, const T &n)
+{
+    return refract(incident, static_cast<const Vector<T, N> &>(normal), n);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR Vector<T, N> refract(const Vector<T, N> &incident, const Normal<T, N> &normal,
+    const T &n1, const T &n2)
+{
+    return refract(incident, static_cast<const Vector<T, N> &>(normal), n1, n2);
+}
+
+template<typename T, size_t N>
+FMATH_INLINE FMATH_CONSTEXPR T refractance(const Vector<T, N> &incident, const Normal<T, N> &normal,
+    const T &n1, const T &n2)
+{
+    return refractance(incident, static_cast<const Vector<T, N> &>(normal), n1, n2);
 }
 
 template<typename T, size_t N>
