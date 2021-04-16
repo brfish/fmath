@@ -2,6 +2,7 @@
 #define _FMATH_COMMON_H_
 
 #include <cassert>
+#include <cstdarg>
 #include <cstdint>
 #include <cstdlib>
 #include <iomanip>
@@ -34,7 +35,34 @@ using diff_t    =   ptrdiff_t;
 
 using angle_t   =   double;
 
-#define FMATH_ASSERT(Expr) assert(Expr)
+namespace internal
+{
+
+static void assertFormatPrint(const char *filename, index_t line, 
+    const char *expression, const char *format, ...)
+{
+    printf("Source: %s:%d\n", filename, line);
+    printf("Expected: %s\n", expression);
+    printf("Message: ");
+    va_list args;
+    va_start(args, format);
+    vprintf(format, args);
+    va_end(args);
+    putchar('\n');
+}
+
+}
+
+#ifndef NDEBUG
+#   define FMATH_ASSERT(Expr) \
+        do { if (!(Expr)) { internal::assertFormatPrint(__FILE__, __LINE__, #Expr, "Assertion failed"); std::abort(); }} while (false)
+
+#   define FMATH_FASSERT(Expr, Fmt, ...) \
+        do { if (!(Expr)) { internal::assertFormatPrint(__FILE__, __LINE__, #Expr, (Fmt), ##__VA_ARGS__); std::abort(); }} while (false)
+#else
+#   define FMATH_ASSERT(Expr)
+#   define FMATH_FASSERT(Expr, Fmt, ...)
+#endif
 
 enum class Axis
 {
