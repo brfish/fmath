@@ -76,7 +76,7 @@ enum class Component
 };
 
 template<typename T>
-std::string toString(const T &value, uint32 precision = 6)
+FMATH_ALWAYS_INLINE std::string toString(const T &value, uint32 precision = 6)
 {
     std::stringstream ss;
     ss << std::fixed << std::setprecision(precision);
