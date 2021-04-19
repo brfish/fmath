@@ -18,6 +18,38 @@ template<typename VectorT>
 struct VectorTraits_TypeInfo
 {};
 
+#pragma region VectorTraits_Stringify
+template<typename T, size_t N>
+struct VectorTraits_Stringify
+{
+    static FMATH_INLINE FMATH_CONSTEXPR std::string toString(const VectorBase<T, N> &base, uint32 precision = 6);
+};
+
+template<typename T, size_t  N>
+FMATH_INLINE FMATH_CONSTEXPR std::string VectorTraits_Stringify<T, N>::toString(const VectorBase<T, N> &base, uint32 precision)
+{
+    std::stringstream ss;
+    ss << '[';
+    ss << std::fixed << std::setprecision(precision);
+    
+    for (index_t i = 0; i < N; ++i)
+    {
+        const char *comma = ",";
+        comma += (i == N - 1);
+
+        if constexpr (std::is_integral_v<T> && sizeof(T) <= 2)
+        {
+            using PromotedType = std::conditional_t<std::is_signed_v<T>, int32, uint32>;
+            ss << static_cast<PromotedType>(base[i]) << comma;
+        }
+        else
+            ss << base[i] << comma;
+    }
+    ss << ']';
+    return ss.str();
+}
+#pragma endregion
+
 #pragma region VectorTraits_Assign
 template<typename T, size_t N, typename VectorT>
 struct VectorTraits_Assign
@@ -556,7 +588,6 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 3, VectorT>::hadam
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 3, VectorT>::hadamardDiv(const Base &v1, const Base &v2)
 {
-    FMATH_ASSERT(v2[0] !=0 && v2[1] != 0 && v2[2] != 0);
     return VectorT(v1[0] / v2[0], v1[1] / v2[1], v1[2] / v2[2]);
 }
 
@@ -708,38 +739,6 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Clamp<T, 4, VectorT>::clamp(co
         fmath::clamp(v[2], minv, maxv),
         fmath::clamp(v[3], minv, maxv)
     );
-}
-#pragma endregion
-
-#pragma region VectorTraits_Stringify
-template<typename T, size_t N>
-struct VectorTraits_Stringify
-{
-    static FMATH_INLINE FMATH_CONSTEXPR std::string toString(const VectorBase<T, N> &base, uint32 precision = 6);
-};
-
-template<typename T, size_t  N>
-FMATH_INLINE FMATH_CONSTEXPR std::string VectorTraits_Stringify<T, N>::toString(const VectorBase<T, N> &base, uint32 precision)
-{
-    std::stringstream ss;
-    ss << '[';
-    ss << std::fixed << std::setprecision(precision);
-    
-    for (index_t i = 0; i < N; ++i)
-    {
-        const char *comma = ",";
-        comma += (i == N - 1);
-
-        if constexpr (std::is_integral_v<T> && sizeof(T) <= 2)
-        {
-            using PromotedType = std::conditional_t<std::is_signed_v<T>, int32, uint32>;
-            ss << static_cast<PromotedType>(base[i]) << comma;
-        }
-        else
-            ss << base[i] << comma;
-    }
-    ss << ']';
-    return ss.str();
 }
 #pragma endregion
 

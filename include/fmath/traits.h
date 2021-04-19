@@ -53,6 +53,18 @@ struct IsIntegral<T, std::enable_if_t<internal::HasValueType<T>::value>> :
     std::is_integral<typename T::ValueType>
 {};
 
+template<typename T, typename = void>
+struct ValueTypeSize
+{
+    static constexpr size_t value = sizeof(T);
+};
+
+template<typename T>
+struct ValueTypeSize<T, std::enable_if_t<internal::HasValueType<T>::value>>
+{
+    static constexpr size_t value = sizeof(typename T::ValueType);
+};
+
 template<typename T>
 inline constexpr bool is_vector_v = IsVector<T>::value;
 
@@ -64,6 +76,9 @@ inline constexpr bool is_floating_point_v = IsFloatingPoint<T>::value;
 
 template<typename T>
 inline constexpr bool is_integral_v = IsIntegral<T>::value;
+
+template<typename T>
+inline constexpr size_t value_type_size_v = ValueTypeSize<T>::value;
 
 }
 

@@ -77,7 +77,9 @@ FMATH_INLINE T random(const T &minv, const T &maxv, R &engine)
 template<typename T>
 FMATH_INLINE T random(const T &minv, const T &maxv)
 {
-    return random(minv, maxv, internal::global_random_engine);
+    using EngineType = std::conditional_t<ValueTypeSize<T>::value >= 4, std::mt19937_64, std::mt19937>;
+    static thread_local EngineType engine;
+    return random(minv, maxv, engine);
 }
 
 }
