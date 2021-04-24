@@ -13,12 +13,6 @@ namespace fmath
 {
 
 template<typename T>
-struct IsIEC559
-{
-    static constexpr bool value = std::numeric_limits<T>::is_iec559;
-};
-
-template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR bool isNaN(const T &value)
 {
     return std::isnan(value);
@@ -49,7 +43,7 @@ FMATH_INLINE FMATH_CONSTEXPR double toDegrees(double radian)
 template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
 FMATH_INLINE FMATH_CONSTEXPR double toDegrees(const T &radian)
 {
-    return toDegrees(static_cast<T>(radian));
+    return toDegrees(static_cast<double>(radian));
 }
 
 FMATH_INLINE FMATH_CONSTEXPR float toRadians(float degree)
@@ -65,13 +59,13 @@ FMATH_INLINE FMATH_CONSTEXPR double toRadians(double degree)
 template<typename T, typename = std::enable_if_t<std::is_integral_v<T>>>
 FMATH_INLINE FMATH_CONSTEXPR double toRadians(const T &degree)
 {
-    return toRadians(static_cast<T>(degree));
+    return toRadians(static_cast<double>(degree));
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T sin(const T &angle)
 {
-#if defined(FMATH_USE_DEGREE)
+#if defined(FMATH_USE_DEGREES)
     return std::sin(toRadians(angle));
 #else
     return std::sin(angle);
@@ -81,7 +75,7 @@ FMATH_INLINE FMATH_CONSTEXPR T sin(const T &angle)
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T cos(const T &angle)
 {
-#if defined(FMATH_USE_DEGREE)
+#if defined(FMATH_USE_DEGREES)
     return std::cos(toRadians(angle));
 #else
     return std::cos(angle);
@@ -91,7 +85,7 @@ FMATH_INLINE FMATH_CONSTEXPR T cos(const T &angle)
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T tan(const T &angle)
 {
-#if defined(FMATH_USE_DEGREE)
+#if defined(FMATH_USE_DEGREES)
     return std::tan(toRadians(angle));
 #else
     return std::tan(angle);
@@ -101,7 +95,7 @@ FMATH_INLINE FMATH_CONSTEXPR T tan(const T &angle)
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T asin(const T &angle)
 {
-#if defined(FMATH_USE_DEGREE)
+#if defined(FMATH_USE_DEGREES)
     return std::asin(toRadians(angle));
 #else
     return std::asin(angle);
@@ -111,7 +105,7 @@ FMATH_INLINE FMATH_CONSTEXPR T asin(const T &angle)
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T acos(const T &angle)
 {
-#if defined(FMATH_USE_DEGREE)
+#if defined(FMATH_USE_DEGREES)
     return std::acos(toRadians(angle));
 #else
     return std::acos(angle);
@@ -121,11 +115,17 @@ FMATH_INLINE FMATH_CONSTEXPR T acos(const T &angle)
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T atan(const T &angle)
 {
-#if defined(FMATH_USE_DEGREE)
+#if defined(FMATH_USE_DEGREES)
     return std::atan(toRadians(angle));
 #else
     return std::atan(angle);
 #endif
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR T atan2(const T &y, const T &x)
+{
+    return std::atan2(y, x);
 }
 
 template<typename T>
@@ -219,9 +219,21 @@ FMATH_INLINE FMATH_CONSTEXPR T max(const T &a, const T &b)
 }
 
 template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR T max(const T &a, const T &b, const T &c)
+{
+    return max(a, max(b, c));
+}
+
+template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T min(const T &a, const T &b)
 {
     return internal::MinImpl<T>::compute(a, b);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR T min(const T &a, const T &b, const T &c)
+{
+    return min(a, min(b, c));
 }
 
 template<typename T>
@@ -233,15 +245,45 @@ FMATH_INLINE FMATH_CONSTEXPR T clamp(const T &v, const T &minv, const T &maxv)
 template<typename T, typename U, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
 FMATH_INLINE FMATH_CONSTEXPR T clamp(const T &v, const U &minv, const U &maxv)
 {
-    return min(static_cast<T>(maxv), max(v, static_cast<T>(minv)));
+    return clamp(v, static_cast<T>(minv), static_cast<T>(maxv));
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR T saturate(const T &value)
+{
+    static_assert(std::is_floating_point_v<T>, "T must be a floating point type");
+    return clamp(value, static_cast<T>(0), static_cast<T>(1));
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T lerp(const T &a, const T &b, const T &t)
 {
-    static_assert(std::is_floating_point_v<T>);
-    FMATH_ASSERT(!isInfinite(a) && !isInfinite(b) && !isInfinite(t));
     return a + t * (b - a);
+}
+
+template<typename T, typename U, typename = std::enable_if_t<std::is_convertible_v<U, T>>>
+FMATH_INLINE FMATH_CONSTEXPR T lerp(const T &a, const T &b, const U &t)
+{
+    return lerp(a, b, static_cast<T>(t));
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR T nextPower2(const T &value)
+{
+    static_assert(std::is_integral_v<T>, "T must be an integer type");
+
+    using UnsignedType = std::make_unsigned_t<T>;
+    UnsignedType x = static_cast<UnsignedType>(value <= 1 ? 1 : value) - 1;
+
+    x |= x >> 1;
+    x |= x >> 2;
+    x |= x >> 4;
+    x |= x >> 8;
+    x |= x >> 16;
+
+    if constexpr (sizeof(T) == 8)
+        x |= x >> 32;
+    return static_cast<T>(x + 1);
 }
 
 template<typename T>

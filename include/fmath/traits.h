@@ -1,5 +1,5 @@
 #ifndef _FMATH_TRAITS_H_
-#define _FMATH_TRIATS_H_
+#define _FMATH_TRAITS_H_
 
 #include <type_traits>
 
@@ -20,6 +20,12 @@ struct HasValueType<T, std::void_t<typename T::ValueType>> : std::true_type
 {};
 
 }
+
+template<typename T>
+struct IsIEC559
+{
+    static constexpr bool value = std::numeric_limits<T>::is_iec559;
+};
 
 template<typename T>
 struct IsVector : std::conditional_t<
@@ -64,6 +70,9 @@ struct ValueTypeSize<T, std::enable_if_t<internal::HasValueType<T>::value>>
 {
     static constexpr size_t value = sizeof(typename T::ValueType);
 };
+
+template<typename T>
+inline constexpr bool is_iec559_v = IsIEC559<T>::value;
 
 template<typename T>
 inline constexpr bool is_vector_v = IsVector<T>::value;
