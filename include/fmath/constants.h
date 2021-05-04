@@ -69,7 +69,7 @@ struct Pi4
 template<>
 struct Pi4<double>
 {
-    static constexpr double value = 1.570796326794896;
+    static constexpr double value = 0.785398163397448;    
 };
 
 template<>

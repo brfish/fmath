@@ -47,13 +47,15 @@ template<typename T, typename MatrixT>
     template<typename MatrixU>
 FMATH_INLINE FMATH_CONSTEXPR void MatrixTraits_Assign<T, 3, MatrixT>::assign(MatrixT &dst, const MatrixU &src)
 {
+    using VectorType = typename MatrixU::VectorType;
+
     dst[0] = src[0];
     dst[1] = src[1];
 
     if constexpr (MatrixU::DIMENSION >= 3)
         dst[2] = src[2];
     else
-        dst[2] = std::decay_t<decltype(dst[2])>();
+        dst[2] = VectorType();
 }
 
 template<typename T, typename MatrixT>
@@ -67,52 +69,93 @@ template<typename T, typename MatrixT>
     template<typename MatrixU>
 FMATH_INLINE FMATH_CONSTEXPR void MatrixTraits_Assign<T, 4, MatrixT>::assign(MatrixT &dst, const MatrixU &src)
 {
+    using VectorType = typename MatrixU::VectorType;
+
     dst[0] = src[0];
     dst[1] = src[1];
 
     if constexpr (MatrixU::DIMENSION >= 3)
         dst[2] = src[2];
     else
-        dst[2] = std::decay_t<decltype(dst[2])>();
+        dst[2] = VectorType();
     
     if constexpr (MatrixU::DIMENSION >= 4)
         dst[3] = src[3];
     else
-        dst[3] = std::decay_t<decltype(dst[3])>();
+        dst[3] = VectorType();
 }
 #pragma endregion
 
 #pragma region MatrixTraits_Compare
 template<typename T, size_t N>
 struct MatrixTraits_Compare
+{};
+
+template<typename T>
+struct MatrixTraits_Compare<T, 2>
 {
-    using Base = MatrixBase<T, N>;
-    static FMATH_INLINE bool equal(const Base &m1, const Base &m2);
-    static FMATH_INLINE bool equalEpsilon(const Base &m1, const Base &m2, const T &epsilon);
+    using Base = MatrixBase<T, 2>;
+    static FMATH_INLINE FMATH_CONSTEXPR bool equal(const Base &m1, const Base &m2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Base &m1, const Base &m2, const T &epsilon);
 };
 
-template<typename T, size_t N>
-FMATH_INLINE bool MatrixTraits_Compare<T, N>::equal(const Base &m1, const Base &m2)
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool MatrixTraits_Compare<T, 2>::equal(const Base &m1, const Base &m2)
 {
-    if (&m1 == &m2)
-        return true;
-    return memcmp(m1.data(), m2.data(), sizeof(Base)) == 0;
+    return fmath::equal(m1[0], m2[0]) && fmath::equal(m1[1], m2[1]);
 }
 
-template<typename T, size_t N>
-FMATH_INLINE bool MatrixTraits_Compare<T, N>::equalEpsilon(const Base &m1, const Base &m2, const T &epsilon)
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool MatrixTraits_Compare<T, 2>::equalEpsilon(const Base &m1, const Base &m2, const T &epsilon)
 {
-    if (&m1 == &m2)
-        return true;
-    for (index_t i = 0; i < N; ++i)
-    {
-        for (index_t j = 0; j < N; ++j)
-        {
-            if (!fmath::equalEpsilon(m1[i][j], m2[i][j], epsilon))
-                return false;
-        }
-    }
-    return true;
+    return fmath::equalEpsilon(m1[0], m2[0], epsilon) &&
+        fmath::equalEpsilon(m1[1], m2[1], epsilon);
+}
+
+template<typename T>
+struct MatrixTraits_Compare<T, 3>
+{
+    using Base = MatrixBase<T, 3>;
+    static FMATH_INLINE FMATH_CONSTEXPR bool equal(const Base &m1, const Base &m2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Base &m1, const Base &m2, const T &epsilon);
+};
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool MatrixTraits_Compare<T, 3>::equal(const Base &m1, const Base &m2)
+{
+    return fmath::equal(m1[0], m2[0]) && fmath::equal(m1[1], m2[1]) && fmath::equal(m1[2], m2[2]);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool MatrixTraits_Compare<T, 3>::equalEpsilon(const Base &m1, const Base &m2, const T &epsilon)
+{
+    return fmath::equalEpsilon(m1[0], m2[0], epsilon) &&
+        fmath::equalEpsilon(m1[1], m2[1], epsilon) &&
+        fmath::equalEpsilon(m1[2], m2[2], epsilon);
+}
+
+template<typename T>
+struct MatrixTraits_Compare<T, 4>
+{
+    using Base = MatrixBase<T, 4>;
+    static FMATH_INLINE FMATH_CONSTEXPR bool equal(const Base &m1, const Base &m2);
+    static FMATH_INLINE FMATH_CONSTEXPR bool equalEpsilon(const Base &m1, const Base &m2, const T &epsilon);
+};
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool MatrixTraits_Compare<T, 4>::equal(const Base &m1, const Base &m2)
+{
+    return fmath::equal(m1[0], m2[0]) && fmath::equal(m1[1], m2[1]) &&
+        fmath::equal(m1[2], m2[2]) && fmath::equal(m1[3], m2[3]);
+}
+
+template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR bool MatrixTraits_Compare<T, 4>::equalEpsilon(const Base &m1, const Base &m2, const T &epsilon)
+{
+    return fmath::equalEpsilon(m1[0], m2[0], epsilon) &&
+        fmath::equalEpsilon(m1[1], m2[1], epsilon) &&
+        fmath::equalEpsilon(m1[2], m2[2], epsilon) &&
+        fmath::equalEpsilon(m1[3], m2[3], epsilon)
 }
 #pragma endregion
 
@@ -753,8 +796,10 @@ struct MatrixTraits_Square<T, 2, MatrixT>
 template<typename T, typename MatrixT>
 FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Square<T, 2, MatrixT>::inverse(const Base &m)
 {
+    static_assert(std::is_floating_point_v<T>, "T must be a floating point type");
+
     T det = determinant(m);
-    FMATH_ASSERT(det != 0);
+    FMATH_FASSERT(det != static_cast<T>(0), "The matrix is not invertible");
 
     det = static_cast<T>(1) / det;
     return MatrixT(m[1][1], -m[0][1], -m[1][0], m[0][0]) * det;
@@ -777,8 +822,9 @@ struct MatrixTraits_Square<T, 3, MatrixT>
 template<typename T, typename MatrixT>
 FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Square<T, 3, MatrixT>::inverse(const Base &m)
 {
+    static_assert(std::is_floating_point_v<T>, "T must be a floating point type");
+
     MatrixT result;
-    
     result[0][0] = m[1][1] * m[2][2] - m[1][2] * m[2][1];
     result[0][1] = m[0][2] * m[2][1] - m[0][1] * m[2][2];
     result[0][2] = m[0][1] * m[1][2] - m[0][2] * m[1][1];
@@ -790,7 +836,7 @@ FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Square<T, 3, MatrixT>::inverse
     result[2][2] = m[0][0] * m[1][1] - m[0][1] * m[1][0];
 
     T det = determinant(m);
-    FMATH_ASSERT(det != 0);
+    FMATH_FASSERT(det != static_cast<T>(0), "The matrix is not invertible");
 
     det = static_cast<T>(1) / det;
 
@@ -818,8 +864,9 @@ struct MatrixTraits_Square<T, 4, MatrixT>
 template<typename T, typename MatrixT>
 FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Square<T, 4, MatrixT>::inverse(const Base &m)
 {
-    MatrixT result;
+    static_assert(std::is_floating_point_v<T>, "T must be a floating point type");
 
+    MatrixT result;
     result[0][0] = m[1][1] * m[2][2] * m[3][3] -
         m[1][1] * m[2][3] * m[3][2] -
         m[2][1] * m[1][2] * m[3][3] +
@@ -933,9 +980,9 @@ FMATH_INLINE FMATH_CONSTEXPR MatrixT MatrixTraits_Square<T, 4, MatrixT>::inverse
         m[2][0] * m[0][2] * m[1][1];
 
     T det = m[0][0] * result[0][0] + m[0][1] * result[1][0] + m[0][2] * result[2][0] + m[0][3] * result[3][0];
-    FMATH_ASSERT(det != 0);
+    FMATH_FASSERT(det != static_cast<T>(0), "The matrix is not invertible");
 
-    det = 1.0 / det;
+    det = static_cast<T>(1) / det;
     result *= det;
     return result;
 }

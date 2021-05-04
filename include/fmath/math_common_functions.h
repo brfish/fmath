@@ -237,6 +237,13 @@ FMATH_INLINE FMATH_CONSTEXPR T min(const T &a, const T &b, const T &c)
 }
 
 template<typename T>
+FMATH_INLINE FMATH_CONSTEXPR std::pair<const T &, const T &> minmax(const T &a, const T &b)
+{
+    return a < b ? std::pair<const T &, const T &>(a, b) :
+            std::pair<const T &, const T &>(b, a);
+}
+
+template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR T clamp(const T &v, const T &minv, const T &maxv)
 {
     return min(maxv, max(v, minv));

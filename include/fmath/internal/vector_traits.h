@@ -138,17 +138,14 @@ struct VectorTraits_Compare<T, 2>
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 2>::equal(const Base &v1, const Base &v2)
 {
-    return v1[0] == v2[0] && v1[1] == v2[1];
+    return (&v1 == &v2) || (v1[0] == v2[0] && v1[1] == v2[1]);
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 2>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
 {
-    if (&v1 == &v2)
-        return true;
-
-    return fmath::equalEpsilon(v1[0], v2[0], epsilon) && 
-        fmath::equalEpsilon(v1[1], v2[1], epsilon);
+    return (&v1 == &v2) || (fmath::equalEpsilon(v1[0], v2[0], epsilon) && 
+        fmath::equalEpsilon(v1[1], v2[1], epsilon));
 }
 
 template<typename T>
@@ -204,18 +201,15 @@ struct VectorTraits_Compare<T, 3>
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 3>::equal(const Base &v1, const Base &v2)
 {
-    return v1[0] == v2[0] && v1[1] == v2[1] && v1[2] == v2[2];
+    return (&v1 == &v2) || (v1[0] == v2[0] && v1[1] == v2[1] && v1[2] == v2[2]);
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 3>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
 {
-    if (&v1 == &v2)
-        return true;
-
-    return fmath::equalEpsilon(v1[0], v2[0], epsilon) && 
+    return (&v1 == &v2) || (fmath::equalEpsilon(v1[0], v2[0], epsilon) && 
         fmath::equalEpsilon(v1[1], v2[1], epsilon) && 
-        fmath::equalEpsilon(v1[2], v2[2], epsilon);
+        fmath::equalEpsilon(v1[2], v2[2], epsilon));
 }
 
 template<typename T>
@@ -271,19 +265,16 @@ struct VectorTraits_Compare<T, 4>
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 4>::equal(const Base &v1, const Base &v2)
 {
-    return v1[0] == v2[0] && v1[1] == v2[1] && v1[2] == v2[2] && v1[3] == v2[3];
+    return (&v1 == &v2) || (v1[0] == v2[0] && v1[1] == v2[1] && v1[2] == v2[2] && v1[3] == v2[3]);
 }
 
 template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR bool VectorTraits_Compare<T, 4>::equalEpsilon(const Base &v1, const Base &v2, const T &epsilon)
 {
-    if (&v1 == &v2)
-        return true;
-
-    return fmath::equalEpsilon(v1[0], v2[0], epsilon) && 
+    return (&v1 == &v2) || (fmath::equalEpsilon(v1[0], v2[0], epsilon) && 
         fmath::equalEpsilon(v1[1], v2[1], epsilon) && 
         fmath::equalEpsilon(v1[2], v2[2], epsilon) && 
-        fmath::equalEpsilon(v1[3], v2[3], epsilon);
+        fmath::equalEpsilon(v1[3], v2[3], epsilon));
 }
 
 template<typename T>
@@ -498,7 +489,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 2, VectorT>::mul(cons
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 2, VectorT>::div(const Base &v, const T &value)
 {
-    FMATH_ASSERT(value != 0);
+    FMATH_FASSERT(value != 0, "The divisor cannot be zero");
     return VectorT(v[0] / value, v[1] / value);
 }
 
@@ -519,7 +510,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 3, VectorT>::mul(cons
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 3, VectorT>::div(const Base &v, const T &value)
 {
-    FMATH_ASSERT(value != 0);
+    FMATH_FASSERT(value != 0, "The divisor cannot be zero");
     return VectorT(v[0] / value, v[1] / value, v[2] / value);
 }
 
@@ -540,7 +531,7 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 4, VectorT>::mul(cons
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Scale<T, 4, VectorT>::div(const Base &v, const T &value)
 {
-    FMATH_ASSERT(value != 0);
+    FMATH_FASSERT(value != 0, "The divisor cannot be zero");
     return VectorT(v[0] / value, v[1] / value, v[2] / value, v[3] / value);
 }
 #pragma endregion
@@ -567,7 +558,8 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 2, VectorT>::hadam
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 2, VectorT>::hadamardDiv(const Base &v1, const Base &v2)
 {
-    FMATH_ASSERT(v2[0] !=0 && v2[1] != 0);
+    FMATH_FASSERT(v2[0] != 0, "The divisor 'v2[0]' cannot be zero");
+    FMATH_FASSERT(v2[1] != 0, "The divisor 'v2[1]' cannot be zero");
     return VectorT(v1[0] / v2[0], v1[1] / v2[1]);
 }
 
@@ -588,6 +580,9 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 3, VectorT>::hadam
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 3, VectorT>::hadamardDiv(const Base &v1, const Base &v2)
 {
+    FMATH_FASSERT(v2[0] != 0, "The divisor 'v2[0]' cannot be zero");
+    FMATH_FASSERT(v2[1] != 0, "The divisor 'v2[1]' cannot be zero");
+    FMATH_FASSERT(v2[2] != 0, "The divisor 'v2[2]' cannot be zero");
     return VectorT(v1[0] / v2[0], v1[1] / v2[1], v1[2] / v2[2]);
 }
 
@@ -608,7 +603,10 @@ FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 4, VectorT>::hadam
 template<typename T, typename VectorT>
 FMATH_INLINE FMATH_CONSTEXPR VectorT VectorTraits_Hadamard<T, 4, VectorT>::hadamardDiv(const Base &v1, const Base &v2)
 {
-    FMATH_ASSERT(v2[0] != 0 && v2[1] != 0 && v2[2] !=0 && v2[3] != 0);
+    FMATH_FASSERT(v2[0] != 0, "The divisor 'v2[0]' cannot be zero");
+    FMATH_FASSERT(v2[1] != 0, "The divisor 'v2[1]' cannot be zero");
+    FMATH_FASSERT(v2[2] != 0, "The divisor 'v2[2]' cannot be zero");
+    FMATH_FASSERT(v2[3] != 0, "The divisor 'v2[3]' cannot be zero");
     return VectorT(v1[0] / v2[0], v1[1] / v2[1], v1[2] * v2[2], v1[3] * v2[3]);
 }
 #pragma endregion

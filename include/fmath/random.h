@@ -47,7 +47,9 @@ struct RandomTraits<T, R, std::enable_if_t<std::is_floating_point_v<T>>>
         using ParamType = typename DistributionType::param_type;
 
         static DistributionType d { };
-        return d(engine, ParamType(minv, maxv));
+
+        std::pair<const T &, const T &> range = minmax(minv, maxv);
+        return d(engine, ParamType(range.first, range.second));
     }
 };
 
@@ -56,11 +58,11 @@ struct RandomTraits<T, R, std::enable_if_t<is_vector_v<T>>>
 {
     static FMATH_INLINE T uniform(const T &minv, const T &maxv, R &engine)
     {
-        T result;
+        T result { };
         for (index_t i = 0; i < T::DIMENSION; ++i)
         {
-            FMATH_ASSERT(minv[i] <= maxv[i]);
-            result[i] = RandomTraits<typename T::ValueType, R>::uniform(minv[i], maxv[i], engine);
+            std::pair<const T &, const T &> range = minmax(minv[i], maxv[i]);
+            result[i] = RandomTraits<typename T::ValueType, R>::uniform(range.first, range.second, engine);
         }
         return result;
     }
@@ -69,15 +71,15 @@ struct RandomTraits<T, R, std::enable_if_t<is_vector_v<T>>>
 }
 
 template<typename T, typename R>
-FMATH_INLINE T random(const T &minv, const T &maxv, R &engine)
+static FMATH_INLINE T random(const T &minv, const T &maxv, R &engine)
 {
     return internal::RandomTraits<T, R>::uniform(minv, maxv, engine);
 }
 
 template<typename T>
-FMATH_INLINE T random(const T &minv, const T &maxv)
+static FMATH_INLINE T random(const T &minv, const T &maxv)
 {
-    using EngineType = std::conditional_t<ValueTypeSize<T>::value >= 4, std::mt19937_64, std::mt19937>;
+    using EngineType = std::conditional_t<is_integral_v<T> && ValueTypeSize<T>::value >= 4, std::mt19937_64, std::mt19937>;
     static thread_local EngineType engine;
     return random(minv, maxv, engine);
 }
