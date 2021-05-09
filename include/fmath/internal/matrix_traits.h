@@ -155,7 +155,7 @@ FMATH_INLINE FMATH_CONSTEXPR bool MatrixTraits_Compare<T, 4>::equalEpsilon(const
     return fmath::equalEpsilon(m1[0], m2[0], epsilon) &&
         fmath::equalEpsilon(m1[1], m2[1], epsilon) &&
         fmath::equalEpsilon(m1[2], m2[2], epsilon) &&
-        fmath::equalEpsilon(m1[3], m2[3], epsilon)
+        fmath::equalEpsilon(m1[3], m2[3], epsilon);
 }
 #pragma endregion
 

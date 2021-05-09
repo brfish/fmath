@@ -58,11 +58,12 @@ struct RandomTraits<T, R, std::enable_if_t<is_vector_v<T>>>
 {
     static FMATH_INLINE T uniform(const T &minv, const T &maxv, R &engine)
     {
+        using ValueType = typename T::ValueType;
         T result { };
         for (index_t i = 0; i < T::DIMENSION; ++i)
         {
-            std::pair<const T &, const T &> range = minmax(minv[i], maxv[i]);
-            result[i] = RandomTraits<typename T::ValueType, R>::uniform(range.first, range.second, engine);
+            std::pair<const ValueType &, const ValueType &> range = minmax(minv[i], maxv[i]);
+            result[i] = RandomTraits<ValueType, R>::uniform(range.first, range.second, engine);
         }
         return result;
     }

@@ -110,23 +110,23 @@ template<typename T>
 FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> scale(const Vector3<T> &axis, const T &factor)
 {
     Vector3<T> n = normalize(axis);
-    const T factor_x = n[0] * (factor - 1);
-    const T factor_y = n[1] * (factor - 1);
-    const T factor_z = n[2] * (factor - 1);
+    const T factor_x = n[0] * (factor - static_cast<T>(1));
+    const T factor_y = n[1] * (factor - static_cast<T>(1));
+    const T factor_z = n[2] * (factor - static_cast<T>(1));
 
     Matrix4<T> result;
 
-    result[0][0] = factor_x * n[0] + 1;
+    result[0][0] = factor_x * n[0] + static_cast<T>(1);
     result[0][1] = factor_y * n[0];
     result[0][2] = factor_z * n[0];
 
     result[1][0] = factor_x * n[1];
-    result[1][1] = factor_y * n[1] + 1;
+    result[1][1] = factor_y * n[1] + static_cast<T>(1);
     result[1][2] = factor_z * n[1];
 
     result[2][0] = factor_x * n[2];
     result[2][1] = factor_z * n[2];
-    result[2][2] = factor_z * n[2] + 1;
+    result[2][2] = factor_z * n[2] + static_cast<T>(1);
 
     result[3][3] = static_cast<T>(1);
 
@@ -186,34 +186,6 @@ FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> shear(const T &factor_s, const T &factor
             zero, zero, zero, one
         );
     }
-}
-
-template<typename T>
-FMATH_INLINE FMATH_CONSTEXPR Matrix4<T> shear(const Vector3<T> &axis, const T &factor)
-{
-    Vector3<T> &n = normalize(axis);
-    const T factor_x = n[0] * (factor - 1);
-    const T factor_y = n[1] * (factor - 1);
-    const T factor_z = n[2] * (factor - 1);
-
-    Matrix4<T> r;
-    Vector4<T> r0, r1, r2, r3;
-
-    r[0][0] = factor_x * n[0] + 1;
-    r[0][1] = factor_y * n[0];
-    r[0][2] = factor_z * n[0];
-
-    r[1][0] = factor_x * n[1];
-    r[1][1] = factor_y * n[1] + 1;
-    r[1][2] = factor_z * n[1];
-
-    r[2][0] = factor_x * n[2];
-    r[2][1] = factor_z * n[2];
-    r[2][2] = factor_z * n[2] + 1;
-
-    r[3][3] = static_cast<T>(1);
-
-    return r;
 }
 
 template<typename T, Axis A>
@@ -365,8 +337,6 @@ public:
 
     template<Axis A>
     FMATH_INLINE Transform &shear(const ValueType &factor_s, const ValueType &factor_t);
-
-    FMATH_INLINE Transform &shear(const Vector3<ValueType> &axis, const ValueType &factor);
 
     template<Axis A>
     FMATH_INLINE Transform &mirror();
@@ -595,8 +565,8 @@ FMATH_INLINE Transform<T> &Transform<T>::preScale(const Vector3<ValueType> &axis
     Matrix4<ValueType> &m = mat_;
     Vector3<ValueType> &n = normalize(axis);
     const ValueType factor_x = n[0] * (factor - static_cast<ValueType>(1));
-    const ValueType factor_y = n[1] * (factor - 1);
-    const ValueType factor_z = n[2] * (factor - 1);
+    const ValueType factor_y = n[1] * (factor - static_cast<ValueType>(1));
+    const ValueType factor_z = n[2] * (factor - static_cast<ValueType>(1));
 
     Vector3<T> r0, r1, r2;
 
@@ -688,13 +658,6 @@ template<typename T>
 FMATH_INLINE Transform<T> &Transform<T>::shear(const ValueType &factor_s, const ValueType &factor_t)
 {
     mat_ = fmath::shear<A>(factor_s, factor_t) * mat_;
-    return *this;
-}
-
-template<typename T>
-FMATH_INLINE Transform<T> &Transform<T>::shear(const Vector3<ValueType> &axis, const ValueType &factor)
-{
-    mat_ = fmath::shear(axis, factor) * mat_;
     return *this;
 }
 
