@@ -69,10 +69,10 @@ enum class Axis
     X, Y, Z
 };
 
-enum class Component
+enum class Component : uint8
 {
-    X = 0, Y = 1, Z = 2, W = 3,
-    R = 0, G = 1, B = 2, A = 3,
+    X = 0x00, Y = 0x01, Z = 0x02, W = 0x03,
+    R = 0x10, G = 0x11, B = 0x12, A = 0x13
 };
 
 template<typename T>
